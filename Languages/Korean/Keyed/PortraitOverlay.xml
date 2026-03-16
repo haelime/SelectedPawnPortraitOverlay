@@ -22,6 +22,14 @@
   <PortraitOverlay.Settings.FacialAnimationStatus>Facial Animation: {0}</PortraitOverlay.Settings.FacialAnimationStatus>
   <PortraitOverlay.Settings.FacialAnimationActive>감지됨</PortraitOverlay.Settings.FacialAnimationActive>
   <PortraitOverlay.Settings.FacialAnimationInactive>감지되지 않음</PortraitOverlay.Settings.FacialAnimationInactive>
+  <PortraitOverlay.Settings.ExpectedPerformance>예상 성능: {0}</PortraitOverlay.Settings.ExpectedPerformance>
+  <PortraitOverlay.Settings.OptimizationLevel>최적화 수준: {0}</PortraitOverlay.Settings.OptimizationLevel>
+  <PortraitOverlay.Settings.PerformanceLight>가벼운 부하</PortraitOverlay.Settings.PerformanceLight>
+  <PortraitOverlay.Settings.PerformanceModerate>보통 부하</PortraitOverlay.Settings.PerformanceModerate>
+  <PortraitOverlay.Settings.PerformanceHeavy>높은 부하</PortraitOverlay.Settings.PerformanceHeavy>
+  <PortraitOverlay.Settings.OptimizationAggressive>공격적 (성능 우선)</PortraitOverlay.Settings.OptimizationAggressive>
+  <PortraitOverlay.Settings.OptimizationBalanced>균형형</PortraitOverlay.Settings.OptimizationBalanced>
+  <PortraitOverlay.Settings.OptimizationVisualQuality>시각 품질 우선</PortraitOverlay.Settings.OptimizationVisualQuality>
   <PortraitOverlay.Overlay.Title>{0}</PortraitOverlay.Overlay.Title>
   <PortraitOverlay.Overlay.NoPortrait>초상화를 렌더링할 수 없습니다</PortraitOverlay.Overlay.NoPortrait>
   <PortraitOverlay.Overlay.Tooltip>드래그 이동이 켜져 있으면 이 패널을 끌어 위치를 바꿀 수 있습니다.</PortraitOverlay.Overlay.Tooltip>

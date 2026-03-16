@@ -22,6 +22,14 @@
   <PortraitOverlay.Settings.FacialAnimationStatus>Facial Animation: {0}</PortraitOverlay.Settings.FacialAnimationStatus>
   <PortraitOverlay.Settings.FacialAnimationActive>已检测到</PortraitOverlay.Settings.FacialAnimationActive>
   <PortraitOverlay.Settings.FacialAnimationInactive>未检测到</PortraitOverlay.Settings.FacialAnimationInactive>
+  <PortraitOverlay.Settings.ExpectedPerformance>预计性能: {0}</PortraitOverlay.Settings.ExpectedPerformance>
+  <PortraitOverlay.Settings.OptimizationLevel>优化级别: {0}</PortraitOverlay.Settings.OptimizationLevel>
+  <PortraitOverlay.Settings.PerformanceLight>低负载</PortraitOverlay.Settings.PerformanceLight>
+  <PortraitOverlay.Settings.PerformanceModerate>中等负载</PortraitOverlay.Settings.PerformanceModerate>
+  <PortraitOverlay.Settings.PerformanceHeavy>高负载</PortraitOverlay.Settings.PerformanceHeavy>
+  <PortraitOverlay.Settings.OptimizationAggressive>激进（性能优先）</PortraitOverlay.Settings.OptimizationAggressive>
+  <PortraitOverlay.Settings.OptimizationBalanced>平衡</PortraitOverlay.Settings.OptimizationBalanced>
+  <PortraitOverlay.Settings.OptimizationVisualQuality>画质优先</PortraitOverlay.Settings.OptimizationVisualQuality>
   <PortraitOverlay.Overlay.Title>{0}</PortraitOverlay.Overlay.Title>
   <PortraitOverlay.Overlay.NoPortrait>无法渲染肖像</PortraitOverlay.Overlay.NoPortrait>
   <PortraitOverlay.Overlay.Tooltip>启用拖动时，可拖动此面板来移动位置。</PortraitOverlay.Overlay.Tooltip>

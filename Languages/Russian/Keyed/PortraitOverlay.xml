@@ -22,6 +22,14 @@
   <PortraitOverlay.Settings.FacialAnimationStatus>Facial Animation: {0}</PortraitOverlay.Settings.FacialAnimationStatus>
   <PortraitOverlay.Settings.FacialAnimationActive>обнаружен</PortraitOverlay.Settings.FacialAnimationActive>
   <PortraitOverlay.Settings.FacialAnimationInactive>не обнаружен</PortraitOverlay.Settings.FacialAnimationInactive>
+  <PortraitOverlay.Settings.ExpectedPerformance>Ожидаемая производительность: {0}</PortraitOverlay.Settings.ExpectedPerformance>
+  <PortraitOverlay.Settings.OptimizationLevel>Уровень оптимизации: {0}</PortraitOverlay.Settings.OptimizationLevel>
+  <PortraitOverlay.Settings.PerformanceLight>Низкая нагрузка</PortraitOverlay.Settings.PerformanceLight>
+  <PortraitOverlay.Settings.PerformanceModerate>Средняя нагрузка</PortraitOverlay.Settings.PerformanceModerate>
+  <PortraitOverlay.Settings.PerformanceHeavy>Высокая нагрузка</PortraitOverlay.Settings.PerformanceHeavy>
+  <PortraitOverlay.Settings.OptimizationAggressive>Агрессивный (приоритет производительности)</PortraitOverlay.Settings.OptimizationAggressive>
+  <PortraitOverlay.Settings.OptimizationBalanced>Сбалансированный</PortraitOverlay.Settings.OptimizationBalanced>
+  <PortraitOverlay.Settings.OptimizationVisualQuality>Приоритет визуального качества</PortraitOverlay.Settings.OptimizationVisualQuality>
   <PortraitOverlay.Overlay.Title>{0}</PortraitOverlay.Overlay.Title>
   <PortraitOverlay.Overlay.NoPortrait>Портрет недоступен</PortraitOverlay.Overlay.NoPortrait>
   <PortraitOverlay.Overlay.Tooltip>Если перетаскивание включено, эту панель можно перемещать мышью.</PortraitOverlay.Overlay.Tooltip>

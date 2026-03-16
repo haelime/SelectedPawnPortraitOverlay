@@ -22,6 +22,14 @@
   <PortraitOverlay.Settings.FacialAnimationStatus>Facial Animation: {0}</PortraitOverlay.Settings.FacialAnimationStatus>
   <PortraitOverlay.Settings.FacialAnimationActive>検出済み</PortraitOverlay.Settings.FacialAnimationActive>
   <PortraitOverlay.Settings.FacialAnimationInactive>未検出</PortraitOverlay.Settings.FacialAnimationInactive>
+  <PortraitOverlay.Settings.ExpectedPerformance>想定パフォーマンス: {0}</PortraitOverlay.Settings.ExpectedPerformance>
+  <PortraitOverlay.Settings.OptimizationLevel>最適化レベル: {0}</PortraitOverlay.Settings.OptimizationLevel>
+  <PortraitOverlay.Settings.PerformanceLight>低負荷</PortraitOverlay.Settings.PerformanceLight>
+  <PortraitOverlay.Settings.PerformanceModerate>中負荷</PortraitOverlay.Settings.PerformanceModerate>
+  <PortraitOverlay.Settings.PerformanceHeavy>高負荷</PortraitOverlay.Settings.PerformanceHeavy>
+  <PortraitOverlay.Settings.OptimizationAggressive>高最適化（性能優先）</PortraitOverlay.Settings.OptimizationAggressive>
+  <PortraitOverlay.Settings.OptimizationBalanced>バランス</PortraitOverlay.Settings.OptimizationBalanced>
+  <PortraitOverlay.Settings.OptimizationVisualQuality>画質優先</PortraitOverlay.Settings.OptimizationVisualQuality>
   <PortraitOverlay.Overlay.Title>{0}</PortraitOverlay.Overlay.Title>
   <PortraitOverlay.Overlay.NoPortrait>ポートレートを描画できません</PortraitOverlay.Overlay.NoPortrait>
   <PortraitOverlay.Overlay.Tooltip>ドラッグ移動が有効なら、このパネルをドラッグして位置を変更できます。</PortraitOverlay.Overlay.Tooltip>

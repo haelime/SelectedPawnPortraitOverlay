@@ -6,6 +6,7 @@ namespace SelectedPawnPortraitOverlay;
 public sealed class PortraitOverlayMod : Mod
 {
     private const float SettingsContentHeight = 760f;
+    private const float BaselinePanelArea = 240f * 360f;
 
     private static PortraitOverlayMod instance;
     private Vector2 settingsScrollPosition;
@@ -77,10 +78,74 @@ public sealed class PortraitOverlayMod : Mod
 
         listing.GapLine();
         listing.Label("PortraitOverlay.Settings.FacialAnimationStatus".Translate(ModCompatibility.FacialAnimationStatusLabel.Translate()));
+        listing.Label("PortraitOverlay.Settings.ExpectedPerformance".Translate(GetExpectedPerformanceLabel(settings).Translate()));
+        listing.Label("PortraitOverlay.Settings.OptimizationLevel".Translate(GetOptimizationLevelLabel(settings).Translate()));
 
         listing.End();
         Widgets.EndScrollView();
         settings.ClampValues();
+    }
+
+    private static string GetExpectedPerformanceLabel(PortraitOverlaySettings settings)
+    {
+        var score = CalculatePerformanceScore(settings);
+        if (score <= 1)
+        {
+            return "PortraitOverlay.Settings.PerformanceLight";
+        }
+
+        return score <= 3
+            ? "PortraitOverlay.Settings.PerformanceModerate"
+            : "PortraitOverlay.Settings.PerformanceHeavy";
+    }
+
+    private static string GetOptimizationLevelLabel(PortraitOverlaySettings settings)
+    {
+        var score = CalculatePerformanceScore(settings);
+        if (!settings.RenderHeadgear && !settings.RenderApparel)
+        {
+            return "PortraitOverlay.Settings.OptimizationAggressive";
+        }
+
+        return score <= 3
+            ? "PortraitOverlay.Settings.OptimizationBalanced"
+            : "PortraitOverlay.Settings.OptimizationVisualQuality";
+    }
+
+    private static int CalculatePerformanceScore(PortraitOverlaySettings settings)
+    {
+        var score = 0;
+        if (settings.RenderHeadgear)
+        {
+            score += 1;
+        }
+
+        if (settings.RenderApparel)
+        {
+            score += 2;
+        }
+
+        var panelAreaRatio = (settings.PanelWidth * settings.PanelHeight) / BaselinePanelArea;
+        if (panelAreaRatio > 1.8f)
+        {
+            score += 2;
+        }
+        else if (panelAreaRatio > 1.35f)
+        {
+            score += 1;
+        }
+
+        if (settings.CameraZoom > 1.2f)
+        {
+            score += 1;
+        }
+
+        if (settings.FaceEmphasis > 0.65f)
+        {
+            score += 1;
+        }
+
+        return score;
     }
 
     private static string FormatPercent(float value)

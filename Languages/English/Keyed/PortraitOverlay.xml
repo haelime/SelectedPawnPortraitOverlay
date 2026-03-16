@@ -22,6 +22,14 @@
   <PortraitOverlay.Settings.FacialAnimationStatus>Facial Animation: {0}</PortraitOverlay.Settings.FacialAnimationStatus>
   <PortraitOverlay.Settings.FacialAnimationActive>detected</PortraitOverlay.Settings.FacialAnimationActive>
   <PortraitOverlay.Settings.FacialAnimationInactive>not detected</PortraitOverlay.Settings.FacialAnimationInactive>
+  <PortraitOverlay.Settings.ExpectedPerformance>Expected performance: {0}</PortraitOverlay.Settings.ExpectedPerformance>
+  <PortraitOverlay.Settings.OptimizationLevel>Optimization level: {0}</PortraitOverlay.Settings.OptimizationLevel>
+  <PortraitOverlay.Settings.PerformanceLight>Light load</PortraitOverlay.Settings.PerformanceLight>
+  <PortraitOverlay.Settings.PerformanceModerate>Moderate load</PortraitOverlay.Settings.PerformanceModerate>
+  <PortraitOverlay.Settings.PerformanceHeavy>Heavy load</PortraitOverlay.Settings.PerformanceHeavy>
+  <PortraitOverlay.Settings.OptimizationAggressive>Aggressive (performance-focused)</PortraitOverlay.Settings.OptimizationAggressive>
+  <PortraitOverlay.Settings.OptimizationBalanced>Balanced</PortraitOverlay.Settings.OptimizationBalanced>
+  <PortraitOverlay.Settings.OptimizationVisualQuality>Visual quality priority</PortraitOverlay.Settings.OptimizationVisualQuality>
   <PortraitOverlay.Overlay.Title>{0}</PortraitOverlay.Overlay.Title>
   <PortraitOverlay.Overlay.NoPortrait>Portrait unavailable</PortraitOverlay.Overlay.NoPortrait>
   <PortraitOverlay.Overlay.Tooltip>Drag this panel to move it when dragging is enabled.</PortraitOverlay.Overlay.Tooltip>
