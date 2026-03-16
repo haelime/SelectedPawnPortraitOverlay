@@ -6,7 +6,11 @@ namespace SelectedPawnPortraitOverlay;
 public sealed class PortraitOverlayMod : Mod
 {
     private const float SettingsContentHeight = 760f;
-    private const float BaselinePanelArea = 240f * 360f;
+    private const float DefaultPanelArea = 240f * 360f;
+    private const float MediumAreaRatioThreshold = 1.35f;
+    private const float HighAreaRatioThreshold = 1.8f;
+    private const float HighZoomThreshold = 1.2f;
+    private const float HighFaceEmphasisThreshold = 0.65f;
 
     private static PortraitOverlayMod instance;
     private Vector2 settingsScrollPosition;
@@ -76,19 +80,19 @@ public sealed class PortraitOverlayMod : Mod
             SaveSettings();
         }
 
+        var performanceScore = CalculatePerformanceScore(settings);
         listing.GapLine();
         listing.Label("PortraitOverlay.Settings.FacialAnimationStatus".Translate(ModCompatibility.FacialAnimationStatusLabel.Translate()));
-        listing.Label("PortraitOverlay.Settings.ExpectedPerformance".Translate(GetExpectedPerformanceLabel(settings).Translate()));
-        listing.Label("PortraitOverlay.Settings.OptimizationLevel".Translate(GetOptimizationLevelLabel(settings).Translate()));
+        listing.Label("PortraitOverlay.Settings.ExpectedPerformance".Translate(GetExpectedPerformanceLabel(performanceScore).Translate()));
+        listing.Label("PortraitOverlay.Settings.OptimizationLevel".Translate(GetOptimizationLevelLabel(performanceScore, settings).Translate()));
 
         listing.End();
         Widgets.EndScrollView();
         settings.ClampValues();
     }
 
-    private static string GetExpectedPerformanceLabel(PortraitOverlaySettings settings)
+    private static string GetExpectedPerformanceLabel(int score)
     {
-        var score = CalculatePerformanceScore(settings);
         if (score <= 1)
         {
             return "PortraitOverlay.Settings.PerformanceLight";
@@ -99,9 +103,8 @@ public sealed class PortraitOverlayMod : Mod
             : "PortraitOverlay.Settings.PerformanceHeavy";
     }
 
-    private static string GetOptimizationLevelLabel(PortraitOverlaySettings settings)
+    private static string GetOptimizationLevelLabel(int score, PortraitOverlaySettings settings)
     {
-        var score = CalculatePerformanceScore(settings);
         if (!settings.RenderHeadgear && !settings.RenderApparel)
         {
             return "PortraitOverlay.Settings.OptimizationAggressive";
@@ -125,27 +128,32 @@ public sealed class PortraitOverlayMod : Mod
             score += 2;
         }
 
-        var panelAreaRatio = (settings.PanelWidth * settings.PanelHeight) / BaselinePanelArea;
-        if (panelAreaRatio > 1.8f)
+        var panelAreaRatio = CalculatePanelAreaRatio(settings);
+        if (panelAreaRatio > HighAreaRatioThreshold)
         {
             score += 2;
         }
-        else if (panelAreaRatio > 1.35f)
+        else if (panelAreaRatio > MediumAreaRatioThreshold)
         {
             score += 1;
         }
 
-        if (settings.CameraZoom > 1.2f)
+        if (settings.CameraZoom > HighZoomThreshold)
         {
             score += 1;
         }
 
-        if (settings.FaceEmphasis > 0.65f)
+        if (settings.FaceEmphasis > HighFaceEmphasisThreshold)
         {
             score += 1;
         }
 
         return score;
+    }
+
+    private static float CalculatePanelAreaRatio(PortraitOverlaySettings settings)
+    {
+        return (settings.PanelWidth * settings.PanelHeight) / DefaultPanelArea;
     }
 
     private static string FormatPercent(float value)
