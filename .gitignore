@@ -1,0 +1,6 @@
+bin/
+obj/
+Assemblies/
+*.user
+*.suo
+*.cache

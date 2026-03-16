@@ -1,0 +1,37 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net472</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>disable</Nullable>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <OutputPath>..\Assemblies\</OutputPath>
+    <RootNamespace>SelectedPawnPortraitOverlay</RootNamespace>
+    <AssemblyName>SelectedPawnPortraitOverlay</AssemblyName>
+    <RimWorldDir Condition="'$(RimWorldDir)' == ''">$(RIMWORLD_16_DIR)</RimWorldDir>
+    <ManagedDir Condition="'$(ManagedDir)' == '' and '$(RimWorldDir)' != ''">$(RimWorldDir)\RimWorldWin64_Data\Managed</ManagedDir>
+  </PropertyGroup>
+
+  <Target Name="EnsureRimWorldDir" BeforeTargets="ResolveReferences" Condition="'$(ManagedDir)' == ''">
+    <Error Text="Set RimWorldDir MSBuild property or RIMWORLD_16_DIR environment variable to your RimWorld 1.6 install directory." />
+  </Target>
+
+  <ItemGroup>
+    <Reference Include="Assembly-CSharp">
+      <HintPath>$(ManagedDir)\Assembly-CSharp.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.CoreModule">
+      <HintPath>$(ManagedDir)\UnityEngine.CoreModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.IMGUIModule">
+      <HintPath>$(ManagedDir)\UnityEngine.IMGUIModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.TextRenderingModule">
+      <HintPath>$(ManagedDir)\UnityEngine.TextRenderingModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+</Project>

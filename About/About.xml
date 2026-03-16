@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ModMetaData>
+  <name>Selected Pawn Portrait Overlay</name>
+  <author>haelime</author>
+  <packageId>haelime.selectedpawnportraitoverlay</packageId>
+  <supportedVersions>
+    <li>1.6</li>
+  </supportedVersions>
+  <description>Shows a front-facing full-body portrait overlay for the currently selected colonist. Includes Korean, English, and Japanese localization.</description>
+</ModMetaData>
