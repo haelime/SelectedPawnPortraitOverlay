@@ -1,6 +1,6 @@
 # Selected Pawn Portrait Overlay
 
-RimWorld 1.6 mod that renders the currently selected pawn as a front-facing full-body portrait in a movable overlay at the top-left of the HUD.
+Mod that renders the currently selected pawn as a front-facing full-body portrait in a movable overlay at the top-left of the HUD.
 
 ## Features
 
@@ -10,9 +10,13 @@ RimWorld 1.6 mod that renders the currently selected pawn as a front-facing full
 - Korean, English, and Japanese localization
 - Graceful fallback when Facial Animation is not installed
 
+## Verified Compatibility
+
+- RimWorld 1.6
+
 ## Build
 
-Set your RimWorld 1.6 install path before building.
+Set your RimWorld install path before building.
 
 PowerShell example:
 
