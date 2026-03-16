@@ -3,11 +3,14 @@
   <PortraitOverlay.Settings.Category>ポートレートオーバーレイ</PortraitOverlay.Settings.Category>
   <PortraitOverlay.Settings.Enabled>オーバーレイを表示</PortraitOverlay.Settings.Enabled>
   <PortraitOverlay.Settings.ShowBackground>パネル背景を表示</PortraitOverlay.Settings.ShowBackground>
+  <PortraitOverlay.Settings.ShowName>名前を表示</PortraitOverlay.Settings.ShowName>
+  <PortraitOverlay.Settings.KeepLastPortrait>選択解除後もポートレートを維持</PortraitOverlay.Settings.KeepLastPortrait>
   <PortraitOverlay.Settings.RenderHeadgear>頭装備を描画</PortraitOverlay.Settings.RenderHeadgear>
   <PortraitOverlay.Settings.RenderApparel>衣服レイヤーを描画</PortraitOverlay.Settings.RenderApparel>
   <PortraitOverlay.Settings.AllowDragging>ゲーム内でドラッグ移動を許可</PortraitOverlay.Settings.AllowDragging>
   <PortraitOverlay.Settings.ShowAnimals>動物を表示</PortraitOverlay.Settings.ShowAnimals>
   <PortraitOverlay.Settings.ShowMechanoids>メカノイドを表示</PortraitOverlay.Settings.ShowMechanoids>
+  <PortraitOverlay.Settings.ShowAnomalyEntities>Anomaly エンティティを表示</PortraitOverlay.Settings.ShowAnomalyEntities>
   <PortraitOverlay.Settings.PanelWidth>パネル幅: {0}px</PortraitOverlay.Settings.PanelWidth>
   <PortraitOverlay.Settings.PanelHeight>パネル高さ: {0}px</PortraitOverlay.Settings.PanelHeight>
   <PortraitOverlay.Settings.PositionX>パネル X 位置: {0}</PortraitOverlay.Settings.PositionX>

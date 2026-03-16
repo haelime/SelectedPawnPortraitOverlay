@@ -7,6 +7,7 @@ public sealed class SelectedPawnPortraitOverlayComponent : GameComponent
 {
     private bool isDragging;
     private Vector2 dragOffset;
+    private Pawn lastDisplayedPawn;
 
     public SelectedPawnPortraitOverlayComponent(Game game)
     {
@@ -28,7 +29,7 @@ public sealed class SelectedPawnPortraitOverlayComponent : GameComponent
             return;
         }
 
-        var pawn = GetSelectedPawn();
+        var pawn = GetPawnToDisplay(settings);
         if (pawn == null)
         {
             isDragging = false;
@@ -41,15 +42,32 @@ public sealed class SelectedPawnPortraitOverlayComponent : GameComponent
         DrawPanel(rect, pawn, settings);
     }
 
-    private static Pawn GetSelectedPawn()
+    private Pawn GetPawnToDisplay(PortraitOverlaySettings settings)
     {
-        if (Find.Selector == null)
+        var selectedPawn = Find.Selector?.SingleSelectedThing as Pawn;
+        if (selectedPawn == null)
         {
-            return null;
+            return settings.KeepLastPortrait ? GetCachedPawn() : ClearCachedPawn();
         }
 
-        var pawn = Find.Selector.SingleSelectedThing as Pawn;
-        return ShouldDisplayPawn(pawn) ? pawn : null;
+        if (!ShouldDisplayPawn(selectedPawn))
+        {
+            return ClearCachedPawn();
+        }
+
+        lastDisplayedPawn = selectedPawn;
+        return selectedPawn;
+    }
+
+    private Pawn GetCachedPawn()
+    {
+        return ShouldDisplayPawn(lastDisplayedPawn) ? lastDisplayedPawn : ClearCachedPawn();
+    }
+
+    private Pawn ClearCachedPawn()
+    {
+        lastDisplayedPawn = null;
+        return null;
     }
 
     private static bool ShouldDisplayPawn(Pawn pawn)
@@ -66,6 +84,11 @@ public sealed class SelectedPawnPortraitOverlayComponent : GameComponent
         }
 
         if (!settings.ShowMechanoids && pawn.RaceProps?.IsMechanoid == true)
+        {
+            return false;
+        }
+
+        if (!settings.ShowAnomalyEntities && pawn.RaceProps?.IsAnomalyEntity == true)
         {
             return false;
         }
@@ -130,16 +153,21 @@ public sealed class SelectedPawnPortraitOverlayComponent : GameComponent
         TooltipHandler.TipRegion(rect, "PortraitOverlay.Overlay.Tooltip".Translate());
 
         var contentRect = rect.ContractedBy(8f);
-        var titleRect = new Rect(contentRect.x, contentRect.y, contentRect.width, 24f);
-        var portraitRect = new Rect(contentRect.x, titleRect.yMax + 6f, contentRect.width, contentRect.height - 30f);
+        var portraitRect = contentRect;
 
-        var previousAnchor = Text.Anchor;
-        var previousFont = Text.Font;
-        Text.Font = GameFont.Small;
-        Text.Anchor = TextAnchor.UpperLeft;
-        Widgets.Label(titleRect, "PortraitOverlay.Overlay.Title".Translate(pawn.Name?.ToStringShort ?? pawn.LabelShortCap));
-        Text.Anchor = previousAnchor;
-        Text.Font = previousFont;
+        if (settings.ShowName)
+        {
+            var titleRect = new Rect(contentRect.x, contentRect.y, contentRect.width, 24f);
+            portraitRect = new Rect(contentRect.x, titleRect.yMax + 6f, contentRect.width, contentRect.height - 30f);
+
+            var previousAnchor = Text.Anchor;
+            var previousFont = Text.Font;
+            Text.Font = GameFont.Small;
+            Text.Anchor = TextAnchor.UpperLeft;
+            Widgets.Label(titleRect, "PortraitOverlay.Overlay.Title".Translate(pawn.Name?.ToStringShort ?? pawn.LabelShortCap));
+            Text.Anchor = previousAnchor;
+            Text.Font = previousFont;
+        }
 
         var portrait = PortraitRenderCache.GetPortrait(pawn, portraitRect.size, settings);
         if (portrait == null || portrait == BaseContent.BadTex)

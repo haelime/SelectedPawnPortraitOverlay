@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <PortraitOverlay.Settings.Category>肖像覆盖层</PortraitOverlay.Settings.Category>
+  <PortraitOverlay.Settings.Enabled>启用覆盖层</PortraitOverlay.Settings.Enabled>
+  <PortraitOverlay.Settings.ShowBackground>显示面板背景</PortraitOverlay.Settings.ShowBackground>
+  <PortraitOverlay.Settings.ShowName>显示角色名称</PortraitOverlay.Settings.ShowName>
+  <PortraitOverlay.Settings.KeepLastPortrait>取消选择后仍保留肖像</PortraitOverlay.Settings.KeepLastPortrait>
+  <PortraitOverlay.Settings.RenderHeadgear>渲染头部装备</PortraitOverlay.Settings.RenderHeadgear>
+  <PortraitOverlay.Settings.RenderApparel>渲染服装层</PortraitOverlay.Settings.RenderApparel>
+  <PortraitOverlay.Settings.AllowDragging>允许在游戏内拖动</PortraitOverlay.Settings.AllowDragging>
+  <PortraitOverlay.Settings.ShowAnimals>显示动物</PortraitOverlay.Settings.ShowAnimals>
+  <PortraitOverlay.Settings.ShowMechanoids>显示机械族</PortraitOverlay.Settings.ShowMechanoids>
+  <PortraitOverlay.Settings.ShowAnomalyEntities>显示 Anomaly 实体</PortraitOverlay.Settings.ShowAnomalyEntities>
+  <PortraitOverlay.Settings.PanelWidth>面板宽度: {0}px</PortraitOverlay.Settings.PanelWidth>
+  <PortraitOverlay.Settings.PanelHeight>面板高度: {0}px</PortraitOverlay.Settings.PanelHeight>
+  <PortraitOverlay.Settings.PositionX>面板 X 位置: {0}</PortraitOverlay.Settings.PositionX>
+  <PortraitOverlay.Settings.PositionY>面板 Y 位置: {0}</PortraitOverlay.Settings.PositionY>
+  <PortraitOverlay.Settings.BackgroundAlpha>背景不透明度: {0}</PortraitOverlay.Settings.BackgroundAlpha>
+  <PortraitOverlay.Settings.Zoom>肖像缩放: {0}</PortraitOverlay.Settings.Zoom>
+  <PortraitOverlay.Settings.FaceEmphasis>面部强调: {0}</PortraitOverlay.Settings.FaceEmphasis>
+  <PortraitOverlay.Settings.ResetPosition>重置面板位置</PortraitOverlay.Settings.ResetPosition>
+  <PortraitOverlay.Settings.FacialAnimationStatus>Facial Animation: {0}</PortraitOverlay.Settings.FacialAnimationStatus>
+  <PortraitOverlay.Settings.FacialAnimationActive>已检测到</PortraitOverlay.Settings.FacialAnimationActive>
+  <PortraitOverlay.Settings.FacialAnimationInactive>未检测到</PortraitOverlay.Settings.FacialAnimationInactive>
+  <PortraitOverlay.Overlay.Title>{0}</PortraitOverlay.Overlay.Title>
+  <PortraitOverlay.Overlay.NoPortrait>无法渲染肖像</PortraitOverlay.Overlay.NoPortrait>
+  <PortraitOverlay.Overlay.Tooltip>启用拖动时，可拖动此面板来移动位置。</PortraitOverlay.Overlay.Tooltip>
+</LanguageData>

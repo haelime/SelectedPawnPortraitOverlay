@@ -3,11 +3,14 @@
   <PortraitOverlay.Settings.Category>초상화 오버레이</PortraitOverlay.Settings.Category>
   <PortraitOverlay.Settings.Enabled>오버레이 표시</PortraitOverlay.Settings.Enabled>
   <PortraitOverlay.Settings.ShowBackground>패널 배경 표시</PortraitOverlay.Settings.ShowBackground>
+  <PortraitOverlay.Settings.ShowName>이름 표시</PortraitOverlay.Settings.ShowName>
+  <PortraitOverlay.Settings.KeepLastPortrait>선택 해제 후에도 초상화 유지</PortraitOverlay.Settings.KeepLastPortrait>
   <PortraitOverlay.Settings.RenderHeadgear>머리 장비 렌더링</PortraitOverlay.Settings.RenderHeadgear>
   <PortraitOverlay.Settings.RenderApparel>의류 레이어 렌더링</PortraitOverlay.Settings.RenderApparel>
   <PortraitOverlay.Settings.AllowDragging>게임 내 드래그 이동 허용</PortraitOverlay.Settings.AllowDragging>
   <PortraitOverlay.Settings.ShowAnimals>동물 표시</PortraitOverlay.Settings.ShowAnimals>
   <PortraitOverlay.Settings.ShowMechanoids>메카노이드 표시</PortraitOverlay.Settings.ShowMechanoids>
+  <PortraitOverlay.Settings.ShowAnomalyEntities>Anomaly 실체 표시</PortraitOverlay.Settings.ShowAnomalyEntities>
   <PortraitOverlay.Settings.PanelWidth>패널 너비: {0}px</PortraitOverlay.Settings.PanelWidth>
   <PortraitOverlay.Settings.PanelHeight>패널 높이: {0}px</PortraitOverlay.Settings.PanelHeight>
   <PortraitOverlay.Settings.PositionX>패널 X 위치: {0}</PortraitOverlay.Settings.PositionX>

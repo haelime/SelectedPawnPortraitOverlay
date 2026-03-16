@@ -5,7 +5,10 @@ namespace SelectedPawnPortraitOverlay;
 
 public sealed class PortraitOverlayMod : Mod
 {
+    private const float SettingsContentHeight = 760f;
+
     private static PortraitOverlayMod instance;
+    private Vector2 settingsScrollPosition;
 
     public static PortraitOverlaySettings Settings { get; private set; }
 
@@ -27,16 +30,22 @@ public sealed class PortraitOverlayMod : Mod
         var settings = Settings;
         settings.ClampValues();
 
+        var viewRect = new Rect(0f, 0f, inRect.width - 16f, SettingsContentHeight);
+        Widgets.BeginScrollView(inRect, ref settingsScrollPosition, viewRect);
+
         var listing = new Listing_Standard();
-        listing.Begin(inRect);
+        listing.Begin(viewRect);
 
         listing.CheckboxLabeled("PortraitOverlay.Settings.Enabled".Translate(), ref settings.Enabled);
         listing.CheckboxLabeled("PortraitOverlay.Settings.ShowBackground".Translate(), ref settings.ShowBackground);
+        listing.CheckboxLabeled("PortraitOverlay.Settings.ShowName".Translate(), ref settings.ShowName);
+        listing.CheckboxLabeled("PortraitOverlay.Settings.KeepLastPortrait".Translate(), ref settings.KeepLastPortrait);
         listing.CheckboxLabeled("PortraitOverlay.Settings.RenderHeadgear".Translate(), ref settings.RenderHeadgear);
         listing.CheckboxLabeled("PortraitOverlay.Settings.RenderApparel".Translate(), ref settings.RenderApparel);
         listing.CheckboxLabeled("PortraitOverlay.Settings.AllowDragging".Translate(), ref settings.AllowDragging);
         listing.CheckboxLabeled("PortraitOverlay.Settings.ShowAnimals".Translate(), ref settings.ShowAnimals);
         listing.CheckboxLabeled("PortraitOverlay.Settings.ShowMechanoids".Translate(), ref settings.ShowMechanoids);
+        listing.CheckboxLabeled("PortraitOverlay.Settings.ShowAnomalyEntities".Translate(), ref settings.ShowAnomalyEntities);
         listing.GapLine();
 
         listing.Label("PortraitOverlay.Settings.PanelWidth".Translate(settings.PanelWidth.ToString("F0")));
@@ -70,6 +79,7 @@ public sealed class PortraitOverlayMod : Mod
         listing.Label("PortraitOverlay.Settings.FacialAnimationStatus".Translate(ModCompatibility.FacialAnimationStatusLabel.Translate()));
 
         listing.End();
+        Widgets.EndScrollView();
         settings.ClampValues();
     }
 

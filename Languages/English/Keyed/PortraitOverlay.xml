@@ -3,11 +3,14 @@
   <PortraitOverlay.Settings.Category>Portrait Overlay</PortraitOverlay.Settings.Category>
   <PortraitOverlay.Settings.Enabled>Enable overlay</PortraitOverlay.Settings.Enabled>
   <PortraitOverlay.Settings.ShowBackground>Show panel background</PortraitOverlay.Settings.ShowBackground>
+  <PortraitOverlay.Settings.ShowName>Show pawn name</PortraitOverlay.Settings.ShowName>
+  <PortraitOverlay.Settings.KeepLastPortrait>Keep portrait after deselection</PortraitOverlay.Settings.KeepLastPortrait>
   <PortraitOverlay.Settings.RenderHeadgear>Render headgear</PortraitOverlay.Settings.RenderHeadgear>
   <PortraitOverlay.Settings.RenderApparel>Render apparel layers</PortraitOverlay.Settings.RenderApparel>
   <PortraitOverlay.Settings.AllowDragging>Allow dragging in-game</PortraitOverlay.Settings.AllowDragging>
   <PortraitOverlay.Settings.ShowAnimals>Show animals</PortraitOverlay.Settings.ShowAnimals>
   <PortraitOverlay.Settings.ShowMechanoids>Show mechanoids</PortraitOverlay.Settings.ShowMechanoids>
+  <PortraitOverlay.Settings.ShowAnomalyEntities>Show Anomaly entities</PortraitOverlay.Settings.ShowAnomalyEntities>
   <PortraitOverlay.Settings.PanelWidth>Panel width: {0}px</PortraitOverlay.Settings.PanelWidth>
   <PortraitOverlay.Settings.PanelHeight>Panel height: {0}px</PortraitOverlay.Settings.PanelHeight>
   <PortraitOverlay.Settings.PositionX>Panel X position: {0}</PortraitOverlay.Settings.PositionX>

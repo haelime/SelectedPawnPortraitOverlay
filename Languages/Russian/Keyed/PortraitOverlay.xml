@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <PortraitOverlay.Settings.Category>Портретный оверлей</PortraitOverlay.Settings.Category>
+  <PortraitOverlay.Settings.Enabled>Включить оверлей</PortraitOverlay.Settings.Enabled>
+  <PortraitOverlay.Settings.ShowBackground>Показывать фон панели</PortraitOverlay.Settings.ShowBackground>
+  <PortraitOverlay.Settings.ShowName>Показывать имя</PortraitOverlay.Settings.ShowName>
+  <PortraitOverlay.Settings.KeepLastPortrait>Сохранять портрет после снятия выбора</PortraitOverlay.Settings.KeepLastPortrait>
+  <PortraitOverlay.Settings.RenderHeadgear>Отрисовывать головной убор</PortraitOverlay.Settings.RenderHeadgear>
+  <PortraitOverlay.Settings.RenderApparel>Отрисовывать слои одежды</PortraitOverlay.Settings.RenderApparel>
+  <PortraitOverlay.Settings.AllowDragging>Разрешить перетаскивание в игре</PortraitOverlay.Settings.AllowDragging>
+  <PortraitOverlay.Settings.ShowAnimals>Показывать животных</PortraitOverlay.Settings.ShowAnimals>
+  <PortraitOverlay.Settings.ShowMechanoids>Показывать механоидов</PortraitOverlay.Settings.ShowMechanoids>
+  <PortraitOverlay.Settings.ShowAnomalyEntities>Показывать сущности Anomaly</PortraitOverlay.Settings.ShowAnomalyEntities>
+  <PortraitOverlay.Settings.PanelWidth>Ширина панели: {0}px</PortraitOverlay.Settings.PanelWidth>
+  <PortraitOverlay.Settings.PanelHeight>Высота панели: {0}px</PortraitOverlay.Settings.PanelHeight>
+  <PortraitOverlay.Settings.PositionX>Позиция панели по X: {0}</PortraitOverlay.Settings.PositionX>
+  <PortraitOverlay.Settings.PositionY>Позиция панели по Y: {0}</PortraitOverlay.Settings.PositionY>
+  <PortraitOverlay.Settings.BackgroundAlpha>Непрозрачность фона: {0}</PortraitOverlay.Settings.BackgroundAlpha>
+  <PortraitOverlay.Settings.Zoom>Масштаб портрета: {0}</PortraitOverlay.Settings.Zoom>
+  <PortraitOverlay.Settings.FaceEmphasis>Акцент на лице: {0}</PortraitOverlay.Settings.FaceEmphasis>
+  <PortraitOverlay.Settings.ResetPosition>Сбросить позицию панели</PortraitOverlay.Settings.ResetPosition>
+  <PortraitOverlay.Settings.FacialAnimationStatus>Facial Animation: {0}</PortraitOverlay.Settings.FacialAnimationStatus>
+  <PortraitOverlay.Settings.FacialAnimationActive>обнаружен</PortraitOverlay.Settings.FacialAnimationActive>
+  <PortraitOverlay.Settings.FacialAnimationInactive>не обнаружен</PortraitOverlay.Settings.FacialAnimationInactive>
+  <PortraitOverlay.Overlay.Title>{0}</PortraitOverlay.Overlay.Title>
+  <PortraitOverlay.Overlay.NoPortrait>Портрет недоступен</PortraitOverlay.Overlay.NoPortrait>
+  <PortraitOverlay.Overlay.Tooltip>Если перетаскивание включено, эту панель можно перемещать мышью.</PortraitOverlay.Overlay.Tooltip>
+</LanguageData>
