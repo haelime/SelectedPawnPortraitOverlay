@@ -1,6 +1,7 @@
 bin/
 obj/
 Assemblies/
+.dotnet/
 *.user
 *.suo
 *.cache

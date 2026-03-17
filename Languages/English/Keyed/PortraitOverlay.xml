@@ -11,6 +11,8 @@
   <PortraitOverlay.Settings.ShowAnimals>Show animals</PortraitOverlay.Settings.ShowAnimals>
   <PortraitOverlay.Settings.ShowMechanoids>Show mechanoids</PortraitOverlay.Settings.ShowMechanoids>
   <PortraitOverlay.Settings.ShowAnomalyEntities>Show Anomaly entities</PortraitOverlay.Settings.ShowAnomalyEntities>
+  <PortraitOverlay.Settings.ShowPrisoners>Show prisoners</PortraitOverlay.Settings.ShowPrisoners>
+  <PortraitOverlay.Settings.ShowSlaves>Show slaves</PortraitOverlay.Settings.ShowSlaves>
   <PortraitOverlay.Settings.PanelWidth>Panel width: {0}px</PortraitOverlay.Settings.PanelWidth>
   <PortraitOverlay.Settings.PanelHeight>Panel height: {0}px</PortraitOverlay.Settings.PanelHeight>
   <PortraitOverlay.Settings.PositionX>Panel X position: {0}</PortraitOverlay.Settings.PositionX>
@@ -18,7 +20,8 @@
   <PortraitOverlay.Settings.BackgroundAlpha>Background opacity: {0}</PortraitOverlay.Settings.BackgroundAlpha>
   <PortraitOverlay.Settings.Zoom>Portrait zoom: {0}</PortraitOverlay.Settings.Zoom>
   <PortraitOverlay.Settings.FaceEmphasis>Face emphasis: {0}</PortraitOverlay.Settings.FaceEmphasis>
-  <PortraitOverlay.Settings.ResetPosition>Reset panel position</PortraitOverlay.Settings.ResetPosition>
+  <PortraitOverlay.Settings.ResetWindowSettings>Reset panel size/position</PortraitOverlay.Settings.ResetWindowSettings>
+  <PortraitOverlay.Settings.ResetAllSettings>Reset all settings</PortraitOverlay.Settings.ResetAllSettings>
   <PortraitOverlay.Settings.FacialAnimationStatus>Facial Animation: {0}</PortraitOverlay.Settings.FacialAnimationStatus>
   <PortraitOverlay.Settings.FacialAnimationActive>detected</PortraitOverlay.Settings.FacialAnimationActive>
   <PortraitOverlay.Settings.FacialAnimationInactive>not detected</PortraitOverlay.Settings.FacialAnimationInactive>

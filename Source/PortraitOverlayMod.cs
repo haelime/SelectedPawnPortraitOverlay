@@ -5,7 +5,8 @@ namespace SelectedPawnPortraitOverlay;
 
 public sealed class PortraitOverlayMod : Mod
 {
-    private const float SettingsContentHeight = 760f;
+    private const float SettingsScrollBarWidth = 16f;
+    private const float SettingsContentPadding = 12f;
 
     private static PortraitOverlayMod instance;
     private Vector2 settingsScrollPosition;
@@ -30,11 +31,13 @@ public sealed class PortraitOverlayMod : Mod
         var settings = Settings;
         settings.ClampValues();
 
-        var viewRect = new Rect(0f, 0f, inRect.width - 16f, SettingsContentHeight);
+        var contentHeight = GetSettingsContentHeight();
+        var viewRect = new Rect(0f, 0f, inRect.width - SettingsScrollBarWidth, contentHeight);
+        var listingRect = new Rect(0f, 0f, viewRect.width - SettingsContentPadding, contentHeight);
         Widgets.BeginScrollView(inRect, ref settingsScrollPosition, viewRect);
 
         var listing = new Listing_Standard();
-        listing.Begin(viewRect);
+        listing.Begin(listingRect);
 
         listing.CheckboxLabeled("PortraitOverlay.Settings.Enabled".Translate(), ref settings.Enabled);
         listing.CheckboxLabeled("PortraitOverlay.Settings.ShowBackground".Translate(), ref settings.ShowBackground);
@@ -46,6 +49,8 @@ public sealed class PortraitOverlayMod : Mod
         listing.CheckboxLabeled("PortraitOverlay.Settings.ShowAnimals".Translate(), ref settings.ShowAnimals);
         listing.CheckboxLabeled("PortraitOverlay.Settings.ShowMechanoids".Translate(), ref settings.ShowMechanoids);
         listing.CheckboxLabeled("PortraitOverlay.Settings.ShowAnomalyEntities".Translate(), ref settings.ShowAnomalyEntities);
+        listing.CheckboxLabeled("PortraitOverlay.Settings.ShowPrisoners".Translate(), ref settings.ShowPrisoners);
+        listing.CheckboxLabeled("PortraitOverlay.Settings.ShowSlaves".Translate(), ref settings.ShowSlaves);
         listing.GapLine();
 
         listing.Label("PortraitOverlay.Settings.PanelWidth".Translate(settings.PanelWidth.ToString("F0")));
@@ -69,9 +74,17 @@ public sealed class PortraitOverlayMod : Mod
         listing.Label("PortraitOverlay.Settings.FaceEmphasis".Translate(FormatPercent(settings.FaceEmphasis)));
         settings.FaceEmphasis = listing.Slider(settings.FaceEmphasis, 0f, 1f);
 
-        if (listing.ButtonText("PortraitOverlay.Settings.ResetPosition".Translate()))
+        listing.GapLine();
+
+        if (listing.ButtonText("PortraitOverlay.Settings.ResetWindowSettings".Translate()))
         {
-            settings.ResetPosition();
+            settings.ResetWindowSettings();
+            SaveSettings();
+        }
+
+        if (listing.ButtonText("PortraitOverlay.Settings.ResetAllSettings".Translate()))
+        {
+            settings.ResetAll();
             SaveSettings();
         }
 
@@ -86,6 +99,22 @@ public sealed class PortraitOverlayMod : Mod
     private static string FormatPercent(float value)
     {
         return Mathf.RoundToInt(value * 100f) + "%";
+    }
+
+    private static float GetSettingsContentHeight()
+    {
+        const float checkboxHeight = 32f;
+        const float sliderBlockHeight = 56f;
+        const float buttonHeight = 36f;
+        const float sectionSpacing = 160f;
+        const int checkboxCount = 12;
+        const int sliderCount = 7;
+        const int buttonCount = 2;
+
+        return (checkboxCount * checkboxHeight)
+            + (sliderCount * sliderBlockHeight)
+            + (buttonCount * buttonHeight)
+            + sectionSpacing;
     }
 
     public static void SaveSettings()

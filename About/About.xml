@@ -6,5 +6,5 @@
   <supportedVersions>
     <li>1.6</li>
   </supportedVersions>
-  <description>Shows a front-facing full-body portrait overlay for the currently selected colonist. Includes Korean, English, Japanese, Simplified Chinese, and Russian localization.</description>
+  <description>Shows a front-facing full-body portrait overlay for the currently selected pawn, with filters for animals, mechanoids, Anomaly entities, prisoners, and slaves. Includes Korean, English, Japanese, Simplified Chinese, and Russian localization.</description>
 </ModMetaData>

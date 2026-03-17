@@ -11,6 +11,8 @@
   <PortraitOverlay.Settings.ShowAnimals>動物を表示</PortraitOverlay.Settings.ShowAnimals>
   <PortraitOverlay.Settings.ShowMechanoids>メカノイドを表示</PortraitOverlay.Settings.ShowMechanoids>
   <PortraitOverlay.Settings.ShowAnomalyEntities>Anomaly エンティティを表示</PortraitOverlay.Settings.ShowAnomalyEntities>
+  <PortraitOverlay.Settings.ShowPrisoners>囚人を表示</PortraitOverlay.Settings.ShowPrisoners>
+  <PortraitOverlay.Settings.ShowSlaves>奴隷を表示</PortraitOverlay.Settings.ShowSlaves>
   <PortraitOverlay.Settings.PanelWidth>パネル幅: {0}px</PortraitOverlay.Settings.PanelWidth>
   <PortraitOverlay.Settings.PanelHeight>パネル高さ: {0}px</PortraitOverlay.Settings.PanelHeight>
   <PortraitOverlay.Settings.PositionX>パネル X 位置: {0}</PortraitOverlay.Settings.PositionX>
@@ -18,7 +20,8 @@
   <PortraitOverlay.Settings.BackgroundAlpha>背景不透明度: {0}</PortraitOverlay.Settings.BackgroundAlpha>
   <PortraitOverlay.Settings.Zoom>ポートレートズーム: {0}</PortraitOverlay.Settings.Zoom>
   <PortraitOverlay.Settings.FaceEmphasis>顔の強調: {0}</PortraitOverlay.Settings.FaceEmphasis>
-  <PortraitOverlay.Settings.ResetPosition>パネル位置をリセット</PortraitOverlay.Settings.ResetPosition>
+  <PortraitOverlay.Settings.ResetWindowSettings>パネル位置/サイズをリセット</PortraitOverlay.Settings.ResetWindowSettings>
+  <PortraitOverlay.Settings.ResetAllSettings>すべての設定をリセット</PortraitOverlay.Settings.ResetAllSettings>
   <PortraitOverlay.Settings.FacialAnimationStatus>Facial Animation: {0}</PortraitOverlay.Settings.FacialAnimationStatus>
   <PortraitOverlay.Settings.FacialAnimationActive>検出済み</PortraitOverlay.Settings.FacialAnimationActive>
   <PortraitOverlay.Settings.FacialAnimationInactive>未検出</PortraitOverlay.Settings.FacialAnimationInactive>

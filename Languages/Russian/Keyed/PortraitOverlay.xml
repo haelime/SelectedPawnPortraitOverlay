@@ -11,6 +11,8 @@
   <PortraitOverlay.Settings.ShowAnimals>Показывать животных</PortraitOverlay.Settings.ShowAnimals>
   <PortraitOverlay.Settings.ShowMechanoids>Показывать механоидов</PortraitOverlay.Settings.ShowMechanoids>
   <PortraitOverlay.Settings.ShowAnomalyEntities>Показывать сущности Anomaly</PortraitOverlay.Settings.ShowAnomalyEntities>
+  <PortraitOverlay.Settings.ShowPrisoners>Показывать заключённых</PortraitOverlay.Settings.ShowPrisoners>
+  <PortraitOverlay.Settings.ShowSlaves>Показывать рабов</PortraitOverlay.Settings.ShowSlaves>
   <PortraitOverlay.Settings.PanelWidth>Ширина панели: {0}px</PortraitOverlay.Settings.PanelWidth>
   <PortraitOverlay.Settings.PanelHeight>Высота панели: {0}px</PortraitOverlay.Settings.PanelHeight>
   <PortraitOverlay.Settings.PositionX>Позиция панели по X: {0}</PortraitOverlay.Settings.PositionX>
@@ -18,7 +20,8 @@
   <PortraitOverlay.Settings.BackgroundAlpha>Непрозрачность фона: {0}</PortraitOverlay.Settings.BackgroundAlpha>
   <PortraitOverlay.Settings.Zoom>Масштаб портрета: {0}</PortraitOverlay.Settings.Zoom>
   <PortraitOverlay.Settings.FaceEmphasis>Акцент на лице: {0}</PortraitOverlay.Settings.FaceEmphasis>
-  <PortraitOverlay.Settings.ResetPosition>Сбросить позицию панели</PortraitOverlay.Settings.ResetPosition>
+  <PortraitOverlay.Settings.ResetWindowSettings>Сбросить размер и позицию панели</PortraitOverlay.Settings.ResetWindowSettings>
+  <PortraitOverlay.Settings.ResetAllSettings>Сбросить все настройки</PortraitOverlay.Settings.ResetAllSettings>
   <PortraitOverlay.Settings.FacialAnimationStatus>Facial Animation: {0}</PortraitOverlay.Settings.FacialAnimationStatus>
   <PortraitOverlay.Settings.FacialAnimationActive>обнаружен</PortraitOverlay.Settings.FacialAnimationActive>
   <PortraitOverlay.Settings.FacialAnimationInactive>не обнаружен</PortraitOverlay.Settings.FacialAnimationInactive>

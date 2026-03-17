@@ -5,46 +5,70 @@ namespace SelectedPawnPortraitOverlay;
 
 public sealed class PortraitOverlaySettings : ModSettings
 {
-    public bool Enabled = true;
-    public bool ShowBackground = true;
-    public bool ShowName = true;
-    public bool KeepLastPortrait = false;
-    public bool RenderHeadgear = true;
-    public bool RenderApparel = true;
-    public bool AllowDragging = true;
-    public bool ShowAnimals = true;
-    public bool ShowMechanoids = true;
-    public bool ShowAnomalyEntities = true;
+    private const bool DefaultEnabled = true;
+    private const bool DefaultShowBackground = true;
+    private const bool DefaultShowName = true;
+    private const bool DefaultKeepLastPortrait = false;
+    private const bool DefaultRenderHeadgear = true;
+    private const bool DefaultRenderApparel = true;
+    private const bool DefaultAllowDragging = true;
+    private const bool DefaultShowAnimals = true;
+    private const bool DefaultShowMechanoids = true;
+    private const bool DefaultShowAnomalyEntities = true;
+    private const bool DefaultShowPrisoners = true;
+    private const bool DefaultShowSlaves = true;
+    private const float DefaultPanelX = 24f;
+    private const float DefaultPanelY = 24f;
+    private const float DefaultPanelWidth = 240f;
+    private const float DefaultPanelHeight = 360f;
+    private const float DefaultBackgroundAlpha = 0.45f;
+    private const float DefaultCameraZoom = 1.02f;
+    private const float DefaultFaceEmphasis = 0.2f;
 
-    public float PanelX = 24f;
-    public float PanelY = 24f;
-    public float PanelWidth = 240f;
-    public float PanelHeight = 360f;
-    public float BackgroundAlpha = 0.45f;
-    public float CameraZoom = 1.02f;
-    public float FaceEmphasis = 0.2f;
+    public bool Enabled = DefaultEnabled;
+    public bool ShowBackground = DefaultShowBackground;
+    public bool ShowName = DefaultShowName;
+    public bool KeepLastPortrait = DefaultKeepLastPortrait;
+    public bool RenderHeadgear = DefaultRenderHeadgear;
+    public bool RenderApparel = DefaultRenderApparel;
+    public bool AllowDragging = DefaultAllowDragging;
+    public bool ShowAnimals = DefaultShowAnimals;
+    public bool ShowMechanoids = DefaultShowMechanoids;
+    public bool ShowAnomalyEntities = DefaultShowAnomalyEntities;
+    public bool ShowPrisoners = DefaultShowPrisoners;
+    public bool ShowSlaves = DefaultShowSlaves;
+
+    public float PanelX = DefaultPanelX;
+    public float PanelY = DefaultPanelY;
+    public float PanelWidth = DefaultPanelWidth;
+    public float PanelHeight = DefaultPanelHeight;
+    public float BackgroundAlpha = DefaultBackgroundAlpha;
+    public float CameraZoom = DefaultCameraZoom;
+    public float FaceEmphasis = DefaultFaceEmphasis;
 
     public Vector2 PanelSize => new(PanelWidth, PanelHeight);
 
     public override void ExposeData()
     {
-        Scribe_Values.Look(ref Enabled, nameof(Enabled), true);
-        Scribe_Values.Look(ref ShowBackground, nameof(ShowBackground), true);
-        Scribe_Values.Look(ref ShowName, nameof(ShowName), true);
-        Scribe_Values.Look(ref KeepLastPortrait, nameof(KeepLastPortrait), false);
-        Scribe_Values.Look(ref RenderHeadgear, nameof(RenderHeadgear), true);
-        Scribe_Values.Look(ref RenderApparel, nameof(RenderApparel), true);
-        Scribe_Values.Look(ref AllowDragging, nameof(AllowDragging), true);
-        Scribe_Values.Look(ref ShowAnimals, nameof(ShowAnimals), true);
-        Scribe_Values.Look(ref ShowMechanoids, nameof(ShowMechanoids), true);
-        Scribe_Values.Look(ref ShowAnomalyEntities, nameof(ShowAnomalyEntities), true);
-        Scribe_Values.Look(ref PanelX, nameof(PanelX), 24f);
-        Scribe_Values.Look(ref PanelY, nameof(PanelY), 24f);
-        Scribe_Values.Look(ref PanelWidth, nameof(PanelWidth), 240f);
-        Scribe_Values.Look(ref PanelHeight, nameof(PanelHeight), 360f);
-        Scribe_Values.Look(ref BackgroundAlpha, nameof(BackgroundAlpha), 0.45f);
-        Scribe_Values.Look(ref CameraZoom, nameof(CameraZoom), 1.02f);
-        Scribe_Values.Look(ref FaceEmphasis, nameof(FaceEmphasis), 0.2f);
+        Scribe_Values.Look(ref Enabled, nameof(Enabled), DefaultEnabled);
+        Scribe_Values.Look(ref ShowBackground, nameof(ShowBackground), DefaultShowBackground);
+        Scribe_Values.Look(ref ShowName, nameof(ShowName), DefaultShowName);
+        Scribe_Values.Look(ref KeepLastPortrait, nameof(KeepLastPortrait), DefaultKeepLastPortrait);
+        Scribe_Values.Look(ref RenderHeadgear, nameof(RenderHeadgear), DefaultRenderHeadgear);
+        Scribe_Values.Look(ref RenderApparel, nameof(RenderApparel), DefaultRenderApparel);
+        Scribe_Values.Look(ref AllowDragging, nameof(AllowDragging), DefaultAllowDragging);
+        Scribe_Values.Look(ref ShowAnimals, nameof(ShowAnimals), DefaultShowAnimals);
+        Scribe_Values.Look(ref ShowMechanoids, nameof(ShowMechanoids), DefaultShowMechanoids);
+        Scribe_Values.Look(ref ShowAnomalyEntities, nameof(ShowAnomalyEntities), DefaultShowAnomalyEntities);
+        Scribe_Values.Look(ref ShowPrisoners, nameof(ShowPrisoners), DefaultShowPrisoners);
+        Scribe_Values.Look(ref ShowSlaves, nameof(ShowSlaves), DefaultShowSlaves);
+        Scribe_Values.Look(ref PanelX, nameof(PanelX), DefaultPanelX);
+        Scribe_Values.Look(ref PanelY, nameof(PanelY), DefaultPanelY);
+        Scribe_Values.Look(ref PanelWidth, nameof(PanelWidth), DefaultPanelWidth);
+        Scribe_Values.Look(ref PanelHeight, nameof(PanelHeight), DefaultPanelHeight);
+        Scribe_Values.Look(ref BackgroundAlpha, nameof(BackgroundAlpha), DefaultBackgroundAlpha);
+        Scribe_Values.Look(ref CameraZoom, nameof(CameraZoom), DefaultCameraZoom);
+        Scribe_Values.Look(ref FaceEmphasis, nameof(FaceEmphasis), DefaultFaceEmphasis);
         ClampValues();
     }
 
@@ -59,9 +83,36 @@ public sealed class PortraitOverlaySettings : ModSettings
         FaceEmphasis = Mathf.Clamp01(FaceEmphasis);
     }
 
-    public void ResetPosition()
+    public void ResetWindowSettings()
     {
-        PanelX = 24f;
-        PanelY = 24f;
+        PanelX = DefaultPanelX;
+        PanelY = DefaultPanelY;
+        PanelWidth = DefaultPanelWidth;
+        PanelHeight = DefaultPanelHeight;
+        ClampValues();
+    }
+
+    public void ResetAll()
+    {
+        Enabled = DefaultEnabled;
+        ShowBackground = DefaultShowBackground;
+        ShowName = DefaultShowName;
+        KeepLastPortrait = DefaultKeepLastPortrait;
+        RenderHeadgear = DefaultRenderHeadgear;
+        RenderApparel = DefaultRenderApparel;
+        AllowDragging = DefaultAllowDragging;
+        ShowAnimals = DefaultShowAnimals;
+        ShowMechanoids = DefaultShowMechanoids;
+        ShowAnomalyEntities = DefaultShowAnomalyEntities;
+        ShowPrisoners = DefaultShowPrisoners;
+        ShowSlaves = DefaultShowSlaves;
+        PanelX = DefaultPanelX;
+        PanelY = DefaultPanelY;
+        PanelWidth = DefaultPanelWidth;
+        PanelHeight = DefaultPanelHeight;
+        BackgroundAlpha = DefaultBackgroundAlpha;
+        CameraZoom = DefaultCameraZoom;
+        FaceEmphasis = DefaultFaceEmphasis;
+        ClampValues();
     }
 }

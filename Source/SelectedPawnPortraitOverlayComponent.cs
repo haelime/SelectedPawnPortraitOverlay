@@ -5,8 +5,9 @@ namespace SelectedPawnPortraitOverlay;
 
 public sealed class SelectedPawnPortraitOverlayComponent : GameComponent
 {
+    private const int OverlayWindowId = 18467231;
+
     private bool isDragging;
-    private Vector2 dragOffset;
     private Pawn lastDisplayedPawn;
 
     public SelectedPawnPortraitOverlayComponent(Game game)
@@ -38,8 +39,19 @@ public sealed class SelectedPawnPortraitOverlayComponent : GameComponent
 
         settings.ClampValues();
         var rect = BuildPanelRect(settings);
-        HandleDragging(rect, settings);
-        DrawPanel(rect, pawn, settings);
+        Find.WindowStack.ImmediateWindow(
+            OverlayWindowId,
+            rect,
+            WindowLayer.GameUI,
+            delegate
+            {
+                var localRect = new Rect(0f, 0f, rect.width, rect.height);
+                HandleDragging(localRect, settings);
+                DrawPanel(localRect, pawn, settings);
+            },
+            doBackground: false,
+            absorbInputAroundWindow: false,
+            1f);
     }
 
     private Pawn GetPawnToDisplay(PortraitOverlaySettings settings)
@@ -93,6 +105,16 @@ public sealed class SelectedPawnPortraitOverlayComponent : GameComponent
             return false;
         }
 
+        if (!settings.ShowPrisoners && pawn.IsPrisonerOfColony)
+        {
+            return false;
+        }
+
+        if (!settings.ShowSlaves && pawn.IsSlaveOfColony)
+        {
+            return false;
+        }
+
         return true;
     }
 
@@ -122,12 +144,11 @@ public sealed class SelectedPawnPortraitOverlayComponent : GameComponent
         {
             case EventType.MouseDown when currentEvent.button == 0 && rect.Contains(currentEvent.mousePosition):
                 isDragging = true;
-                dragOffset = currentEvent.mousePosition - rect.position;
                 currentEvent.Use();
                 break;
             case EventType.MouseDrag when isDragging:
-                settings.PanelX = currentEvent.mousePosition.x - dragOffset.x;
-                settings.PanelY = currentEvent.mousePosition.y - dragOffset.y;
+                settings.PanelX += currentEvent.delta.x;
+                settings.PanelY += currentEvent.delta.y;
                 settings.ClampValues();
                 currentEvent.Use();
                 break;

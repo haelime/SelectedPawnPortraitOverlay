@@ -11,6 +11,8 @@
   <PortraitOverlay.Settings.ShowAnimals>동물 표시</PortraitOverlay.Settings.ShowAnimals>
   <PortraitOverlay.Settings.ShowMechanoids>메카노이드 표시</PortraitOverlay.Settings.ShowMechanoids>
   <PortraitOverlay.Settings.ShowAnomalyEntities>Anomaly 실체 표시</PortraitOverlay.Settings.ShowAnomalyEntities>
+  <PortraitOverlay.Settings.ShowPrisoners>수감자 표시</PortraitOverlay.Settings.ShowPrisoners>
+  <PortraitOverlay.Settings.ShowSlaves>노예 표시</PortraitOverlay.Settings.ShowSlaves>
   <PortraitOverlay.Settings.PanelWidth>패널 너비: {0}px</PortraitOverlay.Settings.PanelWidth>
   <PortraitOverlay.Settings.PanelHeight>패널 높이: {0}px</PortraitOverlay.Settings.PanelHeight>
   <PortraitOverlay.Settings.PositionX>패널 X 위치: {0}</PortraitOverlay.Settings.PositionX>
@@ -18,7 +20,8 @@
   <PortraitOverlay.Settings.BackgroundAlpha>배경 투명도: {0}</PortraitOverlay.Settings.BackgroundAlpha>
   <PortraitOverlay.Settings.Zoom>초상화 줌: {0}</PortraitOverlay.Settings.Zoom>
   <PortraitOverlay.Settings.FaceEmphasis>얼굴 강조: {0}</PortraitOverlay.Settings.FaceEmphasis>
-  <PortraitOverlay.Settings.ResetPosition>패널 위치 초기화</PortraitOverlay.Settings.ResetPosition>
+  <PortraitOverlay.Settings.ResetWindowSettings>창 위치/크기 초기화</PortraitOverlay.Settings.ResetWindowSettings>
+  <PortraitOverlay.Settings.ResetAllSettings>모든 설정 초기화</PortraitOverlay.Settings.ResetAllSettings>
   <PortraitOverlay.Settings.FacialAnimationStatus>Facial Animation: {0}</PortraitOverlay.Settings.FacialAnimationStatus>
   <PortraitOverlay.Settings.FacialAnimationActive>감지됨</PortraitOverlay.Settings.FacialAnimationActive>
   <PortraitOverlay.Settings.FacialAnimationInactive>감지되지 않음</PortraitOverlay.Settings.FacialAnimationInactive>

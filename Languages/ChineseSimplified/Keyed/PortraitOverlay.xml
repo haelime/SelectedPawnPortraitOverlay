@@ -11,6 +11,8 @@
   <PortraitOverlay.Settings.ShowAnimals>显示动物</PortraitOverlay.Settings.ShowAnimals>
   <PortraitOverlay.Settings.ShowMechanoids>显示机械族</PortraitOverlay.Settings.ShowMechanoids>
   <PortraitOverlay.Settings.ShowAnomalyEntities>显示 Anomaly 实体</PortraitOverlay.Settings.ShowAnomalyEntities>
+  <PortraitOverlay.Settings.ShowPrisoners>显示囚犯</PortraitOverlay.Settings.ShowPrisoners>
+  <PortraitOverlay.Settings.ShowSlaves>显示奴隶</PortraitOverlay.Settings.ShowSlaves>
   <PortraitOverlay.Settings.PanelWidth>面板宽度: {0}px</PortraitOverlay.Settings.PanelWidth>
   <PortraitOverlay.Settings.PanelHeight>面板高度: {0}px</PortraitOverlay.Settings.PanelHeight>
   <PortraitOverlay.Settings.PositionX>面板 X 位置: {0}</PortraitOverlay.Settings.PositionX>
@@ -18,7 +20,8 @@
   <PortraitOverlay.Settings.BackgroundAlpha>背景不透明度: {0}</PortraitOverlay.Settings.BackgroundAlpha>
   <PortraitOverlay.Settings.Zoom>肖像缩放: {0}</PortraitOverlay.Settings.Zoom>
   <PortraitOverlay.Settings.FaceEmphasis>面部强调: {0}</PortraitOverlay.Settings.FaceEmphasis>
-  <PortraitOverlay.Settings.ResetPosition>重置面板位置</PortraitOverlay.Settings.ResetPosition>
+  <PortraitOverlay.Settings.ResetWindowSettings>重置面板位置/尺寸</PortraitOverlay.Settings.ResetWindowSettings>
+  <PortraitOverlay.Settings.ResetAllSettings>重置所有设置</PortraitOverlay.Settings.ResetAllSettings>
   <PortraitOverlay.Settings.FacialAnimationStatus>Facial Animation: {0}</PortraitOverlay.Settings.FacialAnimationStatus>
   <PortraitOverlay.Settings.FacialAnimationActive>已检测到</PortraitOverlay.Settings.FacialAnimationActive>
   <PortraitOverlay.Settings.FacialAnimationInactive>未检测到</PortraitOverlay.Settings.FacialAnimationInactive>
