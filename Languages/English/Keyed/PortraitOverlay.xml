@@ -28,4 +28,6 @@
   <PortraitOverlay.Overlay.Title>{0}</PortraitOverlay.Overlay.Title>
   <PortraitOverlay.Overlay.NoPortrait>Portrait unavailable</PortraitOverlay.Overlay.NoPortrait>
   <PortraitOverlay.Overlay.Tooltip>Drag this panel to move it when dragging is enabled.</PortraitOverlay.Overlay.Tooltip>
+  <PortraitOverlay.Settings.LivePortrait>Enable live portrait updates</PortraitOverlay.Settings.LivePortrait>
+  <PortraitOverlay.Settings.OnlyPlayerControlledPawns>Show only player-controlled pawns</PortraitOverlay.Settings.OnlyPlayerControlledPawns>
 </LanguageData>

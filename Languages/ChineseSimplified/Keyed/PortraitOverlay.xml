@@ -28,4 +28,6 @@
   <PortraitOverlay.Overlay.Title>{0}</PortraitOverlay.Overlay.Title>
   <PortraitOverlay.Overlay.NoPortrait>无法渲染肖像</PortraitOverlay.Overlay.NoPortrait>
   <PortraitOverlay.Overlay.Tooltip>启用拖动时，可拖动此面板来移动位置。</PortraitOverlay.Overlay.Tooltip>
+  <PortraitOverlay.Settings.LivePortrait>Enable live portrait updates</PortraitOverlay.Settings.LivePortrait>
+  <PortraitOverlay.Settings.OnlyPlayerControlledPawns>Show only player-controlled pawns</PortraitOverlay.Settings.OnlyPlayerControlledPawns>
 </LanguageData>

@@ -11,6 +11,9 @@ namespace SelectedPawnPortraitOverlay;
 public static class PawnFullBodyPortraitRenderer
 {
     private static readonly MethodInfo PortraitGetMethod = ResolvePortraitGetMethod();
+    private const float MinimumBodySize = 0.15f;
+    private const float MinimumBodyScaleFactor = 0.75f;
+    private const float MaximumBodyScaleFactor = 1.35f;
 
     public static Texture Render(Pawn pawn, Vector2 size, PortraitOverlaySettings settings)
     {
@@ -20,10 +23,17 @@ public static class PawnFullBodyPortraitRenderer
         }
 
         var cameraOffset = new Vector3(0f, 0f, settings.FaceEmphasis * 0.28f);
-        var zoom = settings.CameraZoom + (settings.FaceEmphasis * 0.1f);
+        var zoom = (settings.CameraZoom * GetBodyScaleFactor(pawn)) + (settings.FaceEmphasis * 0.1f);
         var args = BuildArguments(PortraitGetMethod.GetParameters(), pawn, size, cameraOffset, zoom, settings);
         var texture = PortraitGetMethod.Invoke(null, args) as Texture;
         return texture ?? BaseContent.BadTex;
+    }
+
+    private static float GetBodyScaleFactor(Pawn pawn)
+    {
+        var normalizedBodySize = Mathf.Max(MinimumBodySize, pawn.BodySize);
+        var scaleFactor = Mathf.Sqrt(1f / normalizedBodySize);
+        return Mathf.Clamp(scaleFactor, MinimumBodyScaleFactor, MaximumBodyScaleFactor);
     }
 
     private static MethodInfo ResolvePortraitGetMethod()

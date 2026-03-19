@@ -1,3 +1,4 @@
+using RimWorld.Planet;
 using UnityEngine;
 using Verse;
 
@@ -31,6 +32,14 @@ public sealed class SelectedPawnPortraitOverlayComponent : GameComponent
         if (!settings.Enabled)
         {
             isDragging = false;
+            dragArmed = false;
+            return;
+        }
+
+        if (WorldRendererUtility.WorldRendered)
+        {
+            isDragging = false;
+            dragArmed = false;
             return;
         }
 
@@ -38,6 +47,7 @@ public sealed class SelectedPawnPortraitOverlayComponent : GameComponent
         if (pawn == null)
         {
             isDragging = false;
+            dragArmed = false;
             return;
         }
 
@@ -105,6 +115,11 @@ public sealed class SelectedPawnPortraitOverlayComponent : GameComponent
         }
 
         var settings = PortraitOverlayMod.Settings;
+        if (settings.OnlyPlayerControlledPawns && !pawn.IsPlayerControlled)
+        {
+            return false;
+        }
+
         if (!settings.ShowAnimals && pawn.RaceProps?.Animal == true)
         {
             return false;
@@ -137,7 +152,8 @@ public sealed class SelectedPawnPortraitOverlayComponent : GameComponent
     {
         var width = Mathf.Min(settings.PanelWidth, UI.screenWidth - 8f);
         var height = Mathf.Min(settings.PanelHeight, UI.screenHeight - 8f);
-        var x = Mathf.Clamp(settings.PanelX, 0f, Mathf.Max(0f, UI.screenWidth - width));
+        var maxX = Mathf.Max(PortraitOverlaySettings.MinPanelX, UI.screenWidth - width);
+        var x = Mathf.Clamp(settings.PanelX, PortraitOverlaySettings.MinPanelX, maxX);
         var y = Mathf.Clamp(settings.PanelY, 0f, Mathf.Max(0f, UI.screenHeight - height));
         return new Rect(x, y, width, height);
     }

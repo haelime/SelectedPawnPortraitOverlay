@@ -45,12 +45,20 @@ public sealed class PortraitOverlayMod : Mod
         listing.CheckboxLabeled("PortraitOverlay.Settings.KeepLastPortrait".Translate(), ref settings.KeepLastPortrait);
         listing.CheckboxLabeled("PortraitOverlay.Settings.RenderHeadgear".Translate(), ref settings.RenderHeadgear);
         listing.CheckboxLabeled("PortraitOverlay.Settings.RenderApparel".Translate(), ref settings.RenderApparel);
+        listing.CheckboxLabeled("PortraitOverlay.Settings.LivePortrait".Translate(), ref settings.LivePortrait);
+        var previousOnlyPlayerControlledPawns = settings.OnlyPlayerControlledPawns;
+        listing.CheckboxLabeled("PortraitOverlay.Settings.OnlyPlayerControlledPawns".Translate(), ref settings.OnlyPlayerControlledPawns);
+        if (settings.OnlyPlayerControlledPawns != previousOnlyPlayerControlledPawns)
+        {
+            settings.ApplyFilterDependencies();
+        }
+
         listing.CheckboxLabeled("PortraitOverlay.Settings.AllowDragging".Translate(), ref settings.AllowDragging);
         listing.CheckboxLabeled("PortraitOverlay.Settings.ShowAnimals".Translate(), ref settings.ShowAnimals);
         listing.CheckboxLabeled("PortraitOverlay.Settings.ShowMechanoids".Translate(), ref settings.ShowMechanoids);
-        listing.CheckboxLabeled("PortraitOverlay.Settings.ShowAnomalyEntities".Translate(), ref settings.ShowAnomalyEntities);
-        listing.CheckboxLabeled("PortraitOverlay.Settings.ShowPrisoners".Translate(), ref settings.ShowPrisoners);
-        listing.CheckboxLabeled("PortraitOverlay.Settings.ShowSlaves".Translate(), ref settings.ShowSlaves);
+        DrawCheckbox(listing, "PortraitOverlay.Settings.ShowAnomalyEntities", ref settings.ShowAnomalyEntities, !settings.OnlyPlayerControlledPawns);
+        DrawCheckbox(listing, "PortraitOverlay.Settings.ShowPrisoners", ref settings.ShowPrisoners, !settings.OnlyPlayerControlledPawns);
+        DrawCheckbox(listing, "PortraitOverlay.Settings.ShowSlaves", ref settings.ShowSlaves, !settings.OnlyPlayerControlledPawns);
         listing.GapLine();
 
         listing.Label("PortraitOverlay.Settings.PanelWidth".Translate(settings.PanelWidth.ToString("F0")));
@@ -60,7 +68,7 @@ public sealed class PortraitOverlayMod : Mod
         settings.PanelHeight = listing.Slider(settings.PanelHeight, 240f, 520f);
 
         listing.Label("PortraitOverlay.Settings.PositionX".Translate(settings.PanelX.ToString("F0")));
-        settings.PanelX = listing.Slider(settings.PanelX, 0f, 1200f);
+        settings.PanelX = listing.Slider(settings.PanelX, PortraitOverlaySettings.MinPanelX, 1200f);
 
         listing.Label("PortraitOverlay.Settings.PositionY".Translate(settings.PanelY.ToString("F0")));
         settings.PanelY = listing.Slider(settings.PanelY, 0f, 700f);
@@ -101,13 +109,21 @@ public sealed class PortraitOverlayMod : Mod
         return Mathf.RoundToInt(value * 100f) + "%";
     }
 
+    private static void DrawCheckbox(Listing_Standard listing, string labelKey, ref bool value, bool enabled)
+    {
+        var previousEnabled = GUI.enabled;
+        GUI.enabled = previousEnabled && enabled;
+        listing.CheckboxLabeled(labelKey.Translate(), ref value);
+        GUI.enabled = previousEnabled;
+    }
+
     private static float GetSettingsContentHeight()
     {
         const float checkboxHeight = 32f;
         const float sliderBlockHeight = 56f;
         const float buttonHeight = 36f;
         const float sectionSpacing = 160f;
-        const int checkboxCount = 12;
+        const int checkboxCount = 14;
         const int sliderCount = 7;
         const int buttonCount = 2;
 

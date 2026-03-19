@@ -5,12 +5,16 @@ namespace SelectedPawnPortraitOverlay;
 
 public sealed class PortraitOverlaySettings : ModSettings
 {
+    public const float MinPanelX = -64f;
+
     private const bool DefaultEnabled = true;
     private const bool DefaultShowBackground = true;
     private const bool DefaultShowName = true;
     private const bool DefaultKeepLastPortrait = false;
     private const bool DefaultRenderHeadgear = true;
     private const bool DefaultRenderApparel = true;
+    private const bool DefaultLivePortrait = false;
+    private const bool DefaultOnlyPlayerControlledPawns = false;
     private const bool DefaultAllowDragging = true;
     private const bool DefaultShowAnimals = true;
     private const bool DefaultShowMechanoids = true;
@@ -31,6 +35,8 @@ public sealed class PortraitOverlaySettings : ModSettings
     public bool KeepLastPortrait = DefaultKeepLastPortrait;
     public bool RenderHeadgear = DefaultRenderHeadgear;
     public bool RenderApparel = DefaultRenderApparel;
+    public bool LivePortrait = DefaultLivePortrait;
+    public bool OnlyPlayerControlledPawns = DefaultOnlyPlayerControlledPawns;
     public bool AllowDragging = DefaultAllowDragging;
     public bool ShowAnimals = DefaultShowAnimals;
     public bool ShowMechanoids = DefaultShowMechanoids;
@@ -56,6 +62,8 @@ public sealed class PortraitOverlaySettings : ModSettings
         Scribe_Values.Look(ref KeepLastPortrait, nameof(KeepLastPortrait), DefaultKeepLastPortrait);
         Scribe_Values.Look(ref RenderHeadgear, nameof(RenderHeadgear), DefaultRenderHeadgear);
         Scribe_Values.Look(ref RenderApparel, nameof(RenderApparel), DefaultRenderApparel);
+        Scribe_Values.Look(ref LivePortrait, nameof(LivePortrait), DefaultLivePortrait);
+        Scribe_Values.Look(ref OnlyPlayerControlledPawns, nameof(OnlyPlayerControlledPawns), DefaultOnlyPlayerControlledPawns);
         Scribe_Values.Look(ref AllowDragging, nameof(AllowDragging), DefaultAllowDragging);
         Scribe_Values.Look(ref ShowAnimals, nameof(ShowAnimals), DefaultShowAnimals);
         Scribe_Values.Look(ref ShowMechanoids, nameof(ShowMechanoids), DefaultShowMechanoids);
@@ -74,7 +82,8 @@ public sealed class PortraitOverlaySettings : ModSettings
 
     public void ClampValues()
     {
-        PanelX = Mathf.Clamp(PanelX, 0f, 5000f);
+        ApplyFilterDependencies();
+        PanelX = Mathf.Clamp(PanelX, MinPanelX, 5000f);
         PanelY = Mathf.Clamp(PanelY, 0f, 5000f);
         PanelWidth = Mathf.Clamp(PanelWidth, 180f, 420f);
         PanelHeight = Mathf.Clamp(PanelHeight, 240f, 520f);
@@ -100,6 +109,8 @@ public sealed class PortraitOverlaySettings : ModSettings
         KeepLastPortrait = DefaultKeepLastPortrait;
         RenderHeadgear = DefaultRenderHeadgear;
         RenderApparel = DefaultRenderApparel;
+        LivePortrait = DefaultLivePortrait;
+        OnlyPlayerControlledPawns = DefaultOnlyPlayerControlledPawns;
         AllowDragging = DefaultAllowDragging;
         ShowAnimals = DefaultShowAnimals;
         ShowMechanoids = DefaultShowMechanoids;
@@ -114,5 +125,17 @@ public sealed class PortraitOverlaySettings : ModSettings
         CameraZoom = DefaultCameraZoom;
         FaceEmphasis = DefaultFaceEmphasis;
         ClampValues();
+    }
+
+    public void ApplyFilterDependencies()
+    {
+        if (!OnlyPlayerControlledPawns)
+        {
+            return;
+        }
+
+        ShowAnomalyEntities = false;
+        ShowPrisoners = false;
+        ShowSlaves = false;
     }
 }

@@ -6,6 +6,8 @@ Mod that renders the currently selected pawn as a front-facing full-body portrai
 
 - Separate top-left overlay panel for the selected pawn
 - Full-body portrait framing using RimWorld's portrait renderer
+- Automatic body-size normalization so very large and very small pawns fit the panel more consistently
+- Optional live portrait refresh for movement, rotation, sleeping, and other pose changes
 - Detailed settings for panel size, position, background, zoom, face emphasis, and supported pawn filters
 - Korean, English, Japanese, Simplified Chinese, and Russian localization
 - Graceful fallback when Facial Animation is not installed
