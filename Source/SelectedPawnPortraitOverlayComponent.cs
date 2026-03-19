@@ -6,8 +6,12 @@ namespace SelectedPawnPortraitOverlay;
 public sealed class SelectedPawnPortraitOverlayComponent : GameComponent
 {
     private const int OverlayWindowId = 18467231;
+    private const float DragStartThreshold = 5f;
+    private const int OverlayGuiDepth = 100;
 
     private bool isDragging;
+    private bool dragArmed;
+    private Vector2 dragStartMousePosition;
     private Pawn lastDisplayedPawn;
 
     public SelectedPawnPortraitOverlayComponent(Game game)
@@ -39,19 +43,30 @@ public sealed class SelectedPawnPortraitOverlayComponent : GameComponent
 
         settings.ClampValues();
         var rect = BuildPanelRect(settings);
-        Find.WindowStack.ImmediateWindow(
-            OverlayWindowId,
-            rect,
-            WindowLayer.GameUI,
-            delegate
-            {
-                var localRect = new Rect(0f, 0f, rect.width, rect.height);
-                HandleDragging(localRect, settings);
-                DrawPanel(localRect, pawn, settings);
-            },
-            doBackground: false,
-            absorbInputAroundWindow: false,
-            1f);
+        if (settings.AllowDragging)
+        {
+            Find.WindowStack.ImmediateWindow(
+                OverlayWindowId,
+                rect,
+                WindowLayer.GameUI,
+                delegate
+                {
+                    var localRect = new Rect(0f, 0f, rect.width, rect.height);
+                    HandleDragging(localRect, settings);
+                    DrawPanel(localRect, pawn, settings);
+                },
+                doBackground: false,
+                absorbInputAroundWindow: false,
+                0f);
+            return;
+        }
+
+        isDragging = false;
+        dragArmed = false;
+        var previousDepth = GUI.depth;
+        GUI.depth = OverlayGuiDepth;
+        DrawPanel(rect, pawn, settings);
+        GUI.depth = previousDepth;
     }
 
     private Pawn GetPawnToDisplay(PortraitOverlaySettings settings)
@@ -135,6 +150,7 @@ public sealed class SelectedPawnPortraitOverlayComponent : GameComponent
             if (currentEvent != null && currentEvent.rawType == EventType.MouseUp)
             {
                 isDragging = false;
+                dragArmed = false;
             }
 
             return;
@@ -143,6 +159,15 @@ public sealed class SelectedPawnPortraitOverlayComponent : GameComponent
         switch (currentEvent.rawType)
         {
             case EventType.MouseDown when currentEvent.button == 0 && rect.Contains(currentEvent.mousePosition):
+                dragArmed = true;
+                dragStartMousePosition = currentEvent.mousePosition;
+                break;
+            case EventType.MouseDrag when dragArmed && !isDragging:
+                if ((currentEvent.mousePosition - dragStartMousePosition).sqrMagnitude < DragStartThreshold * DragStartThreshold)
+                {
+                    break;
+                }
+
                 isDragging = true;
                 currentEvent.Use();
                 break;
@@ -156,9 +181,11 @@ public sealed class SelectedPawnPortraitOverlayComponent : GameComponent
                 if (isDragging)
                 {
                     PortraitOverlayMod.SaveSettings();
+                    currentEvent.Use();
                 }
 
                 isDragging = false;
+                dragArmed = false;
                 break;
         }
     }
@@ -170,7 +197,6 @@ public sealed class SelectedPawnPortraitOverlayComponent : GameComponent
             Widgets.DrawBoxSolid(rect, new Color(0.08f, 0.08f, 0.08f, settings.BackgroundAlpha));
         }
 
-        GenUI.AbsorbClicksInRect(rect);
         TooltipHandler.TipRegion(rect, "PortraitOverlay.Overlay.Tooltip".Translate());
 
         var contentRect = rect.ContractedBy(8f);
