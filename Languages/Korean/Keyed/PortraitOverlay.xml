@@ -28,6 +28,16 @@
   <PortraitOverlay.Overlay.Title>{0}</PortraitOverlay.Overlay.Title>
   <PortraitOverlay.Overlay.NoPortrait>초상화를 렌더링할 수 없습니다</PortraitOverlay.Overlay.NoPortrait>
   <PortraitOverlay.Overlay.Tooltip>드래그 이동이 켜져 있으면 이 패널을 끌어 위치를 바꿀 수 있습니다.</PortraitOverlay.Overlay.Tooltip>
-  <PortraitOverlay.Settings.LivePortrait>라이브 초상화 업데이트 사용</PortraitOverlay.Settings.LivePortrait>
+  <PortraitOverlay.Settings.EnableFacialAnimationInOverlayPortrait>오버레이 초상화에 Facial Animation 적용</PortraitOverlay.Settings.EnableFacialAnimationInOverlayPortrait>
+  <PortraitOverlay.Settings.LivePortrait>폰 움직임과 방향 그대로 복제</PortraitOverlay.Settings.LivePortrait>
   <PortraitOverlay.Settings.OnlyPlayerControlledPawns>플레이어가 직접 통제하는 폰만 표시</PortraitOverlay.Settings.OnlyPlayerControlledPawns>
+  <PortraitOverlay.Settings.TabGeneral>일반</PortraitOverlay.Settings.TabGeneral>
+  <PortraitOverlay.Settings.TabPortrait>초상화</PortraitOverlay.Settings.TabPortrait>
+  <PortraitOverlay.Settings.TabFilters>필터</PortraitOverlay.Settings.TabFilters>
+  <PortraitOverlay.Settings.TabLayout>배치</PortraitOverlay.Settings.TabLayout>
+  <PortraitOverlay.Settings.SectionGeneral>일반</PortraitOverlay.Settings.SectionGeneral>
+  <PortraitOverlay.Settings.SectionAppearance>외형</PortraitOverlay.Settings.SectionAppearance>
+  <PortraitOverlay.Settings.SectionRendering>렌더링</PortraitOverlay.Settings.SectionRendering>
+  <PortraitOverlay.Settings.SectionFilters>필터</PortraitOverlay.Settings.SectionFilters>
+  <PortraitOverlay.Settings.SectionLayout>배치</PortraitOverlay.Settings.SectionLayout>
 </LanguageData>

@@ -14,6 +14,10 @@ public static class PawnFullBodyPortraitRenderer
     private const float MinimumBodySize = 0.15f;
     private const float MinimumBodyScaleFactor = 0.75f;
     private const float MaximumBodyScaleFactor = 1.35f;
+    private const float FaceEmphasisVerticalOffset = 0.08f;
+    private const float FaceEmphasisZoomFactor = 0.02f;
+    private const float MinimumEffectiveZoom = 0.65f;
+    private const float MaximumEffectiveZoom = 1.95f;
 
     public static Texture Render(Pawn pawn, Vector2 size, PortraitOverlaySettings settings)
     {
@@ -22,9 +26,20 @@ public static class PawnFullBodyPortraitRenderer
             return BaseContent.BadTex;
         }
 
-        var cameraOffset = new Vector3(0f, 0f, settings.FaceEmphasis * 0.28f);
-        var zoom = (settings.CameraZoom * GetBodyScaleFactor(pawn)) + (settings.FaceEmphasis * 0.1f);
-        var args = BuildArguments(PortraitGetMethod.GetParameters(), pawn, size, cameraOffset, zoom, settings);
+        var rotation = settings.LivePortrait ? pawn.Rotation : Rot4.South;
+        var bodyScaleFactor = GetBodyScaleFactor(pawn);
+        var baseZoom = settings.CameraZoom * bodyScaleFactor;
+        var cameraOffset = Vector3.zero;
+        var zoom = baseZoom;
+
+        if (!settings.RenderHeadgear)
+        {
+            cameraOffset = new Vector3(0f, settings.FaceEmphasis * FaceEmphasisVerticalOffset, 0f);
+            zoom += settings.FaceEmphasis * FaceEmphasisZoomFactor;
+        }
+
+        zoom = Mathf.Clamp(zoom, MinimumEffectiveZoom, MaximumEffectiveZoom);
+        var args = BuildArguments(PortraitGetMethod.GetParameters(), pawn, size, rotation, cameraOffset, zoom, settings);
         var texture = PortraitGetMethod.Invoke(null, args) as Texture;
         return texture ?? BaseContent.BadTex;
     }
@@ -61,6 +76,7 @@ public static class PawnFullBodyPortraitRenderer
         ParameterInfo[] parameters,
         Pawn pawn,
         Vector2 size,
+        Rot4 rotation,
         Vector3 cameraOffset,
         float zoom,
         PortraitOverlaySettings settings)
@@ -87,7 +103,7 @@ public static class PawnFullBodyPortraitRenderer
 
             if (type == typeof(Rot4))
             {
-                args[i] = Rot4.South;
+                args[i] = rotation;
                 continue;
             }
 
@@ -105,7 +121,7 @@ public static class PawnFullBodyPortraitRenderer
 
             if (type == typeof(bool))
             {
-                args[i] = ResolveBoolArgument(boolIndex, settings);
+                args[i] = ResolveBoolArgument(parameter.Name, boolIndex, settings);
                 boolIndex++;
                 continue;
             }
@@ -136,7 +152,25 @@ public static class PawnFullBodyPortraitRenderer
         return args;
     }
 
-    private static bool ResolveBoolArgument(int boolIndex, PortraitOverlaySettings settings)
+    private static bool ResolveBoolArgument(string parameterName, int boolIndex, PortraitOverlaySettings settings)
+    {
+        if (!string.IsNullOrEmpty(parameterName))
+        {
+            return parameterName switch
+            {
+                "supersample" => true,
+                "compensateForUIScale" => true,
+                "renderHeadgear" => settings.RenderHeadgear,
+                "renderClothes" => settings.RenderApparel,
+                "stylingStation" => false,
+                _ => ResolveBoolArgumentByIndex(boolIndex, settings)
+            };
+        }
+
+        return ResolveBoolArgumentByIndex(boolIndex, settings);
+    }
+
+    private static bool ResolveBoolArgumentByIndex(int boolIndex, PortraitOverlaySettings settings)
     {
         return boolIndex switch
         {

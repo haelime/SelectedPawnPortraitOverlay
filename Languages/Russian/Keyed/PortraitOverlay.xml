@@ -28,6 +28,16 @@
   <PortraitOverlay.Overlay.Title>{0}</PortraitOverlay.Overlay.Title>
   <PortraitOverlay.Overlay.NoPortrait>Портрет недоступен</PortraitOverlay.Overlay.NoPortrait>
   <PortraitOverlay.Overlay.Tooltip>Если перетаскивание включено, эту панель можно перемещать мышью.</PortraitOverlay.Overlay.Tooltip>
-  <PortraitOverlay.Settings.LivePortrait>Enable live portrait updates</PortraitOverlay.Settings.LivePortrait>
+  <PortraitOverlay.Settings.EnableFacialAnimationInOverlayPortrait>Enable Facial Animation in overlay portrait</PortraitOverlay.Settings.EnableFacialAnimationInOverlayPortrait>
+  <PortraitOverlay.Settings.LivePortrait>Copy pawn movement and facing</PortraitOverlay.Settings.LivePortrait>
   <PortraitOverlay.Settings.OnlyPlayerControlledPawns>Show only player-controlled pawns</PortraitOverlay.Settings.OnlyPlayerControlledPawns>
+  <PortraitOverlay.Settings.TabGeneral>General</PortraitOverlay.Settings.TabGeneral>
+  <PortraitOverlay.Settings.TabPortrait>Portrait</PortraitOverlay.Settings.TabPortrait>
+  <PortraitOverlay.Settings.TabFilters>Filters</PortraitOverlay.Settings.TabFilters>
+  <PortraitOverlay.Settings.TabLayout>Layout</PortraitOverlay.Settings.TabLayout>
+  <PortraitOverlay.Settings.SectionGeneral>General</PortraitOverlay.Settings.SectionGeneral>
+  <PortraitOverlay.Settings.SectionAppearance>Appearance</PortraitOverlay.Settings.SectionAppearance>
+  <PortraitOverlay.Settings.SectionRendering>Rendering</PortraitOverlay.Settings.SectionRendering>
+  <PortraitOverlay.Settings.SectionFilters>Filters</PortraitOverlay.Settings.SectionFilters>
+  <PortraitOverlay.Settings.SectionLayout>Layout</PortraitOverlay.Settings.SectionLayout>
 </LanguageData>
