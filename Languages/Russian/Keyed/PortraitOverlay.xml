@@ -17,18 +17,15 @@
   <PortraitOverlay.Settings.PanelHeight>Высота панели: {0}px</PortraitOverlay.Settings.PanelHeight>
   <PortraitOverlay.Settings.PositionX>Позиция панели по X: {0}</PortraitOverlay.Settings.PositionX>
   <PortraitOverlay.Settings.PositionY>Позиция панели по Y: {0}</PortraitOverlay.Settings.PositionY>
+  <PortraitOverlay.Settings.PanelNumericInputHint>Sliders show the recommended range. Numeric input can set wider panel size and position values.</PortraitOverlay.Settings.PanelNumericInputHint>
   <PortraitOverlay.Settings.BackgroundAlpha>Непрозрачность фона: {0}</PortraitOverlay.Settings.BackgroundAlpha>
   <PortraitOverlay.Settings.Zoom>Масштаб портрета: {0}</PortraitOverlay.Settings.Zoom>
   <PortraitOverlay.Settings.FaceEmphasis>Акцент на лице: {0}</PortraitOverlay.Settings.FaceEmphasis>
   <PortraitOverlay.Settings.ResetWindowSettings>Сбросить размер и позицию панели</PortraitOverlay.Settings.ResetWindowSettings>
   <PortraitOverlay.Settings.ResetAllSettings>Сбросить все настройки</PortraitOverlay.Settings.ResetAllSettings>
-  <PortraitOverlay.Settings.FacialAnimationStatus>Facial Animation: {0}</PortraitOverlay.Settings.FacialAnimationStatus>
-  <PortraitOverlay.Settings.FacialAnimationActive>обнаружен</PortraitOverlay.Settings.FacialAnimationActive>
-  <PortraitOverlay.Settings.FacialAnimationInactive>не обнаружен</PortraitOverlay.Settings.FacialAnimationInactive>
   <PortraitOverlay.Overlay.Title>{0}</PortraitOverlay.Overlay.Title>
   <PortraitOverlay.Overlay.NoPortrait>Портрет недоступен</PortraitOverlay.Overlay.NoPortrait>
   <PortraitOverlay.Overlay.Tooltip>Если перетаскивание включено, эту панель можно перемещать мышью.</PortraitOverlay.Overlay.Tooltip>
-  <PortraitOverlay.Settings.EnableFacialAnimationInOverlayPortrait>Enable Facial Animation in overlay portrait</PortraitOverlay.Settings.EnableFacialAnimationInOverlayPortrait>
   <PortraitOverlay.Settings.LivePortrait>Copy pawn movement and facing</PortraitOverlay.Settings.LivePortrait>
   <PortraitOverlay.Settings.OnlyPlayerControlledPawns>Show only player-controlled pawns</PortraitOverlay.Settings.OnlyPlayerControlledPawns>
   <PortraitOverlay.Settings.TabGeneral>General</PortraitOverlay.Settings.TabGeneral>

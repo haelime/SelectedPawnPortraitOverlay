@@ -17,18 +17,15 @@
   <PortraitOverlay.Settings.PanelHeight>パネル高さ: {0}px</PortraitOverlay.Settings.PanelHeight>
   <PortraitOverlay.Settings.PositionX>パネル X 位置: {0}</PortraitOverlay.Settings.PositionX>
   <PortraitOverlay.Settings.PositionY>パネル Y 位置: {0}</PortraitOverlay.Settings.PositionY>
+  <PortraitOverlay.Settings.PanelNumericInputHint>Sliders show the recommended range. Numeric input can set wider panel size and position values.</PortraitOverlay.Settings.PanelNumericInputHint>
   <PortraitOverlay.Settings.BackgroundAlpha>背景不透明度: {0}</PortraitOverlay.Settings.BackgroundAlpha>
   <PortraitOverlay.Settings.Zoom>ポートレートズーム: {0}</PortraitOverlay.Settings.Zoom>
   <PortraitOverlay.Settings.FaceEmphasis>顔の強調: {0}</PortraitOverlay.Settings.FaceEmphasis>
   <PortraitOverlay.Settings.ResetWindowSettings>パネル位置/サイズをリセット</PortraitOverlay.Settings.ResetWindowSettings>
   <PortraitOverlay.Settings.ResetAllSettings>すべての設定をリセット</PortraitOverlay.Settings.ResetAllSettings>
-  <PortraitOverlay.Settings.FacialAnimationStatus>Facial Animation: {0}</PortraitOverlay.Settings.FacialAnimationStatus>
-  <PortraitOverlay.Settings.FacialAnimationActive>検出済み</PortraitOverlay.Settings.FacialAnimationActive>
-  <PortraitOverlay.Settings.FacialAnimationInactive>未検出</PortraitOverlay.Settings.FacialAnimationInactive>
   <PortraitOverlay.Overlay.Title>{0}</PortraitOverlay.Overlay.Title>
   <PortraitOverlay.Overlay.NoPortrait>ポートレートを描画できません</PortraitOverlay.Overlay.NoPortrait>
   <PortraitOverlay.Overlay.Tooltip>ドラッグ移動が有効なら、このパネルをドラッグして位置を変更できます。</PortraitOverlay.Overlay.Tooltip>
-  <PortraitOverlay.Settings.EnableFacialAnimationInOverlayPortrait>Enable Facial Animation in overlay portrait</PortraitOverlay.Settings.EnableFacialAnimationInOverlayPortrait>
   <PortraitOverlay.Settings.LivePortrait>Copy pawn movement and facing</PortraitOverlay.Settings.LivePortrait>
   <PortraitOverlay.Settings.OnlyPlayerControlledPawns>Show only player-controlled pawns</PortraitOverlay.Settings.OnlyPlayerControlledPawns>
   <PortraitOverlay.Settings.TabGeneral>General</PortraitOverlay.Settings.TabGeneral>

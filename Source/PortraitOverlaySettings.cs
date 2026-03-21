@@ -13,7 +13,6 @@ public sealed class PortraitOverlaySettings : ModSettings
     private const bool DefaultKeepLastPortrait = false;
     private const bool DefaultRenderHeadgear = true;
     private const bool DefaultRenderApparel = true;
-    private const bool DefaultEnableFacialAnimationInOverlayPortrait = false;
     private const bool DefaultLivePortrait = false;
     private const bool DefaultOnlyPlayerControlledPawns = false;
     private const bool DefaultAllowDragging = true;
@@ -36,7 +35,6 @@ public sealed class PortraitOverlaySettings : ModSettings
     public bool KeepLastPortrait = DefaultKeepLastPortrait;
     public bool RenderHeadgear = DefaultRenderHeadgear;
     public bool RenderApparel = DefaultRenderApparel;
-    public bool EnableFacialAnimationInOverlayPortrait = DefaultEnableFacialAnimationInOverlayPortrait;
     public bool LivePortrait = DefaultLivePortrait;
     public bool OnlyPlayerControlledPawns = DefaultOnlyPlayerControlledPawns;
     public bool AllowDragging = DefaultAllowDragging;
@@ -64,7 +62,6 @@ public sealed class PortraitOverlaySettings : ModSettings
         Scribe_Values.Look(ref KeepLastPortrait, nameof(KeepLastPortrait), DefaultKeepLastPortrait);
         Scribe_Values.Look(ref RenderHeadgear, nameof(RenderHeadgear), DefaultRenderHeadgear);
         Scribe_Values.Look(ref RenderApparel, nameof(RenderApparel), DefaultRenderApparel);
-        Scribe_Values.Look(ref EnableFacialAnimationInOverlayPortrait, nameof(EnableFacialAnimationInOverlayPortrait), DefaultEnableFacialAnimationInOverlayPortrait);
         Scribe_Values.Look(ref LivePortrait, nameof(LivePortrait), DefaultLivePortrait);
         Scribe_Values.Look(ref OnlyPlayerControlledPawns, nameof(OnlyPlayerControlledPawns), DefaultOnlyPlayerControlledPawns);
         Scribe_Values.Look(ref AllowDragging, nameof(AllowDragging), DefaultAllowDragging);
@@ -86,11 +83,10 @@ public sealed class PortraitOverlaySettings : ModSettings
     public void ClampValues()
     {
         ApplyFilterDependencies();
-        ApplyCompatibilityDependencies();
-        PanelX = Mathf.Clamp(PanelX, MinPanelX, 5000f);
-        PanelY = Mathf.Clamp(PanelY, 0f, 5000f);
-        PanelWidth = Mathf.Clamp(PanelWidth, 180f, 420f);
-        PanelHeight = Mathf.Clamp(PanelHeight, 240f, 520f);
+        PanelX = EnsureFinite(PanelX, DefaultPanelX);
+        PanelY = EnsureFinite(PanelY, DefaultPanelY);
+        PanelWidth = Mathf.Max(1f, EnsureFinite(PanelWidth, DefaultPanelWidth));
+        PanelHeight = Mathf.Max(1f, EnsureFinite(PanelHeight, DefaultPanelHeight));
         BackgroundAlpha = Mathf.Clamp01(BackgroundAlpha);
         CameraZoom = Mathf.Clamp(CameraZoom, 0.75f, 1.45f);
         FaceEmphasis = Mathf.Clamp01(FaceEmphasis);
@@ -113,7 +109,6 @@ public sealed class PortraitOverlaySettings : ModSettings
         KeepLastPortrait = DefaultKeepLastPortrait;
         RenderHeadgear = DefaultRenderHeadgear;
         RenderApparel = DefaultRenderApparel;
-        EnableFacialAnimationInOverlayPortrait = DefaultEnableFacialAnimationInOverlayPortrait;
         LivePortrait = DefaultLivePortrait;
         OnlyPlayerControlledPawns = DefaultOnlyPlayerControlledPawns;
         AllowDragging = DefaultAllowDragging;
@@ -144,11 +139,8 @@ public sealed class PortraitOverlaySettings : ModSettings
         ShowSlaves = false;
     }
 
-    public void ApplyCompatibilityDependencies()
+    private static float EnsureFinite(float value, float fallback)
     {
-        if (!ModCompatibility.CanOverrideFacialAnimationPortraits)
-        {
-            EnableFacialAnimationInOverlayPortrait = false;
-        }
+        return !float.IsNaN(value) && !float.IsInfinity(value) ? value : fallback;
     }
 }

@@ -8,9 +8,6 @@ namespace SelectedPawnPortraitOverlay;
 
 public static class PortraitRenderCache
 {
-    private const string FacialAnimationAssemblyName = "FacialAnimation";
-    private const string FacialAnimationDirtyMethodName = "SetDirty";
-
     private static readonly FieldInfo CachedPortraitsField =
         typeof(PortraitsCache).GetField("cachedPortraits", BindingFlags.Static | BindingFlags.NonPublic);
     private static readonly PropertyInfo CachedPortraitRenderTextureProperty =
@@ -18,8 +15,6 @@ public static class PortraitRenderCache
             ?.GetProperty("RenderTexture", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
     private static readonly MethodInfo DestroyRenderTextureMethod =
         typeof(PortraitsCache).GetMethod("DestroyRenderTexture", BindingFlags.Static | BindingFlags.NonPublic);
-    private static readonly MethodInfo SetAnimatedPortraitsDirtyMethod =
-        typeof(PortraitsCache).GetMethod("SetAnimatedPortraitsDirty", BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
 
     public static Texture GetPortrait(Pawn pawn, Vector2 size, PortraitOverlaySettings settings)
     {
@@ -33,15 +28,13 @@ public static class PortraitRenderCache
             return ModCompatibility.WithPortraitWeaponRenderMode(
                 () => ModCompatibility.WithPortraitHeadgearPreference(
                     settings.RenderHeadgear,
-                    () => ModCompatibility.WithPortraitFacialAnimationSetting(
-                        settings.EnableFacialAnimationInOverlayPortrait,
-                        () =>
-                        {
-                            InvalidatePortraitState(pawn);
-                            var portrait = PawnFullBodyPortraitRenderer.Render(pawn, size, settings);
-                            InvalidatePortraitState(pawn);
-                            return portrait;
-                        })));
+                    () =>
+                    {
+                        InvalidatePortraitState(pawn);
+                        var portrait = PawnFullBodyPortraitRenderer.Render(pawn, size, settings);
+                        InvalidatePortraitState(pawn);
+                        return portrait;
+                    }));
         }
         finally
         {
@@ -56,8 +49,6 @@ public static class PortraitRenderCache
             return;
         }
 
-        InvalidateFacialAnimationState(pawn);
-        SetAnimatedPortraitsDirtyMethod?.Invoke(null, null);
         RemoveCachedPortraits(pawn);
         PortraitsCache.SetDirty(pawn);
     }
@@ -91,35 +82,5 @@ public static class PortraitRenderCache
         }
 
         DestroyRenderTextureMethod.Invoke(null, new object[] { renderTexture });
-    }
-
-    private static void InvalidateFacialAnimationState(Pawn pawn)
-    {
-        if (pawn?.AllComps == null)
-        {
-            return;
-        }
-
-        foreach (var comp in pawn.AllComps)
-        {
-            if (comp == null
-                || !string.Equals(comp.GetType().Assembly.GetName().Name, FacialAnimationAssemblyName, System.StringComparison.Ordinal))
-            {
-                continue;
-            }
-
-            var setDirtyMethod = comp.GetType().GetMethod(
-                FacialAnimationDirtyMethodName,
-                BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
-                null,
-                System.Type.EmptyTypes,
-                null);
-            if (setDirtyMethod == null)
-            {
-                continue;
-            }
-
-            setDirtyMethod.Invoke(comp, null);
-        }
     }
 }

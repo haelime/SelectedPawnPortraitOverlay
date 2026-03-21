@@ -17,18 +17,15 @@
   <PortraitOverlay.Settings.PanelHeight>面板高度: {0}px</PortraitOverlay.Settings.PanelHeight>
   <PortraitOverlay.Settings.PositionX>面板 X 位置: {0}</PortraitOverlay.Settings.PositionX>
   <PortraitOverlay.Settings.PositionY>面板 Y 位置: {0}</PortraitOverlay.Settings.PositionY>
+  <PortraitOverlay.Settings.PanelNumericInputHint>Sliders show the recommended range. Numeric input can set wider panel size and position values.</PortraitOverlay.Settings.PanelNumericInputHint>
   <PortraitOverlay.Settings.BackgroundAlpha>背景不透明度: {0}</PortraitOverlay.Settings.BackgroundAlpha>
   <PortraitOverlay.Settings.Zoom>肖像缩放: {0}</PortraitOverlay.Settings.Zoom>
   <PortraitOverlay.Settings.FaceEmphasis>面部强调: {0}</PortraitOverlay.Settings.FaceEmphasis>
   <PortraitOverlay.Settings.ResetWindowSettings>重置面板位置/尺寸</PortraitOverlay.Settings.ResetWindowSettings>
   <PortraitOverlay.Settings.ResetAllSettings>重置所有设置</PortraitOverlay.Settings.ResetAllSettings>
-  <PortraitOverlay.Settings.FacialAnimationStatus>Facial Animation: {0}</PortraitOverlay.Settings.FacialAnimationStatus>
-  <PortraitOverlay.Settings.FacialAnimationActive>已检测到</PortraitOverlay.Settings.FacialAnimationActive>
-  <PortraitOverlay.Settings.FacialAnimationInactive>未检测到</PortraitOverlay.Settings.FacialAnimationInactive>
   <PortraitOverlay.Overlay.Title>{0}</PortraitOverlay.Overlay.Title>
   <PortraitOverlay.Overlay.NoPortrait>无法渲染肖像</PortraitOverlay.Overlay.NoPortrait>
   <PortraitOverlay.Overlay.Tooltip>启用拖动时，可拖动此面板来移动位置。</PortraitOverlay.Overlay.Tooltip>
-  <PortraitOverlay.Settings.EnableFacialAnimationInOverlayPortrait>Enable Facial Animation in overlay portrait</PortraitOverlay.Settings.EnableFacialAnimationInOverlayPortrait>
   <PortraitOverlay.Settings.LivePortrait>Copy pawn movement and facing</PortraitOverlay.Settings.LivePortrait>
   <PortraitOverlay.Settings.OnlyPlayerControlledPawns>Show only player-controlled pawns</PortraitOverlay.Settings.OnlyPlayerControlledPawns>
   <PortraitOverlay.Settings.TabGeneral>General</PortraitOverlay.Settings.TabGeneral>

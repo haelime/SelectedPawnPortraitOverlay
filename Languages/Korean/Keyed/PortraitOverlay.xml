@@ -17,18 +17,15 @@
   <PortraitOverlay.Settings.PanelHeight>패널 높이: {0}px</PortraitOverlay.Settings.PanelHeight>
   <PortraitOverlay.Settings.PositionX>패널 X 위치: {0}</PortraitOverlay.Settings.PositionX>
   <PortraitOverlay.Settings.PositionY>패널 Y 위치: {0}</PortraitOverlay.Settings.PositionY>
+  <PortraitOverlay.Settings.PanelNumericInputHint>슬라이더는 권장 범위를 표시하고, 숫자 입력은 더 넓은 패널 크기와 위치 값을 직접 설정할 수 있습니다.</PortraitOverlay.Settings.PanelNumericInputHint>
   <PortraitOverlay.Settings.BackgroundAlpha>배경 투명도: {0}</PortraitOverlay.Settings.BackgroundAlpha>
   <PortraitOverlay.Settings.Zoom>초상화 줌: {0}</PortraitOverlay.Settings.Zoom>
   <PortraitOverlay.Settings.FaceEmphasis>얼굴 강조: {0}</PortraitOverlay.Settings.FaceEmphasis>
   <PortraitOverlay.Settings.ResetWindowSettings>창 위치/크기 초기화</PortraitOverlay.Settings.ResetWindowSettings>
   <PortraitOverlay.Settings.ResetAllSettings>모든 설정 초기화</PortraitOverlay.Settings.ResetAllSettings>
-  <PortraitOverlay.Settings.FacialAnimationStatus>Facial Animation: {0}</PortraitOverlay.Settings.FacialAnimationStatus>
-  <PortraitOverlay.Settings.FacialAnimationActive>감지됨</PortraitOverlay.Settings.FacialAnimationActive>
-  <PortraitOverlay.Settings.FacialAnimationInactive>감지되지 않음</PortraitOverlay.Settings.FacialAnimationInactive>
   <PortraitOverlay.Overlay.Title>{0}</PortraitOverlay.Overlay.Title>
   <PortraitOverlay.Overlay.NoPortrait>초상화를 렌더링할 수 없습니다</PortraitOverlay.Overlay.NoPortrait>
   <PortraitOverlay.Overlay.Tooltip>드래그 이동이 켜져 있으면 이 패널을 끌어 위치를 바꿀 수 있습니다.</PortraitOverlay.Overlay.Tooltip>
-  <PortraitOverlay.Settings.EnableFacialAnimationInOverlayPortrait>오버레이 초상화에 Facial Animation 적용</PortraitOverlay.Settings.EnableFacialAnimationInOverlayPortrait>
   <PortraitOverlay.Settings.LivePortrait>폰 움직임과 방향 그대로 복제</PortraitOverlay.Settings.LivePortrait>
   <PortraitOverlay.Settings.OnlyPlayerControlledPawns>플레이어가 직접 통제하는 폰만 표시</PortraitOverlay.Settings.OnlyPlayerControlledPawns>
   <PortraitOverlay.Settings.TabGeneral>일반</PortraitOverlay.Settings.TabGeneral>
