@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Reflection;
 using RimWorld;
@@ -8,6 +9,8 @@ namespace SelectedPawnPortraitOverlay;
 
 public static class PortraitRenderCache
 {
+    private const int PortraitRenderWarningId = 18467233;
+
     private static readonly FieldInfo CachedPortraitsField =
         typeof(PortraitsCache).GetField("cachedPortraits", BindingFlags.Static | BindingFlags.NonPublic);
     private static readonly PropertyInfo CachedPortraitRenderTextureProperty =
@@ -35,6 +38,14 @@ public static class PortraitRenderCache
                         InvalidatePortraitState(pawn);
                         return portrait;
                     }));
+        }
+        catch (Exception exception)
+        {
+            var warningKey = PortraitRenderWarningId ^ (pawn.GetType().FullName?.GetHashCode() ?? 0);
+            Log.WarningOnce(
+                $"Selected Pawn Portrait Overlay skipped portrait rendering for unsupported pawn type '{pawn.GetType().FullName}'. {exception.GetType().Name}: {exception.Message}",
+                warningKey);
+            return BaseContent.BadTex;
         }
         finally
         {

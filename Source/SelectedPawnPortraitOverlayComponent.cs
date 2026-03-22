@@ -1,3 +1,4 @@
+using System;
 using RimWorld.Planet;
 using UnityEngine;
 using Verse;
@@ -7,6 +8,7 @@ namespace SelectedPawnPortraitOverlay;
 public sealed class SelectedPawnPortraitOverlayComponent : GameComponent
 {
     private const int OverlayWindowId = 18467231;
+    private const int UnsupportedVehiclePawnWarningId = 18467232;
     private const float DragStartThreshold = 5f;
     private const int OverlayGuiDepth = 100;
 
@@ -114,6 +116,14 @@ public sealed class SelectedPawnPortraitOverlayComponent : GameComponent
             return false;
         }
 
+        if (IsVehiclePawn(pawn))
+        {
+            Log.WarningOnce(
+                "Selected Pawn Portrait Overlay skipped an unsupported vehicle pawn. Vehicle pawns are not supported by this mod.",
+                UnsupportedVehiclePawnWarningId);
+            return false;
+        }
+
         var settings = PortraitOverlayMod.Settings;
         if (settings.OnlyPlayerControlledPawns && !pawn.IsPlayerControlled)
         {
@@ -146,6 +156,20 @@ public sealed class SelectedPawnPortraitOverlayComponent : GameComponent
         }
 
         return true;
+    }
+
+    private static bool IsVehiclePawn(Pawn pawn)
+    {
+        for (var type = pawn?.GetType(); type != null; type = type.BaseType)
+        {
+            if (string.Equals(type.FullName, "Vehicles.VehiclePawn", StringComparison.Ordinal)
+                || string.Equals(type.Name, "VehiclePawn", StringComparison.Ordinal))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private static Rect BuildPanelRect(PortraitOverlaySettings settings)
