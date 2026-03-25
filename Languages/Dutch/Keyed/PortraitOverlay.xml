@@ -21,6 +21,8 @@
   <PortraitOverlay.Settings.BackgroundAlpha>Background opacity: {0}</PortraitOverlay.Settings.BackgroundAlpha>
   <PortraitOverlay.Settings.Zoom>Portrait zoom: {0}</PortraitOverlay.Settings.Zoom>
   <PortraitOverlay.Settings.FaceEmphasis>Face emphasis: {0}</PortraitOverlay.Settings.FaceEmphasis>
+  <PortraitOverlay.Settings.TopCutoff>Top cutoff: {0}</PortraitOverlay.Settings.TopCutoff>
+  <PortraitOverlay.Settings.BottomCutoff>Bottom cutoff: {0}</PortraitOverlay.Settings.BottomCutoff>
   <PortraitOverlay.Settings.ResetWindowSettings>Reset panel size/position</PortraitOverlay.Settings.ResetWindowSettings>
   <PortraitOverlay.Settings.ResetAllSettings>Reset all settings</PortraitOverlay.Settings.ResetAllSettings>
   <PortraitOverlay.Overlay.Title>{0}</PortraitOverlay.Overlay.Title>

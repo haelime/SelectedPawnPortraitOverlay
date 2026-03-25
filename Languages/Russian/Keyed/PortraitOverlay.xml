@@ -21,6 +21,8 @@
   <PortraitOverlay.Settings.BackgroundAlpha>Непрозрачность фона: {0}</PortraitOverlay.Settings.BackgroundAlpha>
   <PortraitOverlay.Settings.Zoom>Масштаб портрета: {0}</PortraitOverlay.Settings.Zoom>
   <PortraitOverlay.Settings.FaceEmphasis>Акцент на лице: {0}</PortraitOverlay.Settings.FaceEmphasis>
+  <PortraitOverlay.Settings.TopCutoff>Верхний cutoff: {0}</PortraitOverlay.Settings.TopCutoff>
+  <PortraitOverlay.Settings.BottomCutoff>Нижний cutoff: {0}</PortraitOverlay.Settings.BottomCutoff>
   <PortraitOverlay.Settings.ResetWindowSettings>Сбросить размер и позицию панели</PortraitOverlay.Settings.ResetWindowSettings>
   <PortraitOverlay.Settings.ResetAllSettings>Сбросить все настройки</PortraitOverlay.Settings.ResetAllSettings>
   <PortraitOverlay.Overlay.Title>{0}</PortraitOverlay.Overlay.Title>

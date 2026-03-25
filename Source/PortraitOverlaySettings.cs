@@ -28,6 +28,10 @@ public sealed class PortraitOverlaySettings : ModSettings
     private const float DefaultBackgroundAlpha = 0.45f;
     private const float DefaultCameraZoom = 1.02f;
     private const float DefaultFaceEmphasis = 0.2f;
+    private const float DefaultTopCutoff = 0f;
+    private const float DefaultBottomCutoff = 0f;
+    private const float MaximumCutoff = 0.35f;
+    private const float MaximumCombinedVerticalCutoff = 0.8f;
 
     public bool Enabled = DefaultEnabled;
     public bool ShowBackground = DefaultShowBackground;
@@ -51,6 +55,8 @@ public sealed class PortraitOverlaySettings : ModSettings
     public float BackgroundAlpha = DefaultBackgroundAlpha;
     public float CameraZoom = DefaultCameraZoom;
     public float FaceEmphasis = DefaultFaceEmphasis;
+    public float TopCutoff = DefaultTopCutoff;
+    public float BottomCutoff = DefaultBottomCutoff;
 
     public Vector2 PanelSize => new(PanelWidth, PanelHeight);
 
@@ -77,6 +83,8 @@ public sealed class PortraitOverlaySettings : ModSettings
         Scribe_Values.Look(ref BackgroundAlpha, nameof(BackgroundAlpha), DefaultBackgroundAlpha);
         Scribe_Values.Look(ref CameraZoom, nameof(CameraZoom), DefaultCameraZoom);
         Scribe_Values.Look(ref FaceEmphasis, nameof(FaceEmphasis), DefaultFaceEmphasis);
+        Scribe_Values.Look(ref TopCutoff, nameof(TopCutoff), DefaultTopCutoff);
+        Scribe_Values.Look(ref BottomCutoff, nameof(BottomCutoff), DefaultBottomCutoff);
         ClampValues();
     }
 
@@ -90,6 +98,16 @@ public sealed class PortraitOverlaySettings : ModSettings
         BackgroundAlpha = Mathf.Clamp01(BackgroundAlpha);
         CameraZoom = Mathf.Clamp(CameraZoom, 0.75f, 1.45f);
         FaceEmphasis = Mathf.Clamp01(FaceEmphasis);
+        TopCutoff = Mathf.Clamp(TopCutoff, 0f, MaximumCutoff);
+        BottomCutoff = Mathf.Clamp(BottomCutoff, 0f, MaximumCutoff);
+
+        var totalVerticalCutoff = TopCutoff + BottomCutoff;
+        if (totalVerticalCutoff > MaximumCombinedVerticalCutoff)
+        {
+            var scale = MaximumCombinedVerticalCutoff / totalVerticalCutoff;
+            TopCutoff *= scale;
+            BottomCutoff *= scale;
+        }
     }
 
     public void ResetWindowSettings()
@@ -124,6 +142,8 @@ public sealed class PortraitOverlaySettings : ModSettings
         BackgroundAlpha = DefaultBackgroundAlpha;
         CameraZoom = DefaultCameraZoom;
         FaceEmphasis = DefaultFaceEmphasis;
+        TopCutoff = DefaultTopCutoff;
+        BottomCutoff = DefaultBottomCutoff;
         ClampValues();
     }
 

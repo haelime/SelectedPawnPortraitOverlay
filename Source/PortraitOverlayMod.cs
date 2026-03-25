@@ -33,6 +33,8 @@ public sealed class PortraitOverlayMod : Mod
     private string backgroundAlphaBuffer;
     private string cameraZoomBuffer;
     private string faceEmphasisBuffer;
+    private string topCutoffBuffer;
+    private string bottomCutoffBuffer;
     private string panelWidthBuffer;
     private string panelHeightBuffer;
     private string panelXBuffer;
@@ -161,6 +163,22 @@ public sealed class PortraitOverlayMod : Mod
             ref faceEmphasisBuffer,
             0f,
             1f,
+            "F2");
+        DrawSliderWithNumericField(
+            listing,
+            "PortraitOverlay.Settings.TopCutoff".Translate(FormatPercent(settings.TopCutoff)),
+            ref settings.TopCutoff,
+            ref topCutoffBuffer,
+            0f,
+            0.35f,
+            "F2");
+        DrawSliderWithNumericField(
+            listing,
+            "PortraitOverlay.Settings.BottomCutoff".Translate(FormatPercent(settings.BottomCutoff)),
+            ref settings.BottomCutoff,
+            ref bottomCutoffBuffer,
+            0f,
+            0.35f,
             "F2");
 
         listing.GapLine();
@@ -294,6 +312,8 @@ public sealed class PortraitOverlayMod : Mod
         backgroundAlphaBuffer = FormatFloat(settings.BackgroundAlpha, "F2");
         cameraZoomBuffer = FormatFloat(settings.CameraZoom, "F2");
         faceEmphasisBuffer = FormatFloat(settings.FaceEmphasis, "F2");
+        topCutoffBuffer = FormatFloat(settings.TopCutoff, "F2");
+        bottomCutoffBuffer = FormatFloat(settings.BottomCutoff, "F2");
         panelWidthBuffer = FormatFloat(settings.PanelWidth, "F0");
         panelHeightBuffer = FormatFloat(settings.PanelHeight, "F0");
         panelXBuffer = FormatFloat(settings.PanelX, "F0");
@@ -329,7 +349,7 @@ public sealed class PortraitOverlayMod : Mod
         const float spacing = 128f;
         const float infoLabelBlockHeight = InfoLabelHeight + 4f;
         const int checkboxCount = 5;
-        const int sliderCount = 7;
+        const int sliderCount = 9;
         const int buttonCount = 2;
 
         return (checkboxCount * checkboxHeight)

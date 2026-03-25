@@ -232,26 +232,59 @@ public sealed class SelectedPawnPortraitOverlayComponent : GameComponent
 
     private static void DrawPanel(Rect rect, Pawn pawn, PortraitOverlaySettings settings)
     {
-        if (settings.ShowBackground)
-        {
-            Widgets.DrawBoxSolid(rect, new Color(0.08f, 0.08f, 0.08f, settings.BackgroundAlpha));
-        }
-
-        TooltipHandler.TipRegion(rect, "PortraitOverlay.Overlay.Tooltip".Translate());
-
+        var topCutPixels = rect.height * Mathf.Clamp01(settings.TopCutoff);
+        var bottomCutPixels = rect.height * Mathf.Clamp01(settings.BottomCutoff);
+        var visiblePanelRect = new Rect(
+            rect.x,
+            rect.y + topCutPixels,
+            rect.width,
+            Mathf.Max(0f, rect.height - topCutPixels - bottomCutPixels));
         var contentRect = rect.ContractedBy(8f);
+        var titleRect = Rect.zero;
         var portraitRect = contentRect;
 
         if (settings.ShowName)
         {
-            var titleRect = new Rect(contentRect.x, contentRect.y, contentRect.width, 24f);
+            titleRect = new Rect(contentRect.x, contentRect.y, contentRect.width, 24f);
             portraitRect = new Rect(contentRect.x, titleRect.yMax + 6f, contentRect.width, contentRect.height - 30f);
+        }
 
+        if (settings.ShowName)
+        {
+            titleRect.y += topCutPixels;
+        }
+
+        portraitRect.y += topCutPixels;
+
+        TooltipHandler.TipRegion(rect, "PortraitOverlay.Overlay.Tooltip".Translate());
+
+        if (visiblePanelRect.height <= 0f)
+        {
+            return;
+        }
+
+        if (settings.ShowBackground)
+        {
+            DrawBackgroundSection(visiblePanelRect, settings.BackgroundAlpha);
+        }
+
+        GUI.BeginGroup(visiblePanelRect);
+        var localTitleRect = settings.ShowName
+            ? new Rect(titleRect.x - visiblePanelRect.x, titleRect.y - visiblePanelRect.y, titleRect.width, titleRect.height)
+            : Rect.zero;
+        var localPortraitRect = new Rect(
+            portraitRect.x - visiblePanelRect.x,
+            portraitRect.y - visiblePanelRect.y,
+            portraitRect.width,
+            portraitRect.height);
+
+        if (settings.ShowName)
+        {
             var previousAnchor = Text.Anchor;
             var previousFont = Text.Font;
             Text.Font = GameFont.Small;
             Text.Anchor = TextAnchor.UpperLeft;
-            Widgets.Label(titleRect, "PortraitOverlay.Overlay.Title".Translate(pawn.Name?.ToStringShort ?? pawn.LabelShortCap));
+            Widgets.Label(localTitleRect, "PortraitOverlay.Overlay.Title".Translate(pawn.Name?.ToStringShort ?? pawn.LabelShortCap));
             Text.Anchor = previousAnchor;
             Text.Font = previousFont;
         }
@@ -259,11 +292,23 @@ public sealed class SelectedPawnPortraitOverlayComponent : GameComponent
         var portrait = PortraitRenderCache.GetPortrait(pawn, portraitRect.size, settings);
         if (portrait == null || portrait == BaseContent.BadTex)
         {
-            DrawFallbackLabel(portraitRect);
+            DrawFallbackLabel(localPortraitRect);
+            GUI.EndGroup();
             return;
         }
 
-        GUI.DrawTexture(portraitRect, portrait, ScaleMode.ScaleToFit, true);
+        GUI.DrawTexture(localPortraitRect, portrait, ScaleMode.ScaleToFit, true);
+        GUI.EndGroup();
+    }
+
+    private static void DrawBackgroundSection(Rect rect, float alpha)
+    {
+        if (rect.width <= 0f || rect.height <= 0f)
+        {
+            return;
+        }
+
+        Widgets.DrawBoxSolid(rect, new Color(0.08f, 0.08f, 0.08f, alpha));
     }
 
     private static void DrawFallbackLabel(Rect rect)

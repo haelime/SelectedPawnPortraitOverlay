@@ -11,13 +11,11 @@ namespace SelectedPawnPortraitOverlay;
 public static class PawnFullBodyPortraitRenderer
 {
     private static readonly MethodInfo PortraitGetMethod = ResolvePortraitGetMethod();
-    private const float MinimumBodySize = 0.15f;
-    private const float MinimumBodyScaleFactor = 0.75f;
-    private const float MaximumBodyScaleFactor = 1.35f;
-    private const float FaceEmphasisVerticalOffset = 0.08f;
-    private const float FaceEmphasisZoomFactor = 0.02f;
+    private const float FaceEmphasisVerticalOffset = 0.3f;
+    private const float FaceEmphasisDepthOffset = 0.7f;
+    private const float FaceEmphasisZoomFactor = 0.25f;
     private const float MinimumEffectiveZoom = 0.65f;
-    private const float MaximumEffectiveZoom = 1.95f;
+    private const float MaximumEffectiveZoom = 2.2f;
 
     public static Texture Render(Pawn pawn, Vector2 size, PortraitOverlaySettings settings)
     {
@@ -27,28 +25,17 @@ public static class PawnFullBodyPortraitRenderer
         }
 
         var rotation = settings.LivePortrait ? pawn.Rotation : Rot4.South;
-        var bodyScaleFactor = GetBodyScaleFactor(pawn);
-        var baseZoom = settings.CameraZoom * bodyScaleFactor;
-        var cameraOffset = Vector3.zero;
-        var zoom = baseZoom;
-
-        if (!settings.RenderHeadgear)
-        {
-            cameraOffset = new Vector3(0f, settings.FaceEmphasis * FaceEmphasisVerticalOffset, 0f);
-            zoom += settings.FaceEmphasis * FaceEmphasisZoomFactor;
-        }
+        var effectiveFaceEmphasis = Mathf.Pow(settings.FaceEmphasis, 0.5f);
+        var cameraOffset = new Vector3(
+            0f,
+            effectiveFaceEmphasis * FaceEmphasisVerticalOffset,
+            effectiveFaceEmphasis * FaceEmphasisDepthOffset);
+        var zoom = settings.CameraZoom + (effectiveFaceEmphasis * FaceEmphasisZoomFactor);
 
         zoom = Mathf.Clamp(zoom, MinimumEffectiveZoom, MaximumEffectiveZoom);
         var args = BuildArguments(PortraitGetMethod.GetParameters(), pawn, size, rotation, cameraOffset, zoom, settings);
         var texture = PortraitGetMethod.Invoke(null, args) as Texture;
         return texture ?? BaseContent.BadTex;
-    }
-
-    private static float GetBodyScaleFactor(Pawn pawn)
-    {
-        var normalizedBodySize = Mathf.Max(MinimumBodySize, pawn.BodySize);
-        var scaleFactor = Mathf.Sqrt(1f / normalizedBodySize);
-        return Mathf.Clamp(scaleFactor, MinimumBodyScaleFactor, MaximumBodyScaleFactor);
     }
 
     private static MethodInfo ResolvePortraitGetMethod()

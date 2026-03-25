@@ -21,6 +21,8 @@
   <PortraitOverlay.Settings.BackgroundAlpha>背景不透明度: {0}</PortraitOverlay.Settings.BackgroundAlpha>
   <PortraitOverlay.Settings.Zoom>ポートレートズーム: {0}</PortraitOverlay.Settings.Zoom>
   <PortraitOverlay.Settings.FaceEmphasis>顔の強調: {0}</PortraitOverlay.Settings.FaceEmphasis>
+  <PortraitOverlay.Settings.TopCutoff>上側 cutoff: {0}</PortraitOverlay.Settings.TopCutoff>
+  <PortraitOverlay.Settings.BottomCutoff>下側 cutoff: {0}</PortraitOverlay.Settings.BottomCutoff>
   <PortraitOverlay.Settings.ResetWindowSettings>パネル位置/サイズをリセット</PortraitOverlay.Settings.ResetWindowSettings>
   <PortraitOverlay.Settings.ResetAllSettings>すべての設定をリセット</PortraitOverlay.Settings.ResetAllSettings>
   <PortraitOverlay.Overlay.Title>{0}</PortraitOverlay.Overlay.Title>
