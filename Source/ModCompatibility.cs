@@ -13,6 +13,7 @@ public static class ModCompatibility
             return default;
         }
 
+        // These are global game preferences; restore them even when portrait rendering throws.
         var originalMode = Prefs.ShowWeaponsUnderPortraitMode;
         if (originalMode == ShowWeaponsUnderPortraitMode.WhileDrafted)
         {
@@ -37,6 +38,7 @@ public static class ModCompatibility
             return default;
         }
 
+        // Temporarily override the map-only hat preference for this portrait render.
         var originalValue = Prefs.HatsOnlyOnMap;
         if (!renderHeadgear || !originalValue)
         {
