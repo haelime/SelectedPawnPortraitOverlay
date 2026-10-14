@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Reflection;
 using RimWorld;
 using UnityEngine;
 using Verse;
@@ -10,14 +8,6 @@ namespace SelectedPawnPortraitOverlay;
 public static class PortraitRenderCache
 {
     private const int PortraitRenderWarningId = 18467233;
-
-    private static readonly FieldInfo CachedPortraitsField =
-        typeof(PortraitsCache).GetField("cachedPortraits", BindingFlags.Static | BindingFlags.NonPublic);
-    private static readonly PropertyInfo CachedPortraitRenderTextureProperty =
-        typeof(PortraitsCache).GetNestedType("CachedPortrait", BindingFlags.NonPublic)
-            ?.GetProperty("RenderTexture", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-    private static readonly MethodInfo DestroyRenderTextureMethod =
-        typeof(PortraitsCache).GetMethod("DestroyRenderTexture", BindingFlags.Static | BindingFlags.NonPublic);
 
     public static Texture GetPortrait(Pawn pawn, Vector2 size, PortraitOverlaySettings settings)
     {
@@ -33,10 +23,11 @@ public static class PortraitRenderCache
                     settings.RenderHeadgear,
                     () =>
                     {
+                        // A dirty cache entry is re-rendered into its existing texture, so the
+                        // returned texture stays alive. Destroying it here would hand back a dead
+                        // texture: RimWorld 1.7 destroys render textures immediately.
                         InvalidatePortraitState(pawn);
-                        var portrait = PawnFullBodyPortraitRenderer.Render(pawn, size, settings);
-                        InvalidatePortraitState(pawn);
-                        return portrait;
+                        return PawnFullBodyPortraitRenderer.Render(pawn, size, settings);
                     }));
         }
         catch (Exception exception)
@@ -60,38 +51,6 @@ public static class PortraitRenderCache
             return;
         }
 
-        RemoveCachedPortraits(pawn);
         PortraitsCache.SetDirty(pawn);
-    }
-
-    private static void RemoveCachedPortraits(Pawn pawn)
-    {
-        if (pawn == null || CachedPortraitsField?.GetValue(null) is not IDictionary cachedPortraits)
-        {
-            return;
-        }
-
-        foreach (DictionaryEntry portraitCacheEntry in cachedPortraits)
-        {
-            if (portraitCacheEntry.Value is not IDictionary pawnPortraits || !pawnPortraits.Contains(pawn))
-            {
-                continue;
-            }
-
-            DestroyCachedPortraitTexture(pawnPortraits[pawn]);
-            pawnPortraits.Remove(pawn);
-        }
-    }
-
-    private static void DestroyCachedPortraitTexture(object cachedPortrait)
-    {
-        if (cachedPortrait == null
-            || CachedPortraitRenderTextureProperty?.GetValue(cachedPortrait) is not RenderTexture renderTexture
-            || DestroyRenderTextureMethod == null)
-        {
-            return;
-        }
-
-        DestroyRenderTextureMethod.Invoke(null, new object[] { renderTexture });
     }
 }

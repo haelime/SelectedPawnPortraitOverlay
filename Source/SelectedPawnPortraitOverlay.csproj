@@ -1,26 +1,42 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net472</TargetFramework>
+    <GameVersion Condition="'$(GameVersion)' == ''">1.7</GameVersion>
+    <TargetFramework Condition="'$(GameVersion)' == '1.6'">net472</TargetFramework>
+    <TargetFramework Condition="'$(GameVersion)' != '1.6'">net10.0</TargetFramework>
     <LangVersion>latest</LangVersion>
     <Nullable>disable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <GenerateDependencyFile>false</GenerateDependencyFile>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <OutputPath>..\Assemblies\</OutputPath>
+    <OutputPath>..\$(GameVersion)\Assemblies\</OutputPath>
     <RootNamespace>SelectedPawnPortraitOverlay</RootNamespace>
     <AssemblyName>SelectedPawnPortraitOverlay</AssemblyName>
-    <RimWorldDir Condition="'$(RimWorldDir)' == ''">$(RIMWORLD_16_DIR)</RimWorldDir>
-    <ManagedDir Condition="'$(ManagedDir)' == '' and '$(RimWorldDir)' != ''">$(RimWorldDir)\RimWorldWin64_Data\Managed</ManagedDir>
+    <RimWorldDir Condition="'$(RimWorldDir)' == '' and '$(GameVersion)' == '1.6'">$(RIMWORLD_16_DIR)</RimWorldDir>
+    <RimWorldDir Condition="'$(RimWorldDir)' == '' and '$(GameVersion)' != '1.6'">$(RIMWORLD_17_DIR)</RimWorldDir>
+    <!-- 1.6 (Unity) keeps managed assemblies under RimWorldWin64_Data; 1.7 (Waylith) keeps them in the install root. -->
+    <ManagedDir Condition="'$(ManagedDir)' == '' and '$(RimWorldDir)' != '' and '$(GameVersion)' == '1.6'">$(RimWorldDir)\RimWorldWin64_Data\Managed</ManagedDir>
+    <ManagedDir Condition="'$(ManagedDir)' == '' and '$(RimWorldDir)' != '' and '$(GameVersion)' != '1.6'">$(RimWorldDir)</ManagedDir>
+    <!-- Without a local 1.6 install, build 1.6 against the published reference assemblies. -->
+    <UseRimWorldRefPackage Condition="'$(GameVersion)' == '1.6' and '$(ManagedDir)' == ''">true</UseRimWorldRefPackage>
   </PropertyGroup>
 
-  <Target Name="EnsureRimWorldDir" BeforeTargets="ResolveReferences" Condition="'$(ManagedDir)' == ''">
-    <Error Text="Set RimWorldDir MSBuild property or RIMWORLD_16_DIR environment variable to your RimWorld 1.6 install directory." />
+  <Target Name="EnsureRimWorldDir" BeforeTargets="ResolveReferences" Condition="'$(ManagedDir)' == '' and '$(UseRimWorldRefPackage)' != 'true'">
+    <Error Text="Set RimWorldDir MSBuild property or the RIMWORLD_17_DIR environment variable to your RimWorld $(GameVersion) install directory." />
   </Target>
 
-  <ItemGroup>
+  <ItemGroup Condition="'$(UseRimWorldRefPackage)' == 'true'">
+    <PackageReference Include="Krafs.Rimworld.Ref" Version="1.6.4871" ExcludeAssets="runtime" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(UseRimWorldRefPackage)' != 'true'">
     <Reference Include="Assembly-CSharp">
       <HintPath>$(ManagedDir)\Assembly-CSharp.dll</HintPath>
       <Private>false</Private>
     </Reference>
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(GameVersion)' == '1.6' and '$(UseRimWorldRefPackage)' != 'true'">
     <Reference Include="UnityEngine.CoreModule">
       <HintPath>$(ManagedDir)\UnityEngine.CoreModule.dll</HintPath>
       <Private>false</Private>
@@ -31,6 +47,17 @@
     </Reference>
     <Reference Include="UnityEngine.TextRenderingModule">
       <HintPath>$(ManagedDir)\UnityEngine.TextRenderingModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(GameVersion)' != '1.6'">
+    <Reference Include="UnityStubs">
+      <HintPath>$(ManagedDir)\UnityStubs.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Waylith">
+      <HintPath>$(ManagedDir)\Waylith.dll</HintPath>
       <Private>false</Private>
     </Reference>
   </ItemGroup>

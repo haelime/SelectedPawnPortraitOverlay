@@ -24,20 +24,29 @@ Mod that renders the currently selected pawn as a front-facing full-body portrai
 ## Verified Compatibility
 
 - RimWorld 1.6
+- RimWorld 1.7
 
 ## Build
 
-Set your RimWorld install path before building.
+Each game version gets its own assembly, selected at load time by `LoadFolders.xml`:
 
-PowerShell example:
+- `1.7/Assemblies` - RimWorld 1.7 (Waylith engine, .NET 10), the default build
+- `1.6/Assemblies` - RimWorld 1.6 (Unity, .NET Framework 4.7.2)
+
+Building requires the .NET 10 SDK. Point the build at your RimWorld install for the targeted version.
+
+PowerShell example (RimWorld 1.7):
 
 ```powershell
-$env:RIMWORLD_16_DIR="C:\Program Files (x86)\Steam\steamapps\common\RimWorld"
+$env:RIMWORLD_17_DIR="C:\Program Files (x86)\Steam\steamapps\common\RimWorld"
 dotnet build .\Source\SelectedPawnPortraitOverlay.csproj -c Release
 ```
 
-You can also pass the install directory explicitly:
+RimWorld 1.6:
 
 ```powershell
-dotnet build .\Source\SelectedPawnPortraitOverlay.csproj -c Release /p:RimWorldDir="C:\Program Files (x86)\Steam\steamapps\common\RimWorld"
+$env:RIMWORLD_16_DIR="C:\Program Files (x86)\Steam\steamapps\common\RimWorld"
+dotnet build .\Source\SelectedPawnPortraitOverlay.csproj -c Release /p:GameVersion=1.6
 ```
+
+You can also pass the install directory explicitly with `/p:RimWorldDir="..."`.

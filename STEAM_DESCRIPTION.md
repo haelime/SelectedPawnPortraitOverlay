@@ -26,6 +26,7 @@ Below are Steam-ready description texts using Steam formatting tags.
 [h3]지원 버전[/h3]
 [list]
 [*]RimWorld 1.6
+[*]RimWorld 1.7
 [/list]
 
 [h3]언어 지원[/h3]
@@ -61,6 +62,7 @@ It renders the selected pawn as a front-facing full-body portrait and lets you f
 [h3]Supported Version[/h3]
 [list]
 [*]RimWorld 1.6
+[*]RimWorld 1.7
 [/list]
 
 [h3]Language Support[/h3]
@@ -96,6 +98,7 @@ If you enjoy this mod, please consider supporting it on [url=https://ko-fi.com/h
 [h3]対応バージョン[/h3]
 [list]
 [*]RimWorld 1.6
+[*]RimWorld 1.7
 [/list]
 
 [h3]言語対応[/h3]
@@ -131,6 +134,7 @@ If you enjoy this mod, please consider supporting it on [url=https://ko-fi.com/h
 [h3]支持版本[/h3]
 [list]
 [*]RimWorld 1.6
+[*]RimWorld 1.7
 [/list]
 
 [h3]语言支持[/h3]
@@ -166,6 +170,7 @@ If you enjoy this mod, please consider supporting it on [url=https://ko-fi.com/h
 [h3]Поддерживаемая версия[/h3]
 [list]
 [*]RimWorld 1.6
+[*]RimWorld 1.7
 [/list]
 
 [h3]Поддержка языков[/h3]
