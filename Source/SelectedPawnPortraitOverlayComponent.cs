@@ -38,7 +38,8 @@ public sealed class SelectedPawnPortraitOverlayComponent : GameComponent
             return;
         }
 
-        if (WorldRendererUtility.WorldRendered)
+        // WorldRendered is also true on orbit maps, which draw the world as a background.
+        if (WorldRendererUtility.WorldSelected)
         {
             isDragging = false;
             dragArmed = false;
