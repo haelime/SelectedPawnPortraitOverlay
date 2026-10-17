@@ -17,7 +17,7 @@
   <PortraitOverlay.Settings.PanelHeight>面板高度: {0}px</PortraitOverlay.Settings.PanelHeight>
   <PortraitOverlay.Settings.PositionX>面板 X 位置: {0}</PortraitOverlay.Settings.PositionX>
   <PortraitOverlay.Settings.PositionY>面板 Y 位置: {0}</PortraitOverlay.Settings.PositionY>
-  <PortraitOverlay.Settings.PanelNumericInputHint>Sliders show the recommended range. Numeric input accepts wider values for zoom, face emphasis, cutoffs, and panel size and position.</PortraitOverlay.Settings.PanelNumericInputHint>
+  <PortraitOverlay.Settings.PanelNumericInputHint>滑块显示推荐范围。缩放、面部强调、cutoff 以及面板尺寸和位置可通过数字输入填写更大范围的值。</PortraitOverlay.Settings.PanelNumericInputHint>
   <PortraitOverlay.Settings.BackgroundAlpha>背景不透明度: {0}</PortraitOverlay.Settings.BackgroundAlpha>
   <PortraitOverlay.Settings.Zoom>肖像缩放: {0}</PortraitOverlay.Settings.Zoom>
   <PortraitOverlay.Settings.FaceEmphasis>面部强调: {0}</PortraitOverlay.Settings.FaceEmphasis>
@@ -28,90 +28,90 @@
   <PortraitOverlay.Overlay.Title>{0}</PortraitOverlay.Overlay.Title>
   <PortraitOverlay.Overlay.NoPortrait>无法渲染肖像</PortraitOverlay.Overlay.NoPortrait>
   <PortraitOverlay.Overlay.Tooltip>启用拖动时，可拖动此面板来移动位置。</PortraitOverlay.Overlay.Tooltip>
-  <PortraitOverlay.Settings.LivePortrait>Copy pawn movement and facing</PortraitOverlay.Settings.LivePortrait>
-  <PortraitOverlay.Settings.OnlyPlayerControlledPawns>Show only player-controlled pawns</PortraitOverlay.Settings.OnlyPlayerControlledPawns>
-  <PortraitOverlay.Settings.TabGeneral>General</PortraitOverlay.Settings.TabGeneral>
-  <PortraitOverlay.Settings.TabPortrait>Portrait</PortraitOverlay.Settings.TabPortrait>
-  <PortraitOverlay.Settings.TabFilters>Filters</PortraitOverlay.Settings.TabFilters>
-  <PortraitOverlay.Settings.TabLayout>Layout</PortraitOverlay.Settings.TabLayout>
-  <PortraitOverlay.Settings.SectionGeneral>General</PortraitOverlay.Settings.SectionGeneral>
-  <PortraitOverlay.Settings.SectionAppearance>Appearance</PortraitOverlay.Settings.SectionAppearance>
-  <PortraitOverlay.Settings.SectionRendering>Rendering</PortraitOverlay.Settings.SectionRendering>
-  <PortraitOverlay.Settings.SectionFilters>Filters</PortraitOverlay.Settings.SectionFilters>
-  <PortraitOverlay.Settings.SectionLayout>Layout</PortraitOverlay.Settings.SectionLayout>
-  <PortraitOverlay.Settings.AutoFitPortrait>Auto-fit portrait</PortraitOverlay.Settings.AutoFitPortrait>
-  <PortraitOverlay.Settings.AutoFitPortraitTooltip>Renders each pawn once to measure the area it actually covers, then sizes the portrait to it. Animals, mechanoids, insects, and entities are shown at about a human's size and centered on what is drawn. Humanlike pawns, including modded races, are never zoomed in; they only zoom out when something like a large hat or wings makes them much bigger than usual, so ordinary colonists keep their framing.</PortraitOverlay.Settings.AutoFitPortraitTooltip>
-  <PortraitOverlay.Settings.RaceNotLoaded>{0} (not loaded)</PortraitOverlay.Settings.RaceNotLoaded>
-  <PortraitOverlay.Settings.ShowHoverToolbar>Show edit toolbar on mouseover</PortraitOverlay.Settings.ShowHoverToolbar>
-  <PortraitOverlay.Settings.ShowHoverToolbarTooltip>Hovering the panel shows Edit, Reset, and Settings buttons along its bottom.</PortraitOverlay.Settings.ShowHoverToolbarTooltip>
-  <PortraitOverlay.Settings.TabSaved>Saved adjustments</PortraitOverlay.Settings.TabSaved>
-  <PortraitOverlay.Settings.ResetPawnAdjustmentsConfirm>Settings were reset. Also delete the {0} per-pawn adjustments stored in this save?</PortraitOverlay.Settings.ResetPawnAdjustmentsConfirm>
-  <PortraitOverlay.Toolbar.Edit>Edit</PortraitOverlay.Toolbar.Edit>
-  <PortraitOverlay.Toolbar.Done>Done</PortraitOverlay.Toolbar.Done>
-  <PortraitOverlay.Toolbar.EditTooltip>Edit this portrait: drag to move, mouse wheel to zoom (Shift for fine steps), right-click for more.</PortraitOverlay.Toolbar.EditTooltip>
-  <PortraitOverlay.Toolbar.Reset>Reset</PortraitOverlay.Toolbar.Reset>
-  <PortraitOverlay.Toolbar.ResetTooltip>Delete the {0} category adjustment. Race, variant, and pawn adjustments stay; delete those from the right-click menu in edit mode.</PortraitOverlay.Toolbar.ResetTooltip>
-  <PortraitOverlay.Toolbar.PinTooltip>Keep showing this pawn even when another one is selected.</PortraitOverlay.Toolbar.PinTooltip>
-  <PortraitOverlay.Toolbar.Settings>Settings</PortraitOverlay.Toolbar.Settings>
-  <PortraitOverlay.Edit.ScopePawn>This pawn</PortraitOverlay.Edit.ScopePawn>
-  <PortraitOverlay.Edit.ScopeRace>Race: {0}</PortraitOverlay.Edit.ScopeRace>
-  <PortraitOverlay.Edit.Readout>{0}x · X {1} · Z {2}</PortraitOverlay.Edit.Readout>
-  <PortraitOverlay.Edit.Hint>Drag: move · Wheel: zoom (Shift: fine) · Edge tabs: crop · Corner: resize · Ctrl+Z: undo · Right-click: menu · Esc: finish</PortraitOverlay.Edit.Hint>
-  <PortraitOverlay.Menu.ResetAll>Reset all settings...</PortraitOverlay.Menu.ResetAll>
-  <PortraitOverlay.Menu.ResetAllConfirm>Reset every Portrait Overlay setting, including category, race, and variant adjustments?</PortraitOverlay.Menu.ResetAllConfirm>
-  <PortraitOverlay.Menu.OpenSettings>Open settings</PortraitOverlay.Menu.OpenSettings>
-  <PortraitOverlay.Menu.ExitEdit>Finish editing</PortraitOverlay.Menu.ExitEdit>
-  <PortraitOverlay.Saved.Hint>Adjustments made in edit mode. Per-pawn ones are stored in the current save; category, race, and variant ones apply to every save.</PortraitOverlay.Saved.Hint>
-  <PortraitOverlay.Saved.PawnsHeader>Per-pawn (this save)</PortraitOverlay.Saved.PawnsHeader>
-  <PortraitOverlay.Saved.RacesHeader>Per-race</PortraitOverlay.Saved.RacesHeader>
-  <PortraitOverlay.Saved.NoGame>Load a game to see per-pawn adjustments.</PortraitOverlay.Saved.NoGame>
-  <PortraitOverlay.Saved.Empty>None yet.</PortraitOverlay.Saved.Empty>
-  <PortraitOverlay.Saved.MissingPawn>{0} (no longer here)</PortraitOverlay.Saved.MissingPawn>
-  <PortraitOverlay.Saved.Delete>Delete</PortraitOverlay.Saved.Delete>
-  <PortraitOverlay.Saved.DeleteAll>Delete all</PortraitOverlay.Saved.DeleteAll>
-  <PortraitOverlay.Saved.PruneMissing>Remove {0} missing</PortraitOverlay.Saved.PruneMissing>
-  <PortraitOverlay.Saved.DeleteAllPawnsConfirm>Delete all {0} per-pawn adjustments in this save?</PortraitOverlay.Saved.DeleteAllPawnsConfirm>
-  <PortraitOverlay.Hint.FirstRun>Hover over the portrait panel to show its edit tools.</PortraitOverlay.Hint.FirstRun>
-  <PortraitOverlay.Hint.Close>Got it</PortraitOverlay.Hint.Close>
-  <PortraitOverlay.Edit.PresetFull>Full body</PortraitOverlay.Edit.PresetFull>
-  <PortraitOverlay.Edit.PresetUpper>Upper body</PortraitOverlay.Edit.PresetUpper>
-  <PortraitOverlay.Edit.PresetFace>Face</PortraitOverlay.Edit.PresetFace>
-  <PortraitOverlay.Edit.PresetTooltip>Frame the pawn this way and save it to the selected scope.</PortraitOverlay.Edit.PresetTooltip>
-  <PortraitOverlay.Edit.CropTooltip>Drag to hide the top or bottom of the panel.</PortraitOverlay.Edit.CropTooltip>
-  <PortraitOverlay.Edit.ResizeTooltip>Drag to resize the panel.</PortraitOverlay.Edit.ResizeTooltip>
-  <PortraitOverlay.Edit.ReadoutTooltip>Double-click to type exact values.</PortraitOverlay.Edit.ReadoutTooltip>
-  <PortraitOverlay.Menu.Undo>Undo (Ctrl+Z)</PortraitOverlay.Menu.Undo>
-  <PortraitOverlay.Adjust.Title>Adjustment: {0}</PortraitOverlay.Adjust.Title>
-  <PortraitOverlay.Adjust.Zoom>Zoom</PortraitOverlay.Adjust.Zoom>
-  <PortraitOverlay.Adjust.OffsetX>Horizontal offset</PortraitOverlay.Adjust.OffsetX>
-  <PortraitOverlay.Adjust.OffsetZ>Vertical offset</PortraitOverlay.Adjust.OffsetZ>
-  <PortraitOverlay.Adjust.Apply>Apply</PortraitOverlay.Adjust.Apply>
-  <PortraitOverlay.Settings.Advanced>Advanced (numeric values)</PortraitOverlay.Settings.Advanced>
-  <PortraitOverlay.Edit.ReadoutWithPanel>{0}x · X {1} · Z {2} · panel {3}%×{4}%</PortraitOverlay.Edit.ReadoutWithPanel>
-  <PortraitOverlay.Category.Humanlike>Humanlike</PortraitOverlay.Category.Humanlike>
-  <PortraitOverlay.Category.Animal>Animal</PortraitOverlay.Category.Animal>
-  <PortraitOverlay.Category.Mechanoid>Mechanoid</PortraitOverlay.Category.Mechanoid>
-  <PortraitOverlay.Category.Insect>Insect</PortraitOverlay.Category.Insect>
-  <PortraitOverlay.Category.Anomaly>Anomaly entity</PortraitOverlay.Category.Anomaly>
-  <PortraitOverlay.Category.Other>Other</PortraitOverlay.Category.Other>
-  <PortraitOverlay.Edit.ScopeButton>Scope: {0}</PortraitOverlay.Edit.ScopeButton>
-  <PortraitOverlay.Edit.ScopeTooltip>Choose where edits are stored, from the pawn's category down to this pawn. Narrower levels apply on top of broader ones. A dot marks levels that already hold an adjustment.</PortraitOverlay.Edit.ScopeTooltip>
-  <PortraitOverlay.Edit.ScopeCategory>Category: {0}</PortraitOverlay.Edit.ScopeCategory>
-  <PortraitOverlay.Edit.ScopeVariant>Variant: {0}</PortraitOverlay.Edit.ScopeVariant>
-  <PortraitOverlay.Menu.ClearScope>Delete adjustment: {0}</PortraitOverlay.Menu.ClearScope>
-  <PortraitOverlay.Menu.ClearAllScopes>Delete all of this pawn's adjustments</PortraitOverlay.Menu.ClearAllScopes>
-  <PortraitOverlay.Saved.CategoriesHeader>Per-category</PortraitOverlay.Saved.CategoriesHeader>
-  <PortraitOverlay.Saved.VariantsHeader>Per-variant (xenotype or growth stage)</PortraitOverlay.Saved.VariantsHeader>
-  <PortraitOverlay.Saved.DeleteAllConfirm>Delete all {0} adjustments in {1}?</PortraitOverlay.Saved.DeleteAllConfirm>
-  <PortraitOverlay.ScopeHelp.Category>Applies to every pawn in the same category, such as all humanlikes or all animals. Use it to set a whole group's size and framing in one go; it is usually the best place to start.</PortraitOverlay.ScopeHelp.Category>
-  <PortraitOverlay.ScopeHelp.Race>Applies to every pawn of this race, such as all thrumbos or all humans. Use it for races whose art is unusually large or small, and for modded races.</PortraitOverlay.ScopeHelp.Race>
-  <PortraitOverlay.ScopeHelp.Variant>Applies only to this xenotype (humanlike) or growth stage (animals) within the race. Use it when babies and adults, or xenotypes with different builds, need their own framing.</PortraitOverlay.ScopeHelp.Variant>
-  <PortraitOverlay.ScopeHelp.Pawn>Applies only to this pawn and is stored in the save. Use it when one particular colonist should look different.</PortraitOverlay.ScopeHelp.Pawn>
-  <PortraitOverlay.ScopeHelp.VariantUnavailable>This pawn has no variant level. Humanlike pawns are split by xenotype only with Biotech, and races with a single growth stage, such as most mechanoids, have none.</PortraitOverlay.ScopeHelp.VariantUnavailable>
-  <PortraitOverlay.Toolbar.ResetConfirm>Delete the {0} category adjustment? It applies to every pawn in that category.</PortraitOverlay.Toolbar.ResetConfirm>
-  <PortraitOverlay.Toolbar.UnpinTooltip>Unpin: follow the selected pawn again.</PortraitOverlay.Toolbar.UnpinTooltip>
-  <PortraitOverlay.Settings.ShowPinButton>Show the pin button</PortraitOverlay.Settings.ShowPinButton>
-  <PortraitOverlay.Settings.ShowPinButtonTooltip>Hovering the panel shows a pin button in its top-right corner. Pinning keeps this pawn on screen when another is selected; the pin stays visible while pinned. Turning this off also unpins.</PortraitOverlay.Settings.ShowPinButtonTooltip>
-  <PortraitOverlay.Settings.FullBodyFraming>Frame every pawn full body</PortraitOverlay.Settings.FullBodyFraming>
-  <PortraitOverlay.Settings.FullBodyFramingTooltip>With auto-fit on, every pawn is framed whole by its measured size. Small pawns with low-resolution art are not magnified past the point where they blur, so they sit a little smaller. Zoom still applies; face emphasis does not. Off: the earlier framing, close to full body with a slight lean toward the face. On by default; adjustments saved under the earlier framing may need redoing.</PortraitOverlay.Settings.FullBodyFramingTooltip>
+  <PortraitOverlay.Settings.LivePortrait>同步角色的动作和朝向</PortraitOverlay.Settings.LivePortrait>
+  <PortraitOverlay.Settings.OnlyPlayerControlledPawns>仅显示玩家可控制的角色</PortraitOverlay.Settings.OnlyPlayerControlledPawns>
+  <PortraitOverlay.Settings.TabGeneral>常规</PortraitOverlay.Settings.TabGeneral>
+  <PortraitOverlay.Settings.TabPortrait>肖像</PortraitOverlay.Settings.TabPortrait>
+  <PortraitOverlay.Settings.TabFilters>过滤</PortraitOverlay.Settings.TabFilters>
+  <PortraitOverlay.Settings.TabLayout>布局</PortraitOverlay.Settings.TabLayout>
+  <PortraitOverlay.Settings.SectionGeneral>常规</PortraitOverlay.Settings.SectionGeneral>
+  <PortraitOverlay.Settings.SectionAppearance>外观</PortraitOverlay.Settings.SectionAppearance>
+  <PortraitOverlay.Settings.SectionRendering>渲染</PortraitOverlay.Settings.SectionRendering>
+  <PortraitOverlay.Settings.SectionFilters>过滤</PortraitOverlay.Settings.SectionFilters>
+  <PortraitOverlay.Settings.SectionLayout>布局</PortraitOverlay.Settings.SectionLayout>
+  <PortraitOverlay.Settings.AutoFitPortrait>肖像自动适配</PortraitOverlay.Settings.AutoFitPortrait>
+  <PortraitOverlay.Settings.AutoFitPortraitTooltip>将每个角色渲染一次，测量其实际绘制的范围，并据此调整肖像。动物、机械族、昆虫和实体会以接近人类的大小显示，并以绘制部分为中心。人形角色（包括模组种族）不会被放大，只有在大帽子或翅膀等让其明显变大时才会缩小，因此普通殖民者的构图保持不变。</PortraitOverlay.Settings.AutoFitPortraitTooltip>
+  <PortraitOverlay.Settings.RaceNotLoaded>{0}（未加载）</PortraitOverlay.Settings.RaceNotLoaded>
+  <PortraitOverlay.Settings.ShowHoverToolbar>鼠标悬停时显示编辑工具栏</PortraitOverlay.Settings.ShowHoverToolbar>
+  <PortraitOverlay.Settings.ShowHoverToolbarTooltip>鼠标悬停在面板上时，底部会显示编辑、重置和设置按钮。</PortraitOverlay.Settings.ShowHoverToolbarTooltip>
+  <PortraitOverlay.Settings.TabSaved>已保存的调整</PortraitOverlay.Settings.TabSaved>
+  <PortraitOverlay.Settings.ResetPawnAdjustmentsConfirm>设置已重置。是否同时删除此存档中保存的 {0} 个角色单独调整？</PortraitOverlay.Settings.ResetPawnAdjustmentsConfirm>
+  <PortraitOverlay.Toolbar.Edit>编辑</PortraitOverlay.Toolbar.Edit>
+  <PortraitOverlay.Toolbar.Done>完成</PortraitOverlay.Toolbar.Done>
+  <PortraitOverlay.Toolbar.EditTooltip>编辑此肖像：拖动移动，滚轮缩放（按住 Shift 微调），右键打开菜单。</PortraitOverlay.Toolbar.EditTooltip>
+  <PortraitOverlay.Toolbar.Reset>重置</PortraitOverlay.Toolbar.Reset>
+  <PortraitOverlay.Toolbar.ResetTooltip>删除“{0}”大类的调整。种族、细分和角色的调整会保留，可在编辑模式的右键菜单中删除。</PortraitOverlay.Toolbar.ResetTooltip>
+  <PortraitOverlay.Toolbar.PinTooltip>选择其他角色时仍继续显示此角色。</PortraitOverlay.Toolbar.PinTooltip>
+  <PortraitOverlay.Toolbar.Settings>设置</PortraitOverlay.Toolbar.Settings>
+  <PortraitOverlay.Edit.ScopePawn>此角色</PortraitOverlay.Edit.ScopePawn>
+  <PortraitOverlay.Edit.ScopeRace>种族：{0}</PortraitOverlay.Edit.ScopeRace>
+  <PortraitOverlay.Edit.Readout>{0}倍 · X {1} · Z {2}</PortraitOverlay.Edit.Readout>
+  <PortraitOverlay.Edit.Hint>拖动：移动 · 滚轮：缩放（Shift：微调） · 边缘手柄：裁剪 · 角落：调整大小 · Ctrl+Z：撤销 · 右键：菜单 · Esc：结束</PortraitOverlay.Edit.Hint>
+  <PortraitOverlay.Menu.ResetAll>重置所有设置...</PortraitOverlay.Menu.ResetAll>
+  <PortraitOverlay.Menu.ResetAllConfirm>是否重置 Portrait Overlay 的所有设置，包括大类、种族和细分调整？</PortraitOverlay.Menu.ResetAllConfirm>
+  <PortraitOverlay.Menu.OpenSettings>打开设置</PortraitOverlay.Menu.OpenSettings>
+  <PortraitOverlay.Menu.ExitEdit>结束编辑</PortraitOverlay.Menu.ExitEdit>
+  <PortraitOverlay.Saved.Hint>在编辑模式中创建的调整。角色单独的调整保存在当前存档中，大类、种族和细分调整对所有存档生效。</PortraitOverlay.Saved.Hint>
+  <PortraitOverlay.Saved.PawnsHeader>按角色（此存档）</PortraitOverlay.Saved.PawnsHeader>
+  <PortraitOverlay.Saved.RacesHeader>按种族</PortraitOverlay.Saved.RacesHeader>
+  <PortraitOverlay.Saved.NoGame>载入游戏后可查看角色单独的调整。</PortraitOverlay.Saved.NoGame>
+  <PortraitOverlay.Saved.Empty>暂无。</PortraitOverlay.Saved.Empty>
+  <PortraitOverlay.Saved.MissingPawn>{0}（已不在）</PortraitOverlay.Saved.MissingPawn>
+  <PortraitOverlay.Saved.Delete>删除</PortraitOverlay.Saved.Delete>
+  <PortraitOverlay.Saved.DeleteAll>全部删除</PortraitOverlay.Saved.DeleteAll>
+  <PortraitOverlay.Saved.PruneMissing>移除 {0} 个已不在的</PortraitOverlay.Saved.PruneMissing>
+  <PortraitOverlay.Saved.DeleteAllPawnsConfirm>是否删除此存档中全部 {0} 个角色单独调整？</PortraitOverlay.Saved.DeleteAllPawnsConfirm>
+  <PortraitOverlay.Hint.FirstRun>将鼠标悬停在肖像面板上即可显示编辑工具。</PortraitOverlay.Hint.FirstRun>
+  <PortraitOverlay.Hint.Close>知道了</PortraitOverlay.Hint.Close>
+  <PortraitOverlay.Edit.PresetFull>全身</PortraitOverlay.Edit.PresetFull>
+  <PortraitOverlay.Edit.PresetUpper>上半身</PortraitOverlay.Edit.PresetUpper>
+  <PortraitOverlay.Edit.PresetFace>脸部</PortraitOverlay.Edit.PresetFace>
+  <PortraitOverlay.Edit.PresetTooltip>以此构图调整角色，并保存到所选范围。</PortraitOverlay.Edit.PresetTooltip>
+  <PortraitOverlay.Edit.CropTooltip>拖动以隐藏面板的上部或下部。</PortraitOverlay.Edit.CropTooltip>
+  <PortraitOverlay.Edit.ResizeTooltip>拖动以调整面板大小。</PortraitOverlay.Edit.ResizeTooltip>
+  <PortraitOverlay.Edit.ReadoutTooltip>双击可输入精确数值。</PortraitOverlay.Edit.ReadoutTooltip>
+  <PortraitOverlay.Menu.Undo>撤销 (Ctrl+Z)</PortraitOverlay.Menu.Undo>
+  <PortraitOverlay.Adjust.Title>调整：{0}</PortraitOverlay.Adjust.Title>
+  <PortraitOverlay.Adjust.Zoom>缩放</PortraitOverlay.Adjust.Zoom>
+  <PortraitOverlay.Adjust.OffsetX>水平偏移</PortraitOverlay.Adjust.OffsetX>
+  <PortraitOverlay.Adjust.OffsetZ>垂直偏移</PortraitOverlay.Adjust.OffsetZ>
+  <PortraitOverlay.Adjust.Apply>应用</PortraitOverlay.Adjust.Apply>
+  <PortraitOverlay.Settings.Advanced>高级（数值输入）</PortraitOverlay.Settings.Advanced>
+  <PortraitOverlay.Edit.ReadoutWithPanel>{0}倍 · X {1} · Z {2} · 面板 {3}%×{4}%</PortraitOverlay.Edit.ReadoutWithPanel>
+  <PortraitOverlay.Category.Humanlike>人形</PortraitOverlay.Category.Humanlike>
+  <PortraitOverlay.Category.Animal>动物</PortraitOverlay.Category.Animal>
+  <PortraitOverlay.Category.Mechanoid>机械族</PortraitOverlay.Category.Mechanoid>
+  <PortraitOverlay.Category.Insect>昆虫</PortraitOverlay.Category.Insect>
+  <PortraitOverlay.Category.Anomaly>Anomaly 实体</PortraitOverlay.Category.Anomaly>
+  <PortraitOverlay.Category.Other>其他</PortraitOverlay.Category.Other>
+  <PortraitOverlay.Edit.ScopeButton>范围：{0}</PortraitOverlay.Edit.ScopeButton>
+  <PortraitOverlay.Edit.ScopeTooltip>选择编辑保存的范围，从角色所属大类到此角色。较窄的范围会叠加在较宽的范围之上。带圆点的范围已保存调整。</PortraitOverlay.Edit.ScopeTooltip>
+  <PortraitOverlay.Edit.ScopeCategory>大类：{0}</PortraitOverlay.Edit.ScopeCategory>
+  <PortraitOverlay.Edit.ScopeVariant>细分：{0}</PortraitOverlay.Edit.ScopeVariant>
+  <PortraitOverlay.Menu.ClearScope>删除调整：{0}</PortraitOverlay.Menu.ClearScope>
+  <PortraitOverlay.Menu.ClearAllScopes>删除此角色的所有调整</PortraitOverlay.Menu.ClearAllScopes>
+  <PortraitOverlay.Saved.CategoriesHeader>按大类</PortraitOverlay.Saved.CategoriesHeader>
+  <PortraitOverlay.Saved.VariantsHeader>按细分（异种·成长阶段）</PortraitOverlay.Saved.VariantsHeader>
+  <PortraitOverlay.Saved.DeleteAllConfirm>是否删除“{1}”中的全部 {0} 个调整？</PortraitOverlay.Saved.DeleteAllConfirm>
+  <PortraitOverlay.ScopeHelp.Category>应用于同一大类的所有角色，例如所有人形或所有动物。用于一次性调整整组的大小和构图，通常建议从这里开始。</PortraitOverlay.ScopeHelp.Category>
+  <PortraitOverlay.ScopeHelp.Race>应用于此种族的所有角色，例如所有敲击兽或所有人类。用于图像特别大或特别小的种族以及模组种族。</PortraitOverlay.ScopeHelp.Race>
+  <PortraitOverlay.ScopeHelp.Variant>仅应用于该种族中的此异种（人形）或此成长阶段（动物）。用于幼体与成体、或体型不同的异种需要各自构图时。</PortraitOverlay.ScopeHelp.Variant>
+  <PortraitOverlay.ScopeHelp.Pawn>仅应用于此角色，并保存在存档中。用于让某个殖民者单独显示不同效果。</PortraitOverlay.ScopeHelp.Pawn>
+  <PortraitOverlay.ScopeHelp.VariantUnavailable>此角色没有细分层级。人形角色只有在拥有 Biotech 时才会按异种细分，而像大多数机械族这样只有一个成长阶段的种族也没有细分。</PortraitOverlay.ScopeHelp.VariantUnavailable>
+  <PortraitOverlay.Toolbar.ResetConfirm>是否删除“{0}”大类的调整？该调整作用于此大类的所有角色。</PortraitOverlay.Toolbar.ResetConfirm>
+  <PortraitOverlay.Toolbar.UnpinTooltip>取消固定，重新跟随所选角色。</PortraitOverlay.Toolbar.UnpinTooltip>
+  <PortraitOverlay.Settings.ShowPinButton>显示固定（图钉）按钮</PortraitOverlay.Settings.ShowPinButton>
+  <PortraitOverlay.Settings.ShowPinButtonTooltip>鼠标悬停在面板上时，右上角会显示图钉按钮。固定后，即使选择其他角色也会继续显示此角色，固定期间图钉始终可见。关闭此项也会取消固定。</PortraitOverlay.Settings.ShowPinButtonTooltip>
+  <PortraitOverlay.Settings.FullBodyFraming>所有角色使用全身构图</PortraitOverlay.Settings.FullBodyFraming>
+  <PortraitOverlay.Settings.FullBodyFramingTooltip>开启自动适配时，按测量的大小让所有角色完整显示全身。低分辨率的小型角色只会放大到不模糊的程度，因此会显示得稍小。缩放仍然生效，面部强调不使用。关闭后恢复以前的构图（接近全身、略偏向面部）。默认开启；在以前构图下保存的调整可能需要重新调整。</PortraitOverlay.Settings.FullBodyFramingTooltip>
 </LanguageData>

@@ -17,7 +17,7 @@
   <PortraitOverlay.Settings.PanelHeight>Высота панели: {0}px</PortraitOverlay.Settings.PanelHeight>
   <PortraitOverlay.Settings.PositionX>Позиция панели по X: {0}</PortraitOverlay.Settings.PositionX>
   <PortraitOverlay.Settings.PositionY>Позиция панели по Y: {0}</PortraitOverlay.Settings.PositionY>
-  <PortraitOverlay.Settings.PanelNumericInputHint>Sliders show the recommended range. Numeric input accepts wider values for zoom, face emphasis, cutoffs, and panel size and position.</PortraitOverlay.Settings.PanelNumericInputHint>
+  <PortraitOverlay.Settings.PanelNumericInputHint>Ползунки показывают рекомендуемый диапазон. В числовых полях для масштаба, акцента на лице, cutoff, размера и позиции панели можно вводить более широкие значения.</PortraitOverlay.Settings.PanelNumericInputHint>
   <PortraitOverlay.Settings.BackgroundAlpha>Непрозрачность фона: {0}</PortraitOverlay.Settings.BackgroundAlpha>
   <PortraitOverlay.Settings.Zoom>Масштаб портрета: {0}</PortraitOverlay.Settings.Zoom>
   <PortraitOverlay.Settings.FaceEmphasis>Акцент на лице: {0}</PortraitOverlay.Settings.FaceEmphasis>
@@ -28,90 +28,90 @@
   <PortraitOverlay.Overlay.Title>{0}</PortraitOverlay.Overlay.Title>
   <PortraitOverlay.Overlay.NoPortrait>Портрет недоступен</PortraitOverlay.Overlay.NoPortrait>
   <PortraitOverlay.Overlay.Tooltip>Если перетаскивание включено, эту панель можно перемещать мышью.</PortraitOverlay.Overlay.Tooltip>
-  <PortraitOverlay.Settings.LivePortrait>Copy pawn movement and facing</PortraitOverlay.Settings.LivePortrait>
-  <PortraitOverlay.Settings.OnlyPlayerControlledPawns>Show only player-controlled pawns</PortraitOverlay.Settings.OnlyPlayerControlledPawns>
-  <PortraitOverlay.Settings.TabGeneral>General</PortraitOverlay.Settings.TabGeneral>
-  <PortraitOverlay.Settings.TabPortrait>Portrait</PortraitOverlay.Settings.TabPortrait>
-  <PortraitOverlay.Settings.TabFilters>Filters</PortraitOverlay.Settings.TabFilters>
-  <PortraitOverlay.Settings.TabLayout>Layout</PortraitOverlay.Settings.TabLayout>
-  <PortraitOverlay.Settings.SectionGeneral>General</PortraitOverlay.Settings.SectionGeneral>
-  <PortraitOverlay.Settings.SectionAppearance>Appearance</PortraitOverlay.Settings.SectionAppearance>
-  <PortraitOverlay.Settings.SectionRendering>Rendering</PortraitOverlay.Settings.SectionRendering>
-  <PortraitOverlay.Settings.SectionFilters>Filters</PortraitOverlay.Settings.SectionFilters>
-  <PortraitOverlay.Settings.SectionLayout>Layout</PortraitOverlay.Settings.SectionLayout>
-  <PortraitOverlay.Settings.AutoFitPortrait>Auto-fit portrait</PortraitOverlay.Settings.AutoFitPortrait>
-  <PortraitOverlay.Settings.AutoFitPortraitTooltip>Renders each pawn once to measure the area it actually covers, then sizes the portrait to it. Animals, mechanoids, insects, and entities are shown at about a human's size and centered on what is drawn. Humanlike pawns, including modded races, are never zoomed in; they only zoom out when something like a large hat or wings makes them much bigger than usual, so ordinary colonists keep their framing.</PortraitOverlay.Settings.AutoFitPortraitTooltip>
-  <PortraitOverlay.Settings.RaceNotLoaded>{0} (not loaded)</PortraitOverlay.Settings.RaceNotLoaded>
-  <PortraitOverlay.Settings.ShowHoverToolbar>Show edit toolbar on mouseover</PortraitOverlay.Settings.ShowHoverToolbar>
-  <PortraitOverlay.Settings.ShowHoverToolbarTooltip>Hovering the panel shows Edit, Reset, and Settings buttons along its bottom.</PortraitOverlay.Settings.ShowHoverToolbarTooltip>
-  <PortraitOverlay.Settings.TabSaved>Saved adjustments</PortraitOverlay.Settings.TabSaved>
-  <PortraitOverlay.Settings.ResetPawnAdjustmentsConfirm>Settings were reset. Also delete the {0} per-pawn adjustments stored in this save?</PortraitOverlay.Settings.ResetPawnAdjustmentsConfirm>
-  <PortraitOverlay.Toolbar.Edit>Edit</PortraitOverlay.Toolbar.Edit>
-  <PortraitOverlay.Toolbar.Done>Done</PortraitOverlay.Toolbar.Done>
-  <PortraitOverlay.Toolbar.EditTooltip>Edit this portrait: drag to move, mouse wheel to zoom (Shift for fine steps), right-click for more.</PortraitOverlay.Toolbar.EditTooltip>
-  <PortraitOverlay.Toolbar.Reset>Reset</PortraitOverlay.Toolbar.Reset>
-  <PortraitOverlay.Toolbar.ResetTooltip>Delete the {0} category adjustment. Race, variant, and pawn adjustments stay; delete those from the right-click menu in edit mode.</PortraitOverlay.Toolbar.ResetTooltip>
-  <PortraitOverlay.Toolbar.PinTooltip>Keep showing this pawn even when another one is selected.</PortraitOverlay.Toolbar.PinTooltip>
-  <PortraitOverlay.Toolbar.Settings>Settings</PortraitOverlay.Toolbar.Settings>
-  <PortraitOverlay.Edit.ScopePawn>This pawn</PortraitOverlay.Edit.ScopePawn>
-  <PortraitOverlay.Edit.ScopeRace>Race: {0}</PortraitOverlay.Edit.ScopeRace>
+  <PortraitOverlay.Settings.LivePortrait>Повторять движение и направление пешки</PortraitOverlay.Settings.LivePortrait>
+  <PortraitOverlay.Settings.OnlyPlayerControlledPawns>Показывать только пешек под контролем игрока</PortraitOverlay.Settings.OnlyPlayerControlledPawns>
+  <PortraitOverlay.Settings.TabGeneral>Общие</PortraitOverlay.Settings.TabGeneral>
+  <PortraitOverlay.Settings.TabPortrait>Портрет</PortraitOverlay.Settings.TabPortrait>
+  <PortraitOverlay.Settings.TabFilters>Фильтры</PortraitOverlay.Settings.TabFilters>
+  <PortraitOverlay.Settings.TabLayout>Раскладка</PortraitOverlay.Settings.TabLayout>
+  <PortraitOverlay.Settings.SectionGeneral>Общие</PortraitOverlay.Settings.SectionGeneral>
+  <PortraitOverlay.Settings.SectionAppearance>Внешний вид</PortraitOverlay.Settings.SectionAppearance>
+  <PortraitOverlay.Settings.SectionRendering>Отрисовка</PortraitOverlay.Settings.SectionRendering>
+  <PortraitOverlay.Settings.SectionFilters>Фильтры</PortraitOverlay.Settings.SectionFilters>
+  <PortraitOverlay.Settings.SectionLayout>Раскладка</PortraitOverlay.Settings.SectionLayout>
+  <PortraitOverlay.Settings.AutoFitPortrait>Автоподгонка портрета</PortraitOverlay.Settings.AutoFitPortrait>
+  <PortraitOverlay.Settings.AutoFitPortraitTooltip>Каждая пешка один раз отрисовывается, чтобы измерить реально занимаемую область, и портрет подгоняется под неё. Животные, механоиды, насекомые и сущности показываются примерно в размер человека и по центру нарисованного. Человекоподобные пешки (включая расы из модов) никогда не увеличиваются, а уменьшаются только если, например, большая шляпа или крылья делают их заметно крупнее обычного, поэтому кадрирование обычных колонистов не меняется.</PortraitOverlay.Settings.AutoFitPortraitTooltip>
+  <PortraitOverlay.Settings.RaceNotLoaded>{0} (не загружено)</PortraitOverlay.Settings.RaceNotLoaded>
+  <PortraitOverlay.Settings.ShowHoverToolbar>Показывать панель редактирования при наведении</PortraitOverlay.Settings.ShowHoverToolbar>
+  <PortraitOverlay.Settings.ShowHoverToolbarTooltip>При наведении на панель внизу появляются кнопки «Изменить», «Сброс» и «Настройки».</PortraitOverlay.Settings.ShowHoverToolbarTooltip>
+  <PortraitOverlay.Settings.TabSaved>Сохранённые настройки</PortraitOverlay.Settings.TabSaved>
+  <PortraitOverlay.Settings.ResetPawnAdjustmentsConfirm>Настройки сброшены. Удалить также {0} настроек отдельных пешек, сохранённых в этой игре?</PortraitOverlay.Settings.ResetPawnAdjustmentsConfirm>
+  <PortraitOverlay.Toolbar.Edit>Изменить</PortraitOverlay.Toolbar.Edit>
+  <PortraitOverlay.Toolbar.Done>Готово</PortraitOverlay.Toolbar.Done>
+  <PortraitOverlay.Toolbar.EditTooltip>Изменить портрет: перетаскивание сдвигает, колесо мыши масштабирует (Shift — точнее), правый клик открывает меню.</PortraitOverlay.Toolbar.EditTooltip>
+  <PortraitOverlay.Toolbar.Reset>Сброс</PortraitOverlay.Toolbar.Reset>
+  <PortraitOverlay.Toolbar.ResetTooltip>Удалить настройку категории «{0}». Настройки расы, варианта и пешки останутся; их можно удалить через меню правого клика в режиме редактирования.</PortraitOverlay.Toolbar.ResetTooltip>
+  <PortraitOverlay.Toolbar.PinTooltip>Показывать эту пешку, даже если выбрана другая.</PortraitOverlay.Toolbar.PinTooltip>
+  <PortraitOverlay.Toolbar.Settings>Настройки</PortraitOverlay.Toolbar.Settings>
+  <PortraitOverlay.Edit.ScopePawn>Эта пешка</PortraitOverlay.Edit.ScopePawn>
+  <PortraitOverlay.Edit.ScopeRace>Раса: {0}</PortraitOverlay.Edit.ScopeRace>
   <PortraitOverlay.Edit.Readout>{0}x · X {1} · Z {2}</PortraitOverlay.Edit.Readout>
-  <PortraitOverlay.Edit.Hint>Drag: move · Wheel: zoom (Shift: fine) · Edge tabs: crop · Corner: resize · Ctrl+Z: undo · Right-click: menu · Esc: finish</PortraitOverlay.Edit.Hint>
-  <PortraitOverlay.Menu.ResetAll>Reset all settings...</PortraitOverlay.Menu.ResetAll>
-  <PortraitOverlay.Menu.ResetAllConfirm>Reset every Portrait Overlay setting, including category, race, and variant adjustments?</PortraitOverlay.Menu.ResetAllConfirm>
-  <PortraitOverlay.Menu.OpenSettings>Open settings</PortraitOverlay.Menu.OpenSettings>
-  <PortraitOverlay.Menu.ExitEdit>Finish editing</PortraitOverlay.Menu.ExitEdit>
-  <PortraitOverlay.Saved.Hint>Adjustments made in edit mode. Per-pawn ones are stored in the current save; category, race, and variant ones apply to every save.</PortraitOverlay.Saved.Hint>
-  <PortraitOverlay.Saved.PawnsHeader>Per-pawn (this save)</PortraitOverlay.Saved.PawnsHeader>
-  <PortraitOverlay.Saved.RacesHeader>Per-race</PortraitOverlay.Saved.RacesHeader>
-  <PortraitOverlay.Saved.NoGame>Load a game to see per-pawn adjustments.</PortraitOverlay.Saved.NoGame>
-  <PortraitOverlay.Saved.Empty>None yet.</PortraitOverlay.Saved.Empty>
-  <PortraitOverlay.Saved.MissingPawn>{0} (no longer here)</PortraitOverlay.Saved.MissingPawn>
-  <PortraitOverlay.Saved.Delete>Delete</PortraitOverlay.Saved.Delete>
-  <PortraitOverlay.Saved.DeleteAll>Delete all</PortraitOverlay.Saved.DeleteAll>
-  <PortraitOverlay.Saved.PruneMissing>Remove {0} missing</PortraitOverlay.Saved.PruneMissing>
-  <PortraitOverlay.Saved.DeleteAllPawnsConfirm>Delete all {0} per-pawn adjustments in this save?</PortraitOverlay.Saved.DeleteAllPawnsConfirm>
-  <PortraitOverlay.Hint.FirstRun>Hover over the portrait panel to show its edit tools.</PortraitOverlay.Hint.FirstRun>
-  <PortraitOverlay.Hint.Close>Got it</PortraitOverlay.Hint.Close>
-  <PortraitOverlay.Edit.PresetFull>Full body</PortraitOverlay.Edit.PresetFull>
-  <PortraitOverlay.Edit.PresetUpper>Upper body</PortraitOverlay.Edit.PresetUpper>
-  <PortraitOverlay.Edit.PresetFace>Face</PortraitOverlay.Edit.PresetFace>
-  <PortraitOverlay.Edit.PresetTooltip>Frame the pawn this way and save it to the selected scope.</PortraitOverlay.Edit.PresetTooltip>
-  <PortraitOverlay.Edit.CropTooltip>Drag to hide the top or bottom of the panel.</PortraitOverlay.Edit.CropTooltip>
-  <PortraitOverlay.Edit.ResizeTooltip>Drag to resize the panel.</PortraitOverlay.Edit.ResizeTooltip>
-  <PortraitOverlay.Edit.ReadoutTooltip>Double-click to type exact values.</PortraitOverlay.Edit.ReadoutTooltip>
-  <PortraitOverlay.Menu.Undo>Undo (Ctrl+Z)</PortraitOverlay.Menu.Undo>
-  <PortraitOverlay.Adjust.Title>Adjustment: {0}</PortraitOverlay.Adjust.Title>
-  <PortraitOverlay.Adjust.Zoom>Zoom</PortraitOverlay.Adjust.Zoom>
-  <PortraitOverlay.Adjust.OffsetX>Horizontal offset</PortraitOverlay.Adjust.OffsetX>
-  <PortraitOverlay.Adjust.OffsetZ>Vertical offset</PortraitOverlay.Adjust.OffsetZ>
-  <PortraitOverlay.Adjust.Apply>Apply</PortraitOverlay.Adjust.Apply>
-  <PortraitOverlay.Settings.Advanced>Advanced (numeric values)</PortraitOverlay.Settings.Advanced>
-  <PortraitOverlay.Edit.ReadoutWithPanel>{0}x · X {1} · Z {2} · panel {3}%×{4}%</PortraitOverlay.Edit.ReadoutWithPanel>
-  <PortraitOverlay.Category.Humanlike>Humanlike</PortraitOverlay.Category.Humanlike>
-  <PortraitOverlay.Category.Animal>Animal</PortraitOverlay.Category.Animal>
-  <PortraitOverlay.Category.Mechanoid>Mechanoid</PortraitOverlay.Category.Mechanoid>
-  <PortraitOverlay.Category.Insect>Insect</PortraitOverlay.Category.Insect>
-  <PortraitOverlay.Category.Anomaly>Anomaly entity</PortraitOverlay.Category.Anomaly>
-  <PortraitOverlay.Category.Other>Other</PortraitOverlay.Category.Other>
-  <PortraitOverlay.Edit.ScopeButton>Scope: {0}</PortraitOverlay.Edit.ScopeButton>
-  <PortraitOverlay.Edit.ScopeTooltip>Choose where edits are stored, from the pawn's category down to this pawn. Narrower levels apply on top of broader ones. A dot marks levels that already hold an adjustment.</PortraitOverlay.Edit.ScopeTooltip>
-  <PortraitOverlay.Edit.ScopeCategory>Category: {0}</PortraitOverlay.Edit.ScopeCategory>
-  <PortraitOverlay.Edit.ScopeVariant>Variant: {0}</PortraitOverlay.Edit.ScopeVariant>
-  <PortraitOverlay.Menu.ClearScope>Delete adjustment: {0}</PortraitOverlay.Menu.ClearScope>
-  <PortraitOverlay.Menu.ClearAllScopes>Delete all of this pawn's adjustments</PortraitOverlay.Menu.ClearAllScopes>
-  <PortraitOverlay.Saved.CategoriesHeader>Per-category</PortraitOverlay.Saved.CategoriesHeader>
-  <PortraitOverlay.Saved.VariantsHeader>Per-variant (xenotype or growth stage)</PortraitOverlay.Saved.VariantsHeader>
-  <PortraitOverlay.Saved.DeleteAllConfirm>Delete all {0} adjustments in {1}?</PortraitOverlay.Saved.DeleteAllConfirm>
-  <PortraitOverlay.ScopeHelp.Category>Applies to every pawn in the same category, such as all humanlikes or all animals. Use it to set a whole group's size and framing in one go; it is usually the best place to start.</PortraitOverlay.ScopeHelp.Category>
-  <PortraitOverlay.ScopeHelp.Race>Applies to every pawn of this race, such as all thrumbos or all humans. Use it for races whose art is unusually large or small, and for modded races.</PortraitOverlay.ScopeHelp.Race>
-  <PortraitOverlay.ScopeHelp.Variant>Applies only to this xenotype (humanlike) or growth stage (animals) within the race. Use it when babies and adults, or xenotypes with different builds, need their own framing.</PortraitOverlay.ScopeHelp.Variant>
-  <PortraitOverlay.ScopeHelp.Pawn>Applies only to this pawn and is stored in the save. Use it when one particular colonist should look different.</PortraitOverlay.ScopeHelp.Pawn>
-  <PortraitOverlay.ScopeHelp.VariantUnavailable>This pawn has no variant level. Humanlike pawns are split by xenotype only with Biotech, and races with a single growth stage, such as most mechanoids, have none.</PortraitOverlay.ScopeHelp.VariantUnavailable>
-  <PortraitOverlay.Toolbar.ResetConfirm>Delete the {0} category adjustment? It applies to every pawn in that category.</PortraitOverlay.Toolbar.ResetConfirm>
-  <PortraitOverlay.Toolbar.UnpinTooltip>Unpin: follow the selected pawn again.</PortraitOverlay.Toolbar.UnpinTooltip>
-  <PortraitOverlay.Settings.ShowPinButton>Show the pin button</PortraitOverlay.Settings.ShowPinButton>
-  <PortraitOverlay.Settings.ShowPinButtonTooltip>Hovering the panel shows a pin button in its top-right corner. Pinning keeps this pawn on screen when another is selected; the pin stays visible while pinned. Turning this off also unpins.</PortraitOverlay.Settings.ShowPinButtonTooltip>
-  <PortraitOverlay.Settings.FullBodyFraming>Frame every pawn full body</PortraitOverlay.Settings.FullBodyFraming>
-  <PortraitOverlay.Settings.FullBodyFramingTooltip>With auto-fit on, every pawn is framed whole by its measured size. Small pawns with low-resolution art are not magnified past the point where they blur, so they sit a little smaller. Zoom still applies; face emphasis does not. Off: the earlier framing, close to full body with a slight lean toward the face. On by default; adjustments saved under the earlier framing may need redoing.</PortraitOverlay.Settings.FullBodyFramingTooltip>
+  <PortraitOverlay.Edit.Hint>Перетаскивание: сдвиг · Колесо: масштаб (Shift: точнее) · Края: обрезка · Угол: размер · Ctrl+Z: отмена · Правый клик: меню · Esc: готово</PortraitOverlay.Edit.Hint>
+  <PortraitOverlay.Menu.ResetAll>Сбросить все настройки...</PortraitOverlay.Menu.ResetAll>
+  <PortraitOverlay.Menu.ResetAllConfirm>Сбросить все настройки Portrait Overlay, включая настройки категорий, рас и вариантов?</PortraitOverlay.Menu.ResetAllConfirm>
+  <PortraitOverlay.Menu.OpenSettings>Открыть настройки</PortraitOverlay.Menu.OpenSettings>
+  <PortraitOverlay.Menu.ExitEdit>Закончить редактирование</PortraitOverlay.Menu.ExitEdit>
+  <PortraitOverlay.Saved.Hint>Настройки, сделанные в режиме редактирования. Настройки отдельных пешек хранятся в текущем сохранении, а настройки категорий, рас и вариантов действуют во всех сохранениях.</PortraitOverlay.Saved.Hint>
+  <PortraitOverlay.Saved.PawnsHeader>По пешкам (это сохранение)</PortraitOverlay.Saved.PawnsHeader>
+  <PortraitOverlay.Saved.RacesHeader>По расам</PortraitOverlay.Saved.RacesHeader>
+  <PortraitOverlay.Saved.NoGame>Загрузите игру, чтобы увидеть настройки отдельных пешек.</PortraitOverlay.Saved.NoGame>
+  <PortraitOverlay.Saved.Empty>Пока нет.</PortraitOverlay.Saved.Empty>
+  <PortraitOverlay.Saved.MissingPawn>{0} (больше нет)</PortraitOverlay.Saved.MissingPawn>
+  <PortraitOverlay.Saved.Delete>Удалить</PortraitOverlay.Saved.Delete>
+  <PortraitOverlay.Saved.DeleteAll>Удалить все</PortraitOverlay.Saved.DeleteAll>
+  <PortraitOverlay.Saved.PruneMissing>Убрать отсутствующих: {0}</PortraitOverlay.Saved.PruneMissing>
+  <PortraitOverlay.Saved.DeleteAllPawnsConfirm>Удалить все {0} настроек отдельных пешек в этом сохранении?</PortraitOverlay.Saved.DeleteAllPawnsConfirm>
+  <PortraitOverlay.Hint.FirstRun>Наведите курсор на панель портрета, чтобы показать инструменты редактирования.</PortraitOverlay.Hint.FirstRun>
+  <PortraitOverlay.Hint.Close>Понятно</PortraitOverlay.Hint.Close>
+  <PortraitOverlay.Edit.PresetFull>В полный рост</PortraitOverlay.Edit.PresetFull>
+  <PortraitOverlay.Edit.PresetUpper>По пояс</PortraitOverlay.Edit.PresetUpper>
+  <PortraitOverlay.Edit.PresetFace>Лицо</PortraitOverlay.Edit.PresetFace>
+  <PortraitOverlay.Edit.PresetTooltip>Кадрировать пешку так и сохранить в выбранный уровень.</PortraitOverlay.Edit.PresetTooltip>
+  <PortraitOverlay.Edit.CropTooltip>Перетащите, чтобы скрыть верх или низ панели.</PortraitOverlay.Edit.CropTooltip>
+  <PortraitOverlay.Edit.ResizeTooltip>Перетащите, чтобы изменить размер панели.</PortraitOverlay.Edit.ResizeTooltip>
+  <PortraitOverlay.Edit.ReadoutTooltip>Дважды щёлкните, чтобы ввести точные значения.</PortraitOverlay.Edit.ReadoutTooltip>
+  <PortraitOverlay.Menu.Undo>Отменить (Ctrl+Z)</PortraitOverlay.Menu.Undo>
+  <PortraitOverlay.Adjust.Title>Настройка: {0}</PortraitOverlay.Adjust.Title>
+  <PortraitOverlay.Adjust.Zoom>Масштаб</PortraitOverlay.Adjust.Zoom>
+  <PortraitOverlay.Adjust.OffsetX>Сдвиг по горизонтали</PortraitOverlay.Adjust.OffsetX>
+  <PortraitOverlay.Adjust.OffsetZ>Сдвиг по вертикали</PortraitOverlay.Adjust.OffsetZ>
+  <PortraitOverlay.Adjust.Apply>Применить</PortraitOverlay.Adjust.Apply>
+  <PortraitOverlay.Settings.Advanced>Дополнительно (числовые значения)</PortraitOverlay.Settings.Advanced>
+  <PortraitOverlay.Edit.ReadoutWithPanel>{0}x · X {1} · Z {2} · панель {3}%×{4}%</PortraitOverlay.Edit.ReadoutWithPanel>
+  <PortraitOverlay.Category.Humanlike>Человекоподобные</PortraitOverlay.Category.Humanlike>
+  <PortraitOverlay.Category.Animal>Животные</PortraitOverlay.Category.Animal>
+  <PortraitOverlay.Category.Mechanoid>Механоиды</PortraitOverlay.Category.Mechanoid>
+  <PortraitOverlay.Category.Insect>Насекомые</PortraitOverlay.Category.Insect>
+  <PortraitOverlay.Category.Anomaly>Сущности Anomaly</PortraitOverlay.Category.Anomaly>
+  <PortraitOverlay.Category.Other>Прочие</PortraitOverlay.Category.Other>
+  <PortraitOverlay.Edit.ScopeButton>Уровень: {0}</PortraitOverlay.Edit.ScopeButton>
+  <PortraitOverlay.Edit.ScopeTooltip>Выберите, где сохранять изменения: от категории пешки до самой пешки. Более узкие уровни применяются поверх широких. Точкой отмечены уровни, где уже есть настройка.</PortraitOverlay.Edit.ScopeTooltip>
+  <PortraitOverlay.Edit.ScopeCategory>Категория: {0}</PortraitOverlay.Edit.ScopeCategory>
+  <PortraitOverlay.Edit.ScopeVariant>Вариант: {0}</PortraitOverlay.Edit.ScopeVariant>
+  <PortraitOverlay.Menu.ClearScope>Удалить настройку: {0}</PortraitOverlay.Menu.ClearScope>
+  <PortraitOverlay.Menu.ClearAllScopes>Удалить все настройки этой пешки</PortraitOverlay.Menu.ClearAllScopes>
+  <PortraitOverlay.Saved.CategoriesHeader>По категориям</PortraitOverlay.Saved.CategoriesHeader>
+  <PortraitOverlay.Saved.VariantsHeader>По вариантам (ксенотип или стадия роста)</PortraitOverlay.Saved.VariantsHeader>
+  <PortraitOverlay.Saved.DeleteAllConfirm>Удалить все {0} настроек в разделе «{1}»?</PortraitOverlay.Saved.DeleteAllConfirm>
+  <PortraitOverlay.ScopeHelp.Category>Действует на всех пешек одной категории, например на всех человекоподобных или всех животных. Подходит, чтобы задать размер и кадрирование целой группы сразу; обычно лучше начинать отсюда.</PortraitOverlay.ScopeHelp.Category>
+  <PortraitOverlay.ScopeHelp.Race>Действует на всех пешек этой расы, например на всех трумбо или всех людей. Подходит для рас с необычно крупной или мелкой графикой и для рас из модов.</PortraitOverlay.ScopeHelp.Race>
+  <PortraitOverlay.ScopeHelp.Variant>Действует только на этот ксенотип (человекоподобные) или стадию роста (животные) внутри расы. Подходит, когда детёнышам и взрослым или ксенотипам с разным телосложением нужно своё кадрирование.</PortraitOverlay.ScopeHelp.Variant>
+  <PortraitOverlay.ScopeHelp.Pawn>Действует только на эту пешку и хранится в сохранении. Подходит, когда один конкретный колонист должен выглядеть иначе.</PortraitOverlay.ScopeHelp.Pawn>
+  <PortraitOverlay.ScopeHelp.VariantUnavailable>У этой пешки нет уровня варианта. Человекоподобные делятся по ксенотипам только с Biotech, а у рас с одной стадией роста, как у большинства механоидов, его нет.</PortraitOverlay.ScopeHelp.VariantUnavailable>
+  <PortraitOverlay.Toolbar.ResetConfirm>Удалить настройку категории «{0}»? Она действует на всех пешек этой категории.</PortraitOverlay.Toolbar.ResetConfirm>
+  <PortraitOverlay.Toolbar.UnpinTooltip>Открепить: снова следовать за выбранной пешкой.</PortraitOverlay.Toolbar.UnpinTooltip>
+  <PortraitOverlay.Settings.ShowPinButton>Показывать кнопку-булавку</PortraitOverlay.Settings.ShowPinButton>
+  <PortraitOverlay.Settings.ShowPinButtonTooltip>При наведении на панель в её правом верхнем углу появляется кнопка-булавка. Закреплённая пешка остаётся на экране, даже если выбрана другая, а булавка видна всё время закрепления. Если отключить этот параметр, закрепление тоже снимается.</PortraitOverlay.Settings.ShowPinButtonTooltip>
+  <PortraitOverlay.Settings.FullBodyFraming>Все пешки в полный рост</PortraitOverlay.Settings.FullBodyFraming>
+  <PortraitOverlay.Settings.FullBodyFramingTooltip>При включённой автоподгонке каждая пешка кадрируется целиком по измеренному размеру. Мелкие пешки с графикой низкого разрешения не увеличиваются до размытия, поэтому выглядят чуть меньше. Масштаб по-прежнему действует, акцент на лице — нет. Если выключить, вернётся прежнее кадрирование (почти в полный рост, с небольшим смещением к лицу). Включено по умолчанию; настройки, сохранённые при прежнем кадрировании, возможно, придётся переделать.</PortraitOverlay.Settings.FullBodyFramingTooltip>
 </LanguageData>
