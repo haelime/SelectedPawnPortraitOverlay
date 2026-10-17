@@ -41,10 +41,42 @@
   <PortraitOverlay.Settings.SectionLayout>배치</PortraitOverlay.Settings.SectionLayout>
   <PortraitOverlay.Settings.AutoFitPortrait>초상화 자동 맞춤</PortraitOverlay.Settings.AutoFitPortrait>
   <PortraitOverlay.Settings.AutoFitPortraitTooltip>폰을 한 번 렌더링해서 실제로 그려진 영역을 재고, 그 크기에 맞춰 초상화를 맞춥니다. 동물, 메카노이드, 곤충, 개체는 사람과 비슷한 크기로 보이고 그려진 부분의 가운데에 맞춰집니다. 인간형 폰(모드 종족 포함)은 확대하지 않고, 큰 모자나 날개처럼 평소보다 훨씬 커질 때만 축소하므로 보통 정착민의 구도는 그대로입니다.</PortraitOverlay.Settings.AutoFitPortraitTooltip>
-  <PortraitOverlay.Settings.RaceZoomHint>종족별 줌은 자동 맞춤보다 우선합니다. 1.00은 사람과 같은 기준이고, 값이 클수록 확대됩니다.</PortraitOverlay.Settings.RaceZoomHint>
-  <PortraitOverlay.Settings.RaceZoom>{0}: {1}배</PortraitOverlay.Settings.RaceZoom>
   <PortraitOverlay.Settings.RaceNotLoaded>{0} (불러오지 않음)</PortraitOverlay.Settings.RaceNotLoaded>
-  <PortraitOverlay.Settings.AddSelectedRace>선택한 폰의 종족 추가</PortraitOverlay.Settings.AddSelectedRace>
-  <PortraitOverlay.Settings.AddRace>종족 추가...</PortraitOverlay.Settings.AddRace>
-  <PortraitOverlay.Settings.RemoveRace>삭제</PortraitOverlay.Settings.RemoveRace>
+  <PortraitOverlay.Settings.ShowHoverToolbar>마우스를 올리면 편집 도구 막대 표시</PortraitOverlay.Settings.ShowHoverToolbar>
+  <PortraitOverlay.Settings.ShowHoverToolbarTooltip>패널에 마우스를 올리면 아래쪽에 편집 · 초기화 · 고정 · 설정 버튼이 나타납니다.</PortraitOverlay.Settings.ShowHoverToolbarTooltip>
+  <PortraitOverlay.Settings.TabSaved>저장된 보정</PortraitOverlay.Settings.TabSaved>
+  <PortraitOverlay.Settings.ResetPawnAdjustmentsConfirm>설정을 초기화했습니다. 이 세이브에 저장된 폰별 보정 {0}개도 삭제할까요?</PortraitOverlay.Settings.ResetPawnAdjustmentsConfirm>
+  <PortraitOverlay.Toolbar.Edit>편집</PortraitOverlay.Toolbar.Edit>
+  <PortraitOverlay.Toolbar.Done>완료</PortraitOverlay.Toolbar.Done>
+  <PortraitOverlay.Toolbar.EditTooltip>이 초상화를 편집합니다. 드래그로 이동, 휠로 줌(Shift는 미세 조정), 우클릭으로 메뉴를 엽니다.</PortraitOverlay.Toolbar.EditTooltip>
+  <PortraitOverlay.Toolbar.Reset>초기화</PortraitOverlay.Toolbar.Reset>
+  <PortraitOverlay.Toolbar.ResetTooltip>이 폰의 보정을 지우고 자동 구도로 되돌립니다.</PortraitOverlay.Toolbar.ResetTooltip>
+  <PortraitOverlay.Toolbar.Pin>고정</PortraitOverlay.Toolbar.Pin>
+  <PortraitOverlay.Toolbar.Unpin>고정 해제</PortraitOverlay.Toolbar.Unpin>
+  <PortraitOverlay.Toolbar.PinTooltip>다른 폰을 선택해도 이 폰을 계속 표시합니다.</PortraitOverlay.Toolbar.PinTooltip>
+  <PortraitOverlay.Toolbar.Settings>설정</PortraitOverlay.Toolbar.Settings>
+  <PortraitOverlay.Edit.ScopePawn>이 폰</PortraitOverlay.Edit.ScopePawn>
+  <PortraitOverlay.Edit.ScopeRace>종족: {0}</PortraitOverlay.Edit.ScopeRace>
+  <PortraitOverlay.Edit.ScopeGlobal>전체</PortraitOverlay.Edit.ScopeGlobal>
+  <PortraitOverlay.Edit.ClearScopeTooltip>이 범위에 저장된 보정을 지웁니다.</PortraitOverlay.Edit.ClearScopeTooltip>
+  <PortraitOverlay.Edit.Readout>{0}배 · X {1} · Z {2}</PortraitOverlay.Edit.Readout>
+  <PortraitOverlay.Edit.Hint>드래그: 이동 · 휠: 줌(Shift: 미세) · 우클릭: 메뉴 · Esc: 끝내기</PortraitOverlay.Edit.Hint>
+  <PortraitOverlay.Menu.ClearPawn>이 폰 보정 삭제</PortraitOverlay.Menu.ClearPawn>
+  <PortraitOverlay.Menu.ClearRace>이 종족 보정 삭제</PortraitOverlay.Menu.ClearRace>
+  <PortraitOverlay.Menu.ClearBoth>둘 다 삭제</PortraitOverlay.Menu.ClearBoth>
+  <PortraitOverlay.Menu.ResetAll>모든 설정 초기화...</PortraitOverlay.Menu.ResetAll>
+  <PortraitOverlay.Menu.ResetAllConfirm>종족 보정을 포함해 초상화 오버레이의 모든 설정을 초기화할까요?</PortraitOverlay.Menu.ResetAllConfirm>
+  <PortraitOverlay.Menu.OpenSettings>설정 열기</PortraitOverlay.Menu.OpenSettings>
+  <PortraitOverlay.Menu.ExitEdit>편집 끝내기</PortraitOverlay.Menu.ExitEdit>
+  <PortraitOverlay.Saved.Hint>편집 모드에서 만든 보정입니다. 폰별 보정은 현재 세이브에, 종족 보정은 모든 세이브에 공통으로 저장됩니다.</PortraitOverlay.Saved.Hint>
+  <PortraitOverlay.Saved.PawnsHeader>폰별 (현재 세이브)</PortraitOverlay.Saved.PawnsHeader>
+  <PortraitOverlay.Saved.RacesHeader>종족별</PortraitOverlay.Saved.RacesHeader>
+  <PortraitOverlay.Saved.NoGame>게임을 불러오면 폰별 보정이 표시됩니다.</PortraitOverlay.Saved.NoGame>
+  <PortraitOverlay.Saved.Empty>아직 없습니다.</PortraitOverlay.Saved.Empty>
+  <PortraitOverlay.Saved.MissingPawn>{0} (없는 폰)</PortraitOverlay.Saved.MissingPawn>
+  <PortraitOverlay.Saved.Delete>삭제</PortraitOverlay.Saved.Delete>
+  <PortraitOverlay.Saved.DeleteAll>모두 삭제</PortraitOverlay.Saved.DeleteAll>
+  <PortraitOverlay.Saved.PruneMissing>없는 폰 {0}개 정리</PortraitOverlay.Saved.PruneMissing>
+  <PortraitOverlay.Saved.DeleteAllPawnsConfirm>이 세이브의 폰별 보정 {0}개를 모두 삭제할까요?</PortraitOverlay.Saved.DeleteAllPawnsConfirm>
+  <PortraitOverlay.Saved.DeleteAllRacesConfirm>종족 보정 {0}개를 모두 삭제할까요?</PortraitOverlay.Saved.DeleteAllRacesConfirm>
 </LanguageData>

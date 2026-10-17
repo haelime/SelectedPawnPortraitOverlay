@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using RimWorld;
 using UnityEngine;
 using Verse;
 
@@ -21,17 +22,21 @@ public sealed class PortraitOverlayMod : Mod
     private const float SettingControlHeight = 28f;
     private const float InfoLabelHeight = 34f;
     private const float RemoveButtonWidth = 90f;
+    private const float SavedRowHeight = 28f;
+    private const float SavedSummaryWidth = 190f;
 
     private enum SettingsTab
     {
         General,
-        Portrait
+        Portrait,
+        Saved
     }
 
     private static PortraitOverlayMod instance;
     private SettingsTab selectedSettingsTab = SettingsTab.General;
     private Vector2 generalScrollPosition;
     private Vector2 portraitScrollPosition;
+    private Vector2 savedScrollPosition;
     private string backgroundAlphaBuffer;
     private string cameraZoomBuffer;
     private string faceEmphasisBuffer;
@@ -41,9 +46,10 @@ public sealed class PortraitOverlayMod : Mod
     private string panelHeightBuffer;
     private string panelXBuffer;
     private string panelYBuffer;
-    private readonly Dictionary<string, string> raceZoomBuffers = new();
 
     public static PortraitOverlaySettings Settings { get; private set; }
+
+    public static PortraitOverlayMod Instance => instance;
 
     public PortraitOverlayMod(ModContentPack content) : base(content)
     {
@@ -77,7 +83,10 @@ public sealed class PortraitOverlayMod : Mod
                 DrawScrollableListing(contentRect, ref generalScrollPosition, GetGeneralTabHeight(), DrawGeneralTab);
                 break;
             case SettingsTab.Portrait:
-                DrawScrollableListing(contentRect, ref portraitScrollPosition, GetPortraitTabHeight(settings), DrawPortraitTab);
+                DrawScrollableListing(contentRect, ref portraitScrollPosition, GetPortraitTabHeight(), DrawPortraitTab);
+                break;
+            case SettingsTab.Saved:
+                DrawScrollableListing(contentRect, ref savedScrollPosition, GetSavedTabHeight(settings), DrawSavedTab);
                 break;
         }
 
@@ -89,7 +98,8 @@ public sealed class PortraitOverlayMod : Mod
         var tabs = new List<TabRecord>
         {
             new("PortraitOverlay.Settings.TabGeneral".Translate(), () => selectedSettingsTab = SettingsTab.General, selectedSettingsTab == SettingsTab.General),
-            new("PortraitOverlay.Settings.TabPortrait".Translate(), () => selectedSettingsTab = SettingsTab.Portrait, selectedSettingsTab == SettingsTab.Portrait)
+            new("PortraitOverlay.Settings.TabPortrait".Translate(), () => selectedSettingsTab = SettingsTab.Portrait, selectedSettingsTab == SettingsTab.Portrait),
+            new("PortraitOverlay.Settings.TabSaved".Translate(), () => selectedSettingsTab = SettingsTab.Saved, selectedSettingsTab == SettingsTab.Saved)
         };
 
         TabDrawer.DrawTabs(rect, tabs, TabMaxWidth);
@@ -126,6 +136,10 @@ public sealed class PortraitOverlayMod : Mod
         }
 
         listing.CheckboxLabeled("PortraitOverlay.Settings.AllowDragging".Translate(), ref settings.AllowDragging);
+        listing.CheckboxLabeled(
+            "PortraitOverlay.Settings.ShowHoverToolbar".Translate(),
+            ref settings.ShowHoverToolbar,
+            "PortraitOverlay.Settings.ShowHoverToolbarTooltip".Translate());
         listing.GapLine();
         listing.CheckboxLabeled("PortraitOverlay.Settings.ShowAnimals".Translate(), ref settings.ShowAnimals);
         listing.CheckboxLabeled("PortraitOverlay.Settings.ShowMechanoids".Translate(), ref settings.ShowMechanoids);
@@ -191,7 +205,10 @@ public sealed class PortraitOverlayMod : Mod
             numericMax: GetCutoffNumericMax(settings.TopCutoff));
 
         listing.GapLine();
-        DrawRaceZoomSection(listing, settings);
+        listing.CheckboxLabeled(
+            "PortraitOverlay.Settings.AutoFitPortrait".Translate(),
+            ref settings.AutoFitPortrait,
+            "PortraitOverlay.Settings.AutoFitPortraitTooltip".Translate());
 
         listing.GapLine();
         DrawSliderWithNumericField(
@@ -245,91 +262,149 @@ public sealed class PortraitOverlayMod : Mod
 
         if (listing.ButtonText("PortraitOverlay.Settings.ResetAllSettings".Translate()))
         {
-            settings.ResetAll();
-            SyncNumericBuffers(settings);
-            SaveSettings();
+            ResetAllSettings();
         }
     }
 
-    private void DrawRaceZoomSection(Listing_Standard listing, PortraitOverlaySettings settings)
+    private void DrawSavedTab(Listing_Standard listing, PortraitOverlaySettings settings)
     {
-        listing.CheckboxLabeled(
-            "PortraitOverlay.Settings.AutoFitPortrait".Translate(),
-            ref settings.AutoFitPortrait,
-            "PortraitOverlay.Settings.AutoFitPortraitTooltip".Translate());
-        DrawInfoLabel(listing, "PortraitOverlay.Settings.RaceZoomHint".Translate());
+        DrawInfoLabel(listing, "PortraitOverlay.Saved.Hint".Translate());
 
-        string removedDefName = null;
-        foreach (var defName in settings.RaceZoomOverrides.Keys.OrderBy(GetRaceLabel).ToList())
+        listing.Label("PortraitOverlay.Saved.PawnsHeader".Translate());
+        var pawnStore = PortraitAdjustments.PawnStore;
+        if (pawnStore == null)
         {
-            var value = settings.RaceZoomOverrides[defName];
-            raceZoomBuffers.TryGetValue(defName, out var buffer);
-
-            var labelRect = listing.GetRect(SettingLabelHeight);
-            Widgets.Label(
-                labelRect.LeftPartPixels(labelRect.width - RemoveButtonWidth - SliderFieldGap),
-                "PortraitOverlay.Settings.RaceZoom".Translate(GetRaceLabel(defName), value.ToString("F2")));
-            if (Widgets.ButtonText(labelRect.RightPartPixels(RemoveButtonWidth), "PortraitOverlay.Settings.RemoveRace".Translate()))
+            DrawMutedLine(listing, "PortraitOverlay.Saved.NoGame".Translate());
+        }
+        else if (pawnStore.Count == 0)
+        {
+            DrawMutedLine(listing, "PortraitOverlay.Saved.Empty".Translate());
+        }
+        else
+        {
+            int? removedId = null;
+            var missingIds = new List<int>();
+            foreach (var pair in pawnStore.OrderBy(pair => pair.Value.Label ?? string.Empty).ToList())
             {
-                removedDefName = defName;
+                var pawn = SelectedPawnPortraitOverlayComponent.FindPawn(pair.Key);
+                if (pawn == null)
+                {
+                    missingIds.Add(pair.Key);
+                }
+
+                var name = pawn != null
+                    ? pawn.LabelShortCap.ToString()
+                    : "PortraitOverlay.Saved.MissingPawn".Translate(pair.Value.Label ?? pair.Key.ToString()).ToString();
+                if (DrawSavedRow(listing, name, pair.Value))
+                {
+                    removedId = pair.Key;
+                }
             }
 
-            DrawSliderRow(
-                listing,
-                ref value,
-                ref buffer,
-                0.25f,
-                3f,
-                "F2",
-                PortraitOverlaySettings.MinRaceZoom,
-                PortraitOverlaySettings.MaxRaceZoom);
-            settings.RaceZoomOverrides[defName] = value;
-            raceZoomBuffers[defName] = buffer;
+            if (removedId.HasValue)
+            {
+                pawnStore.Remove(removedId.Value);
+            }
+
+            var buttons = listing.GetRect(SavedRowHeight);
+            if (Widgets.ButtonText(buttons.LeftHalf().ContractedBy(2f), "PortraitOverlay.Saved.DeleteAll".Translate()))
+            {
+                Find.WindowStack.Add(Dialog_MessageBox.CreateConfirmation(
+                    "PortraitOverlay.Saved.DeleteAllPawnsConfirm".Translate(pawnStore.Count.ToString()),
+                    pawnStore.Clear,
+                    true));
+            }
+
+            if (missingIds.Count > 0
+                && Widgets.ButtonText(buttons.RightHalf().ContractedBy(2f), "PortraitOverlay.Saved.PruneMissing".Translate(missingIds.Count.ToString())))
+            {
+                foreach (var id in missingIds)
+                {
+                    pawnStore.Remove(id);
+                }
+            }
         }
 
-        if (removedDefName != null)
+        listing.GapLine();
+        listing.Label("PortraitOverlay.Saved.RacesHeader".Translate());
+        if (settings.RaceAdjustments.Count == 0)
         {
-            settings.RaceZoomOverrides.Remove(removedDefName);
-            raceZoomBuffers.Remove(removedDefName);
+            DrawMutedLine(listing, "PortraitOverlay.Saved.Empty".Translate());
+            return;
         }
 
-        var selectedPawn = Current.ProgramState == ProgramState.Playing
-            ? Find.Selector?.SingleSelectedThing as Pawn
-            : null;
-        var canAddSelected = selectedPawn?.def != null && !settings.RaceZoomOverrides.ContainsKey(selectedPawn.def.defName);
-        var previousColor = GUI.color;
-        if (!canAddSelected)
+        string removedRace = null;
+        foreach (var pair in settings.RaceAdjustments.OrderBy(pair => GetRaceLabel(pair.Key)).ToList())
         {
-            GUI.color = Color.gray;
+            if (DrawSavedRow(listing, GetRaceLabel(pair.Key), pair.Value))
+            {
+                removedRace = pair.Key;
+            }
         }
 
-        if (listing.ButtonText("PortraitOverlay.Settings.AddSelectedRace".Translate()) && canAddSelected)
+        if (removedRace != null)
         {
-            // Start from the scale the pawn renders with now, so adding an entry does not change the portrait.
-            settings.RaceZoomOverrides[selectedPawn.def.defName] = PortraitRaceScale
-                .For(selectedPawn, SelectedPawnPortraitOverlayComponent.GetPortraitAspect(settings), settings)
-                .Scale;
+            settings.RaceAdjustments.Remove(removedRace);
+            SaveSettings();
         }
 
-        GUI.color = previousColor;
-        if (listing.ButtonText("PortraitOverlay.Settings.AddRace".Translate()))
+        var raceButtons = listing.GetRect(SavedRowHeight);
+        if (Widgets.ButtonText(raceButtons.LeftHalf().ContractedBy(2f), "PortraitOverlay.Saved.DeleteAll".Translate()))
         {
-            Find.WindowStack.Add(new FloatMenu(BuildAddRaceOptions(settings)));
+            Find.WindowStack.Add(Dialog_MessageBox.CreateConfirmation(
+                "PortraitOverlay.Saved.DeleteAllRacesConfirm".Translate(settings.RaceAdjustments.Count.ToString()),
+                () =>
+                {
+                    settings.RaceAdjustments.Clear();
+                    SaveSettings();
+                },
+                true));
         }
     }
 
-    private static List<FloatMenuOption> BuildAddRaceOptions(PortraitOverlaySettings settings)
+    // One saved correction: name, summary, and a delete button. Returns true when delete was clicked.
+    private static bool DrawSavedRow(Listing_Standard listing, string name, SavedAdjustment adjustment)
     {
-        return DefDatabase<ThingDef>.AllDefsListForReading
-            .Where(def => def.race != null && !settings.RaceZoomOverrides.ContainsKey(def.defName))
-            .OrderBy(def => def.label)
-            .Select(def => new FloatMenuOption(
-                $"{def.LabelCap} ({def.defName})",
-                () => settings.RaceZoomOverrides[def.defName] = PortraitRaceScale.DefaultFor(
-                    def,
-                    SelectedPawnPortraitOverlayComponent.GetPortraitAspect(settings),
-                    settings)))
-            .ToList();
+        var row = listing.GetRect(SavedRowHeight);
+        Widgets.DrawHighlightIfMouseover(row);
+        var previousAnchor = Text.Anchor;
+        Text.Anchor = TextAnchor.MiddleLeft;
+        var nameWidth = Mathf.Max(0f, row.width - SavedSummaryWidth - RemoveButtonWidth - (2f * SliderFieldGap));
+        Widgets.Label(new Rect(row.x, row.y, nameWidth, row.height), name);
+        Widgets.Label(new Rect(row.x + nameWidth + SliderFieldGap, row.y, SavedSummaryWidth, row.height), adjustment.Summary());
+        Text.Anchor = previousAnchor;
+        return Widgets.ButtonText(row.RightPartPixels(RemoveButtonWidth).ContractedBy(2f), "PortraitOverlay.Saved.Delete".Translate());
+    }
+
+    private static void DrawMutedLine(Listing_Standard listing, string text)
+    {
+        var rect = listing.GetRect(SavedRowHeight);
+        var previousColor = GUI.color;
+        GUI.color = new Color(0.72f, 0.72f, 0.72f);
+        Widgets.Label(rect, text);
+        GUI.color = previousColor;
+    }
+
+    // Resets every mod setting. Per-pawn corrections live in the save, so clearing them is asked separately.
+    public static void ResetAllSettings()
+    {
+        if (Settings == null)
+        {
+            return;
+        }
+
+        Settings.ResetAll();
+        instance?.SyncNumericBuffers(Settings);
+        SaveSettings();
+
+        var pawnStore = PortraitAdjustments.PawnStore;
+        if (pawnStore != null && pawnStore.Count > 0)
+        {
+            Find.WindowStack.Add(Dialog_MessageBox.CreateConfirmation(
+                "PortraitOverlay.Settings.ResetPawnAdjustmentsConfirm".Translate(pawnStore.Count.ToString()),
+                pawnStore.Clear,
+                true));
+        }
     }
 
     private static string GetRaceLabel(string defName)
@@ -439,7 +514,6 @@ public sealed class PortraitOverlayMod : Mod
         panelHeightBuffer = FormatFloat(settings.PanelHeight, "F0");
         panelXBuffer = FormatFloat(settings.PanelX, "F0");
         panelYBuffer = FormatFloat(settings.PanelY, "F0");
-        raceZoomBuffers.Clear();
     }
 
     private static string FormatFloat(float value, string format)
@@ -459,11 +533,11 @@ public sealed class PortraitOverlayMod : Mod
     {
         const float checkboxHeight = 32f;
         const float spacing = 96f;
-        const int checkboxCount = 9;
+        const int checkboxCount = 10;
         return (checkboxCount * checkboxHeight) + spacing;
     }
 
-    private static float GetPortraitTabHeight(PortraitOverlaySettings settings)
+    private static float GetPortraitTabHeight()
     {
         const float checkboxHeight = 32f;
         const float sliderBlockHeight = SettingLabelHeight + SettingControlHeight + 4f;
@@ -472,16 +546,26 @@ public sealed class PortraitOverlayMod : Mod
         const float infoLabelBlockHeight = InfoLabelHeight + 4f;
         const int checkboxCount = 6;
         const int sliderCount = 9;
-        const int buttonCount = 4;
-        const int infoLabelCount = 2;
-        const float raceZoomSpacing = 16f;
+        const int buttonCount = 2;
 
         return (checkboxCount * checkboxHeight)
-            + ((sliderCount + settings.RaceZoomOverrides.Count) * sliderBlockHeight)
-            + (infoLabelCount * infoLabelBlockHeight)
+            + (sliderCount * sliderBlockHeight)
+            + infoLabelBlockHeight
             + (buttonCount * buttonHeight)
             + spacing
-            + raceZoomSpacing;
+            + 16f;
+    }
+
+    private static float GetSavedTabHeight(PortraitOverlaySettings settings)
+    {
+        const float headerHeight = SettingLabelHeight + 8f;
+        var pawnRows = PortraitAdjustments.PawnStore?.Count ?? 0;
+        var raceRows = settings.RaceAdjustments.Count;
+
+        // Each list shows its rows plus a button row, or a single placeholder line when empty.
+        var pawnBlock = pawnRows > 0 ? (pawnRows + 1) * SavedRowHeight : SavedRowHeight;
+        var raceBlock = raceRows > 0 ? (raceRows + 1) * SavedRowHeight : SavedRowHeight;
+        return InfoLabelHeight + 8f + (2f * headerHeight) + pawnBlock + raceBlock + 64f;
     }
 
     public override void WriteSettings()

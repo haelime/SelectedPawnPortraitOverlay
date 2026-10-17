@@ -79,20 +79,6 @@ public static class PortraitFitCache
         return Displayed(entry);
     }
 
-    // Any measurement of the race, for seeding a per-race override from the settings list.
-    public static PortraitBounds? FindBoundsForRace(ThingDef race)
-    {
-        foreach (var pair in Entries)
-        {
-            if (pair.Key.def == race && pair.Value.Target.HasValue)
-            {
-                return pair.Value.Target;
-            }
-        }
-
-        return null;
-    }
-
     public static void Clear()
     {
         Entries.Clear();

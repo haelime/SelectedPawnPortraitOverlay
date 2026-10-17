@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using Verse;
 
@@ -14,11 +13,9 @@ public sealed class PortraitOverlaySettings : ModSettings
     public const float MaxFaceEmphasis = 3f;
     public const float MaxCutoff = 0.9f;
     public const float MaxCombinedVerticalCutoff = 0.9f;
-    public const float MinRaceZoom = 0.1f;
-    public const float MaxRaceZoom = 5f;
 
     // Bump when a setting needs migrating. Files written before versioning load as version 0.
-    private const int CurrentSettingsVersion = 1;
+    private const int CurrentSettingsVersion = 2;
 
     private const bool DefaultEnabled = true;
     private const bool DefaultShowBackground = true;
@@ -44,6 +41,7 @@ public sealed class PortraitOverlaySettings : ModSettings
     private const float DefaultTopCutoff = 0f;
     private const float DefaultBottomCutoff = 0f;
     private const bool DefaultAutoFitPortrait = true;
+    private const bool DefaultShowHoverToolbar = true;
 
     public bool Enabled = DefaultEnabled;
     public bool ShowBackground = DefaultShowBackground;
@@ -70,9 +68,14 @@ public sealed class PortraitOverlaySettings : ModSettings
     public float TopCutoff = DefaultTopCutoff;
     public float BottomCutoff = DefaultBottomCutoff;
     public bool AutoFitPortrait = DefaultAutoFitPortrait;
+    public bool ShowHoverToolbar = DefaultShowHoverToolbar;
 
-    // Race defName -> zoom scale relative to human framing. Keyed by name so races from removed mods are kept harmlessly.
-    public Dictionary<string, float> RaceZoomOverrides = new();
+    // Camera offset applied to every portrait, edited with the "global" scope in edit mode.
+    public float GlobalOffsetX;
+    public float GlobalOffsetZ;
+
+    // Race defName -> manual correction. Keyed by name so races from removed mods are kept harmlessly.
+    public Dictionary<string, SavedAdjustment> RaceAdjustments = new();
 
     private int settingsVersion = CurrentSettingsVersion;
 
@@ -104,36 +107,50 @@ public sealed class PortraitOverlaySettings : ModSettings
         Scribe_Values.Look(ref TopCutoff, nameof(TopCutoff), DefaultTopCutoff);
         Scribe_Values.Look(ref BottomCutoff, nameof(BottomCutoff), DefaultBottomCutoff);
         Scribe_Values.Look(ref AutoFitPortrait, nameof(AutoFitPortrait), DefaultAutoFitPortrait);
-        Scribe_Collections.Look(ref RaceZoomOverrides, nameof(RaceZoomOverrides), LookMode.Value, LookMode.Value);
+        Scribe_Values.Look(ref ShowHoverToolbar, nameof(ShowHoverToolbar), DefaultShowHoverToolbar);
+        Scribe_Values.Look(ref GlobalOffsetX, nameof(GlobalOffsetX), 0f);
+        Scribe_Values.Look(ref GlobalOffsetZ, nameof(GlobalOffsetZ), 0f);
+        Scribe_Collections.Look(ref RaceAdjustments, nameof(RaceAdjustments), LookMode.Value, LookMode.Deep);
         Scribe_Values.Look(ref settingsVersion, "SettingsVersion", 0);
 
+        Dictionary<string, float> legacyRaceZoom = null;
         if (Scribe.mode == LoadSaveMode.LoadingVars)
         {
-            MigrateLoadedSettings();
+            // Pre-release builds stored per-race zoom as plain numbers; read them once for migration.
+            Scribe_Collections.Look(ref legacyRaceZoom, "RaceZoomOverrides", LookMode.Value, LookMode.Value);
         }
 
-        RaceZoomOverrides ??= new Dictionary<string, float>();
-        ClampRaceZoomOverrides();
+        RaceAdjustments ??= new Dictionary<string, SavedAdjustment>();
+        if (Scribe.mode == LoadSaveMode.LoadingVars)
+        {
+            MigrateLoadedSettings(legacyRaceZoom);
+        }
+
         ClampValues();
     }
 
-    // Users who configured the mod before auto-fit existed keep the framing they tuned; new installs get it on.
-    private void MigrateLoadedSettings()
+    private void MigrateLoadedSettings(Dictionary<string, float> legacyRaceZoom)
     {
+        // Users who configured the mod before auto-fit existed keep the framing they tuned; new installs get it on.
         if (settingsVersion < 1)
         {
             AutoFitPortrait = false;
         }
 
-        settingsVersion = CurrentSettingsVersion;
-    }
-
-    private void ClampRaceZoomOverrides()
-    {
-        foreach (var defName in RaceZoomOverrides.Keys.ToList())
+        if (legacyRaceZoom != null)
         {
-            RaceZoomOverrides[defName] = Mathf.Clamp(EnsureFinite(RaceZoomOverrides[defName], 1f), MinRaceZoom, MaxRaceZoom);
+            foreach (var entry in legacyRaceZoom)
+            {
+                if (!RaceAdjustments.ContainsKey(entry.Key))
+                {
+                    var adjustment = new SavedAdjustment { Zoom = entry.Value, Label = entry.Key };
+                    adjustment.Clamp();
+                    RaceAdjustments[entry.Key] = adjustment;
+                }
+            }
         }
+
+        settingsVersion = CurrentSettingsVersion;
     }
 
     public void ClampValues()
@@ -141,6 +158,8 @@ public sealed class PortraitOverlaySettings : ModSettings
         ApplyFilterDependencies();
         PanelX = EnsureFinite(PanelX, DefaultPanelX);
         PanelY = EnsureFinite(PanelY, DefaultPanelY);
+        GlobalOffsetX = EnsureFinite(GlobalOffsetX, 0f);
+        GlobalOffsetZ = EnsureFinite(GlobalOffsetZ, 0f);
         PanelWidth = Mathf.Max(1f, EnsureFinite(PanelWidth, DefaultPanelWidth));
         PanelHeight = Mathf.Max(1f, EnsureFinite(PanelHeight, DefaultPanelHeight));
         BackgroundAlpha = Mathf.Clamp01(BackgroundAlpha);
@@ -193,7 +212,10 @@ public sealed class PortraitOverlaySettings : ModSettings
         TopCutoff = DefaultTopCutoff;
         BottomCutoff = DefaultBottomCutoff;
         AutoFitPortrait = DefaultAutoFitPortrait;
-        RaceZoomOverrides.Clear();
+        ShowHoverToolbar = DefaultShowHoverToolbar;
+        GlobalOffsetX = 0f;
+        GlobalOffsetZ = 0f;
+        RaceAdjustments.Clear();
         ClampValues();
     }
 

@@ -12,6 +12,9 @@ public static class PawnFullBodyPortraitRenderer
 {
     private static readonly MethodInfo PortraitGetMethod = ResolvePortraitGetMethod();
 
+    // Camera zoom of the most recent portrait, so edit mode can turn a mouse drag in pixels into world units.
+    public static float LastZoom { get; private set; } = 1f;
+
     public static Texture Render(Pawn pawn, Vector2 size, PortraitOverlaySettings settings)
     {
         if (pawn == null || PortraitGetMethod == null)
@@ -26,7 +29,8 @@ public static class PawnFullBodyPortraitRenderer
             settings.FaceEmphasis,
             PortraitRaceScale.For(pawn, aspect, settings),
             GetHumanlikeHeadZ(pawn, rotation),
-            PortraitAdjustment.Identity);
+            PortraitAdjustments.Resolve(pawn, settings));
+        LastZoom = frame.Zoom;
         var cameraOffset = new Vector3(frame.OffsetX, frame.OffsetY, frame.OffsetZ);
         var args = BuildArguments(PortraitGetMethod.GetParameters(), pawn, size, rotation, cameraOffset, frame.Zoom, settings);
         var texture = PortraitGetMethod.Invoke(null, args) as Texture;

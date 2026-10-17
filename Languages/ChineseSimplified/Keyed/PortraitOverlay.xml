@@ -41,10 +41,42 @@
   <PortraitOverlay.Settings.SectionLayout>Layout</PortraitOverlay.Settings.SectionLayout>
   <PortraitOverlay.Settings.AutoFitPortrait>Auto-fit portrait</PortraitOverlay.Settings.AutoFitPortrait>
   <PortraitOverlay.Settings.AutoFitPortraitTooltip>Renders each pawn once to measure the area it actually covers, then sizes the portrait to it. Animals, mechanoids, insects, and entities are shown at about a human's size and centered on what is drawn. Humanlike pawns, including modded races, are never zoomed in; they only zoom out when something like a large hat or wings makes them much bigger than usual, so ordinary colonists keep their framing.</PortraitOverlay.Settings.AutoFitPortraitTooltip>
-  <PortraitOverlay.Settings.RaceZoomHint>Per-race zoom overrides auto-fit. 1.00 frames the race like a human; larger values zoom in.</PortraitOverlay.Settings.RaceZoomHint>
-  <PortraitOverlay.Settings.RaceZoom>{0}: {1}x</PortraitOverlay.Settings.RaceZoom>
   <PortraitOverlay.Settings.RaceNotLoaded>{0} (not loaded)</PortraitOverlay.Settings.RaceNotLoaded>
-  <PortraitOverlay.Settings.AddSelectedRace>Add selected pawn's race</PortraitOverlay.Settings.AddSelectedRace>
-  <PortraitOverlay.Settings.AddRace>Add race...</PortraitOverlay.Settings.AddRace>
-  <PortraitOverlay.Settings.RemoveRace>Remove</PortraitOverlay.Settings.RemoveRace>
+  <PortraitOverlay.Settings.ShowHoverToolbar>Show edit toolbar on mouseover</PortraitOverlay.Settings.ShowHoverToolbar>
+  <PortraitOverlay.Settings.ShowHoverToolbarTooltip>Shows Edit, Reset, Pin, and Settings buttons along the bottom of the panel while the mouse is over it.</PortraitOverlay.Settings.ShowHoverToolbarTooltip>
+  <PortraitOverlay.Settings.TabSaved>Saved adjustments</PortraitOverlay.Settings.TabSaved>
+  <PortraitOverlay.Settings.ResetPawnAdjustmentsConfirm>Settings were reset. Also delete the {0} per-pawn adjustments stored in this save?</PortraitOverlay.Settings.ResetPawnAdjustmentsConfirm>
+  <PortraitOverlay.Toolbar.Edit>Edit</PortraitOverlay.Toolbar.Edit>
+  <PortraitOverlay.Toolbar.Done>Done</PortraitOverlay.Toolbar.Done>
+  <PortraitOverlay.Toolbar.EditTooltip>Edit this portrait: drag to move, mouse wheel to zoom (Shift for fine steps), right-click for more.</PortraitOverlay.Toolbar.EditTooltip>
+  <PortraitOverlay.Toolbar.Reset>Reset</PortraitOverlay.Toolbar.Reset>
+  <PortraitOverlay.Toolbar.ResetTooltip>Delete this pawn's adjustment and go back to the automatic framing.</PortraitOverlay.Toolbar.ResetTooltip>
+  <PortraitOverlay.Toolbar.Pin>Pin</PortraitOverlay.Toolbar.Pin>
+  <PortraitOverlay.Toolbar.Unpin>Unpin</PortraitOverlay.Toolbar.Unpin>
+  <PortraitOverlay.Toolbar.PinTooltip>Keep showing this pawn even when another one is selected.</PortraitOverlay.Toolbar.PinTooltip>
+  <PortraitOverlay.Toolbar.Settings>Settings</PortraitOverlay.Toolbar.Settings>
+  <PortraitOverlay.Edit.ScopePawn>This pawn</PortraitOverlay.Edit.ScopePawn>
+  <PortraitOverlay.Edit.ScopeRace>Race: {0}</PortraitOverlay.Edit.ScopeRace>
+  <PortraitOverlay.Edit.ScopeGlobal>All</PortraitOverlay.Edit.ScopeGlobal>
+  <PortraitOverlay.Edit.ClearScopeTooltip>Delete the adjustment saved for this scope.</PortraitOverlay.Edit.ClearScopeTooltip>
+  <PortraitOverlay.Edit.Readout>{0}x · X {1} · Z {2}</PortraitOverlay.Edit.Readout>
+  <PortraitOverlay.Edit.Hint>Drag: move · Wheel: zoom (Shift: fine) · Right-click: menu · Esc: finish</PortraitOverlay.Edit.Hint>
+  <PortraitOverlay.Menu.ClearPawn>Delete this pawn's adjustment</PortraitOverlay.Menu.ClearPawn>
+  <PortraitOverlay.Menu.ClearRace>Delete this race's adjustment</PortraitOverlay.Menu.ClearRace>
+  <PortraitOverlay.Menu.ClearBoth>Delete both</PortraitOverlay.Menu.ClearBoth>
+  <PortraitOverlay.Menu.ResetAll>Reset all settings...</PortraitOverlay.Menu.ResetAll>
+  <PortraitOverlay.Menu.ResetAllConfirm>Reset every Portrait Overlay setting, including race adjustments?</PortraitOverlay.Menu.ResetAllConfirm>
+  <PortraitOverlay.Menu.OpenSettings>Open settings</PortraitOverlay.Menu.OpenSettings>
+  <PortraitOverlay.Menu.ExitEdit>Finish editing</PortraitOverlay.Menu.ExitEdit>
+  <PortraitOverlay.Saved.Hint>Adjustments made in edit mode. Per-pawn ones are stored in the current save; race ones apply to every save.</PortraitOverlay.Saved.Hint>
+  <PortraitOverlay.Saved.PawnsHeader>Per-pawn (this save)</PortraitOverlay.Saved.PawnsHeader>
+  <PortraitOverlay.Saved.RacesHeader>Per-race</PortraitOverlay.Saved.RacesHeader>
+  <PortraitOverlay.Saved.NoGame>Load a game to see per-pawn adjustments.</PortraitOverlay.Saved.NoGame>
+  <PortraitOverlay.Saved.Empty>None yet.</PortraitOverlay.Saved.Empty>
+  <PortraitOverlay.Saved.MissingPawn>{0} (no longer here)</PortraitOverlay.Saved.MissingPawn>
+  <PortraitOverlay.Saved.Delete>Delete</PortraitOverlay.Saved.Delete>
+  <PortraitOverlay.Saved.DeleteAll>Delete all</PortraitOverlay.Saved.DeleteAll>
+  <PortraitOverlay.Saved.PruneMissing>Remove {0} missing</PortraitOverlay.Saved.PruneMissing>
+  <PortraitOverlay.Saved.DeleteAllPawnsConfirm>Delete all {0} per-pawn adjustments in this save?</PortraitOverlay.Saved.DeleteAllPawnsConfirm>
+  <PortraitOverlay.Saved.DeleteAllRacesConfirm>Delete all {0} race adjustments?</PortraitOverlay.Saved.DeleteAllRacesConfirm>
 </LanguageData>
