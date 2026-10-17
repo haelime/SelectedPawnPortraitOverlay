@@ -40,7 +40,7 @@ public sealed class Dialog_PortraitAdjustment : Window
         }
         else
         {
-            var saved = scope == AdjustmentScope.Pawn ? PortraitAdjustments.GetPawn(pawn) : PortraitAdjustments.GetRace(pawn, settings);
+            var saved = PortraitAdjustments.Get(scope, pawn, settings);
             zoom = saved?.Zoom ?? 1f;
             offsetX = saved?.OffsetX ?? 0f;
             offsetZ = saved?.OffsetZ ?? 0f;
@@ -56,12 +56,9 @@ public sealed class Dialog_PortraitAdjustment : Window
     public override void DoWindowContents(Rect inRect)
     {
         var settings = PortraitOverlayMod.Settings;
-        var scopeLabel = scope switch
-        {
-            AdjustmentScope.Pawn => pawn.LabelShortCap.ToString(),
-            AdjustmentScope.Race => pawn.def.LabelCap.ToString(),
-            _ => "PortraitOverlay.Edit.ScopeGlobal".Translate().ToString()
-        };
+        var scopeLabel = scope == AdjustmentScope.Pawn
+            ? pawn.LabelShortCap.ToString()
+            : PortraitAdjustments.ScopeLabel(scope, pawn);
 
         Text.Font = GameFont.Medium;
         Widgets.Label(new Rect(inRect.x, inRect.y, inRect.width, 34f), "PortraitOverlay.Adjust.Title".Translate(scopeLabel));

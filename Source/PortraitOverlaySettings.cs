@@ -80,6 +80,10 @@ public sealed class PortraitOverlaySettings : ModSettings
     // Race defName -> manual correction. Keyed by name so races from removed mods are kept harmlessly.
     public Dictionary<string, SavedAdjustment> RaceAdjustments = new();
 
+    // PawnCategory name -> correction, and "raceDefName|variant" -> correction (xenotype or growth stage).
+    public Dictionary<string, SavedAdjustment> CategoryAdjustments = new();
+    public Dictionary<string, SavedAdjustment> VariantAdjustments = new();
+
     private int settingsVersion = CurrentSettingsVersion;
 
     public Vector2 PanelSize => new(PanelWidth, PanelHeight);
@@ -115,6 +119,8 @@ public sealed class PortraitOverlaySettings : ModSettings
         Scribe_Values.Look(ref GlobalOffsetX, nameof(GlobalOffsetX), 0f);
         Scribe_Values.Look(ref GlobalOffsetZ, nameof(GlobalOffsetZ), 0f);
         Scribe_Collections.Look(ref RaceAdjustments, nameof(RaceAdjustments), LookMode.Value, LookMode.Deep);
+        Scribe_Collections.Look(ref CategoryAdjustments, nameof(CategoryAdjustments), LookMode.Value, LookMode.Deep);
+        Scribe_Collections.Look(ref VariantAdjustments, nameof(VariantAdjustments), LookMode.Value, LookMode.Deep);
         Scribe_Values.Look(ref settingsVersion, "SettingsVersion", 0);
 
         Dictionary<string, float> legacyRaceZoom = null;
@@ -125,6 +131,8 @@ public sealed class PortraitOverlaySettings : ModSettings
         }
 
         RaceAdjustments ??= new Dictionary<string, SavedAdjustment>();
+        CategoryAdjustments ??= new Dictionary<string, SavedAdjustment>();
+        VariantAdjustments ??= new Dictionary<string, SavedAdjustment>();
         if (Scribe.mode == LoadSaveMode.LoadingVars)
         {
             MigrateLoadedSettings(legacyRaceZoom);
@@ -220,6 +228,8 @@ public sealed class PortraitOverlaySettings : ModSettings
         GlobalOffsetX = 0f;
         GlobalOffsetZ = 0f;
         RaceAdjustments.Clear();
+        CategoryAdjustments.Clear();
+        VariantAdjustments.Clear();
         ClampValues();
     }
 

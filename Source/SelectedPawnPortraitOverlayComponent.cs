@@ -39,6 +39,14 @@ public sealed class SelectedPawnPortraitOverlayComponent : GameComponent
     private const float FineWheelZoomStep = 1.01f;
 
     private static readonly Color EditAccent = new(0.94f, 0.62f, 0.15f);
+    private static readonly AdjustmentScope[] ScopeOrder =
+    {
+        AdjustmentScope.Global,
+        AdjustmentScope.Category,
+        AdjustmentScope.Race,
+        AdjustmentScope.Variant,
+        AdjustmentScope.Pawn
+    };
     private static readonly Color BarBackground = new(0f, 0f, 0f, 0.6f);
 
     // Per-pawn manual corrections for this save, keyed by Thing.thingIDNumber.
@@ -587,7 +595,7 @@ public sealed class SelectedPawnPortraitOverlayComponent : GameComponent
         var currentEvent = Event.current;
         var mouse = currentEvent.mousePosition;
         var overButtons = EditToolbarRect(layout).Contains(mouse) || PresetRowRect(layout).Contains(mouse);
-        var overScopeChips = ScopeBarRect(layout).Contains(mouse) && mouse.x < ScopeChipsEnd;
+        var overScopeChips = ScopeBarRect(layout).Contains(mouse) && mouse.x < ScopeButtonEnd;
         var overPortrait = layout.Visible.Contains(mouse) && !ScopeBarRect(layout).Contains(mouse) && !overButtons;
 
         switch (currentEvent.type)
@@ -756,8 +764,8 @@ public sealed class SelectedPawnPortraitOverlayComponent : GameComponent
         return new Rect(presets.x, presets.yMax + 2f, presets.width, ToolbarHeight);
     }
 
-    // Right edge of the last scope chip drawn, so the rest of the scope bar can serve as a drag handle.
-    private static float ScopeChipsEnd;
+    // Right edge of the scope button, so the rest of the scope bar can serve as a drag handle.
+    private static float ScopeButtonEnd;
 
     private void ApplyEdit(Pawn pawn, PortraitOverlaySettings settings, float zoomFactor, float deltaX, float deltaZ)
     {
@@ -771,29 +779,37 @@ public sealed class SelectedPawnPortraitOverlayComponent : GameComponent
     private List<FloatMenuOption> BuildEditMenu(Pawn pawn, PortraitOverlaySettings settings)
     {
         var options = new List<FloatMenuOption>();
-        var hasPawn = PortraitAdjustments.Has(AdjustmentScope.Pawn, pawn, settings);
-        var hasRace = PortraitAdjustments.Has(AdjustmentScope.Race, pawn, settings);
         if (undoStack.Count > 0)
         {
             options.Add(new FloatMenuOption("PortraitOverlay.Menu.Undo".Translate(), () => Undo(settings)));
         }
 
-        if (hasPawn)
+        // One delete entry per scope that holds a correction for this pawn, narrowest first. The global scope is
+        // reset from the settings instead, so a stray click here cannot undo the base framing.
+        var saved = new List<AdjustmentScope>();
+        for (var i = ScopeOrder.Length - 1; i > 0; i--)
         {
-            options.Add(new FloatMenuOption("PortraitOverlay.Menu.ClearPawn".Translate(), () => ClearScope(AdjustmentScope.Pawn, pawn, settings)));
-        }
-
-        if (hasRace)
-        {
-            options.Add(new FloatMenuOption("PortraitOverlay.Menu.ClearRace".Translate(), () => ClearScope(AdjustmentScope.Race, pawn, settings)));
-        }
-
-        if (hasPawn && hasRace)
-        {
-            options.Add(new FloatMenuOption("PortraitOverlay.Menu.ClearBoth".Translate(), () =>
+            var scope = ScopeOrder[i];
+            if (PortraitAdjustments.Has(scope, pawn, settings))
             {
-                ClearScope(AdjustmentScope.Pawn, pawn, settings);
-                ClearScope(AdjustmentScope.Race, pawn, settings);
+                saved.Add(scope);
+                options.Add(new FloatMenuOption(
+                    "PortraitOverlay.Menu.ClearScope".Translate(PortraitAdjustments.ScopeLabel(scope, pawn)),
+                    () => ClearScope(scope, pawn, settings)));
+            }
+        }
+
+        if (saved.Count > 1)
+        {
+            options.Add(new FloatMenuOption("PortraitOverlay.Menu.ClearAllScopes".Translate(), () =>
+            {
+                PushUndo(pawn, settings);
+                foreach (var scope in saved)
+                {
+                    PortraitAdjustments.Clear(scope, pawn, settings);
+                }
+
+                PortraitOverlayMod.SaveSettings();
             }));
         }
 
@@ -804,6 +820,33 @@ public sealed class SelectedPawnPortraitOverlayComponent : GameComponent
                 true))));
         options.Add(new FloatMenuOption("PortraitOverlay.Menu.OpenSettings".Translate(), OpenSettings));
         options.Add(new FloatMenuOption("PortraitOverlay.Menu.ExitEdit".Translate(), ExitEditMode));
+        return options;
+    }
+
+    // The scope menu: every level from broadest to narrowest with the pawn's own category, race, and variant
+    // names. A dot marks levels that hold a correction; levels that do not apply to this pawn are greyed out.
+    private List<FloatMenuOption> BuildScopeMenu(Pawn pawn, PortraitOverlaySettings settings)
+    {
+        var options = new List<FloatMenuOption>();
+        foreach (var scope in ScopeOrder)
+        {
+            var label = PortraitAdjustments.ScopeLabel(scope, pawn);
+            if (PortraitAdjustments.Has(scope, pawn, settings))
+            {
+                label = "• " + label;
+            }
+
+            if (scope == editScope)
+            {
+                label = "✓ " + label;
+            }
+
+            var target = scope;
+            options.Add(PortraitAdjustments.IsAvailable(scope, pawn)
+                ? new FloatMenuOption(label, () => editScope = target)
+                : new FloatMenuOption(label, null));
+        }
+
         return options;
     }
 
@@ -898,10 +941,7 @@ public sealed class SelectedPawnPortraitOverlayComponent : GameComponent
 
         var bar = ScopeBarRect(layout);
         Widgets.DrawBoxSolid(bar, BarBackground);
-        var x = bar.x + 4f;
-        x = DrawScopeChip(x, bar, AdjustmentScope.Pawn, "PortraitOverlay.Edit.ScopePawn".Translate(), pawn, settings);
-        x = DrawScopeChip(x, bar, AdjustmentScope.Race, "PortraitOverlay.Edit.ScopeRace".Translate(pawn.def.LabelCap), pawn, settings);
-        ScopeChipsEnd = DrawScopeChip(x, bar, AdjustmentScope.Global, "PortraitOverlay.Edit.ScopeGlobal".Translate(), pawn, settings);
+        ScopeButtonEnd = DrawScopeButton(bar, pawn, settings);
 
         var readout = ReadoutRect(layout);
         Widgets.DrawBoxSolid(new Rect(readout.x, readout.y, readout.width, EditToolbarRect(layout).yMax - readout.y), BarBackground);
@@ -951,47 +991,36 @@ public sealed class SelectedPawnPortraitOverlayComponent : GameComponent
         TooltipHandler.TipRegion(button, (usable ? "PortraitOverlay.Edit.PresetTooltip" : "PortraitOverlay.Edit.PresetGlobalTooltip").Translate());
     }
 
-    // Draws one scope chip and returns the x where the next one starts. A dot marks a scope with a saved
-    // correction; hovering such a chip shows an x that clears it (the global scope is reset from the settings).
-    private float DrawScopeChip(float x, Rect bar, AdjustmentScope scope, string label, Pawn pawn, PortraitOverlaySettings settings)
+    // The scope button: shows where edits are stored and opens the scope menu. Returns its right edge.
+    private float DrawScopeButton(Rect bar, Pawn pawn, PortraitOverlaySettings settings)
     {
-        var hasAdjustment = PortraitAdjustments.Has(scope, pawn, settings);
-        var text = hasAdjustment ? "• " + label : label;
-        var clearable = hasAdjustment && scope != AdjustmentScope.Global;
-        var clearWidth = clearable ? 14f : 0f;
-        var width = Mathf.Min(Text.CalcSize(text).x + 10f + clearWidth, Mathf.Max(0f, bar.xMax - x - 2f));
-        if (width <= 0f)
+        if (!PortraitAdjustments.IsAvailable(editScope, pawn))
         {
-            return x;
+            editScope = AdjustmentScope.Pawn;
         }
 
-        var chip = new Rect(x, bar.y + 3f, width, bar.height - 6f);
-        var selected = editScope == scope;
+        var label = "PortraitOverlay.Edit.ScopeButton".Translate(PortraitAdjustments.ScopeLabel(editScope, pawn)).ToString();
+        if (PortraitAdjustments.Has(editScope, pawn, settings))
+        {
+            label = "• " + label;
+        }
+
+        label += " ▾";
+        var width = Mathf.Min(Text.CalcSize(label).x + 12f, Mathf.Max(0f, bar.width - 8f));
+        var button = new Rect(bar.x + 4f, bar.y + 3f, width, bar.height - 6f);
         var previousColor = GUI.color;
-        Widgets.DrawBoxSolid(chip, selected ? EditAccent : new Color(1f, 1f, 1f, 0.12f));
-        GUI.color = selected ? new Color(0.15f, 0.08f, 0f) : Color.white;
+        Widgets.DrawBoxSolid(button, EditAccent);
+        GUI.color = new Color(0.15f, 0.08f, 0f);
         Text.Anchor = TextAnchor.MiddleCenter;
-        Widgets.Label(new Rect(chip.x, chip.y, chip.width - clearWidth, chip.height), text);
+        Widgets.Label(button, label);
         GUI.color = previousColor;
-
-        var clearRect = new Rect(chip.xMax - clearWidth, chip.y, clearWidth, chip.height);
-        if (clearable && Mouse.IsOver(chip))
+        TooltipHandler.TipRegion(button, "PortraitOverlay.Edit.ScopeTooltip".Translate());
+        if (Widgets.ButtonInvisible(button))
         {
-            Widgets.Label(clearRect, "×");
-            TooltipHandler.TipRegion(clearRect, "PortraitOverlay.Edit.ClearScopeTooltip".Translate());
-            if (Widgets.ButtonInvisible(clearRect))
-            {
-                ClearScope(scope, pawn, settings);
-                return chip.xMax + 4f;
-            }
+            Find.WindowStack.Add(new FloatMenu(BuildScopeMenu(pawn, settings)));
         }
 
-        if (Widgets.ButtonInvisible(new Rect(chip.x, chip.y, chip.width - clearWidth, chip.height)))
-        {
-            editScope = scope;
-        }
-
-        return chip.xMax + 4f;
+        return button.xMax + 4f;
     }
 
     private string ScopeReadout(Pawn pawn, PortraitOverlaySettings settings)
@@ -1001,10 +1030,7 @@ public sealed class SelectedPawnPortraitOverlayComponent : GameComponent
             return SavedAdjustment.Format(settings.CameraZoom, settings.GlobalOffsetX, settings.GlobalOffsetZ, 1f, 1f);
         }
 
-        var saved = editScope == AdjustmentScope.Pawn
-            ? PortraitAdjustments.GetPawn(pawn)
-            : PortraitAdjustments.GetRace(pawn, settings);
-        return saved?.Summary() ?? SavedAdjustment.Format(1f, 0f, 0f, 1f, 1f);
+        return PortraitAdjustments.Get(editScope, pawn, settings)?.Summary() ?? SavedAdjustment.Format(1f, 0f, 0f, 1f, 1f);
     }
 
     private static void DrawPanel(Rect rect, Pawn pawn, PortraitOverlaySettings settings, bool editing)

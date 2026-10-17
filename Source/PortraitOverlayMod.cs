@@ -339,41 +339,61 @@ public sealed class PortraitOverlayMod : Mod
             }
         }
 
+        DrawKeyedSection(listing, "PortraitOverlay.Saved.CategoriesHeader", settings.CategoryAdjustments, CategoryKeyLabel);
+        DrawKeyedSection(listing, "PortraitOverlay.Saved.RacesHeader", settings.RaceAdjustments, GetRaceLabel);
+        DrawKeyedSection(listing, "PortraitOverlay.Saved.VariantsHeader", settings.VariantAdjustments, null);
+    }
+
+    // One settings-stored level (category, race, or variant). labelFor names an entry from its key; without one,
+    // the label saved with the entry is used, which is how variants of unloaded races still read clearly.
+    private static void DrawKeyedSection(
+        Listing_Standard listing,
+        string headerKey,
+        Dictionary<string, SavedAdjustment> store,
+        Func<string, string> labelFor)
+    {
         listing.GapLine();
-        listing.Label("PortraitOverlay.Saved.RacesHeader".Translate());
-        if (settings.RaceAdjustments.Count == 0)
+        listing.Label(headerKey.Translate());
+        if (store.Count == 0)
         {
             DrawMutedLine(listing, "PortraitOverlay.Saved.Empty".Translate());
             return;
         }
 
-        string removedRace = null;
-        foreach (var pair in settings.RaceAdjustments.OrderBy(pair => GetRaceLabel(pair.Key)).ToList())
+        string LabelOf(KeyValuePair<string, SavedAdjustment> pair) => labelFor?.Invoke(pair.Key) ?? pair.Value.Label ?? pair.Key;
+
+        string removed = null;
+        foreach (var pair in store.OrderBy(LabelOf).ToList())
         {
-            if (DrawSavedRow(listing, GetRaceLabel(pair.Key), pair.Value))
+            if (DrawSavedRow(listing, LabelOf(pair), pair.Value))
             {
-                removedRace = pair.Key;
+                removed = pair.Key;
             }
         }
 
-        if (removedRace != null)
+        if (removed != null)
         {
-            settings.RaceAdjustments.Remove(removedRace);
+            store.Remove(removed);
             SaveSettings();
         }
 
-        var raceButtons = listing.GetRect(SavedRowHeight);
-        if (Widgets.ButtonText(raceButtons.LeftHalf().ContractedBy(2f), "PortraitOverlay.Saved.DeleteAll".Translate()))
+        var buttons = listing.GetRect(SavedRowHeight);
+        if (Widgets.ButtonText(buttons.LeftHalf().ContractedBy(2f), "PortraitOverlay.Saved.DeleteAll".Translate()))
         {
             Find.WindowStack.Add(Dialog_MessageBox.CreateConfirmation(
-                "PortraitOverlay.Saved.DeleteAllRacesConfirm".Translate(settings.RaceAdjustments.Count.ToString()),
+                "PortraitOverlay.Saved.DeleteAllConfirm".Translate(store.Count.ToString(), headerKey.Translate()),
                 () =>
                 {
-                    settings.RaceAdjustments.Clear();
+                    store.Clear();
                     SaveSettings();
                 },
                 true));
         }
+    }
+
+    private static string CategoryKeyLabel(string key)
+    {
+        return Enum.TryParse<PawnCategory>(key, out var category) ? PortraitAdjustments.CategoryLabel(category) : key;
     }
 
     // One saved correction: name, summary, and a delete button. Returns true when delete was clicked.
@@ -570,13 +590,13 @@ public sealed class PortraitOverlayMod : Mod
     private static float GetSavedTabHeight(PortraitOverlaySettings settings)
     {
         const float headerHeight = SettingLabelHeight + 8f;
-        var pawnRows = PortraitAdjustments.PawnStore?.Count ?? 0;
-        var raceRows = settings.RaceAdjustments.Count;
-
         // Each list shows its rows plus a button row, or a single placeholder line when empty.
-        var pawnBlock = pawnRows > 0 ? (pawnRows + 1) * SavedRowHeight : SavedRowHeight;
-        var raceBlock = raceRows > 0 ? (raceRows + 1) * SavedRowHeight : SavedRowHeight;
-        return InfoLabelHeight + 8f + (2f * headerHeight) + pawnBlock + raceBlock + 64f;
+        static float Block(int rows) => rows > 0 ? (rows + 1) * SavedRowHeight : SavedRowHeight;
+        var blocks = Block(PortraitAdjustments.PawnStore?.Count ?? 0)
+            + Block(settings.CategoryAdjustments.Count)
+            + Block(settings.RaceAdjustments.Count)
+            + Block(settings.VariantAdjustments.Count);
+        return InfoLabelHeight + 8f + (4f * headerHeight) + blocks + 96f;
     }
 
     public override void WriteSettings()

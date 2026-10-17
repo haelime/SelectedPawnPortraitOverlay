@@ -58,17 +58,13 @@
   <PortraitOverlay.Edit.ScopePawn>이 폰</PortraitOverlay.Edit.ScopePawn>
   <PortraitOverlay.Edit.ScopeRace>종족: {0}</PortraitOverlay.Edit.ScopeRace>
   <PortraitOverlay.Edit.ScopeGlobal>전체</PortraitOverlay.Edit.ScopeGlobal>
-  <PortraitOverlay.Edit.ClearScopeTooltip>이 범위에 저장된 보정을 지웁니다.</PortraitOverlay.Edit.ClearScopeTooltip>
   <PortraitOverlay.Edit.Readout>{0}배 · X {1} · Z {2}</PortraitOverlay.Edit.Readout>
   <PortraitOverlay.Edit.Hint>드래그: 이동 · 휠: 줌(Shift: 미세) · 위아래 탭: 자르기 · 모서리: 크기 · Ctrl+Z: 되돌리기 · 우클릭: 메뉴 · Esc: 끝내기</PortraitOverlay.Edit.Hint>
-  <PortraitOverlay.Menu.ClearPawn>이 폰 보정 삭제</PortraitOverlay.Menu.ClearPawn>
-  <PortraitOverlay.Menu.ClearRace>이 종족 보정 삭제</PortraitOverlay.Menu.ClearRace>
-  <PortraitOverlay.Menu.ClearBoth>둘 다 삭제</PortraitOverlay.Menu.ClearBoth>
   <PortraitOverlay.Menu.ResetAll>모든 설정 초기화...</PortraitOverlay.Menu.ResetAll>
   <PortraitOverlay.Menu.ResetAllConfirm>종족 보정을 포함해 초상화 오버레이의 모든 설정을 초기화할까요?</PortraitOverlay.Menu.ResetAllConfirm>
   <PortraitOverlay.Menu.OpenSettings>설정 열기</PortraitOverlay.Menu.OpenSettings>
   <PortraitOverlay.Menu.ExitEdit>편집 끝내기</PortraitOverlay.Menu.ExitEdit>
-  <PortraitOverlay.Saved.Hint>편집 모드에서 만든 보정입니다. 폰별 보정은 현재 세이브에, 종족 보정은 모든 세이브에 공통으로 저장됩니다.</PortraitOverlay.Saved.Hint>
+  <PortraitOverlay.Saved.Hint>편집 모드에서 만든 보정입니다. 폰별 보정은 현재 세이브에, 대분류·종족·세부 보정은 모든 세이브에 공통으로 저장됩니다.</PortraitOverlay.Saved.Hint>
   <PortraitOverlay.Saved.PawnsHeader>폰별 (현재 세이브)</PortraitOverlay.Saved.PawnsHeader>
   <PortraitOverlay.Saved.RacesHeader>종족별</PortraitOverlay.Saved.RacesHeader>
   <PortraitOverlay.Saved.NoGame>게임을 불러오면 폰별 보정이 표시됩니다.</PortraitOverlay.Saved.NoGame>
@@ -78,14 +74,13 @@
   <PortraitOverlay.Saved.DeleteAll>모두 삭제</PortraitOverlay.Saved.DeleteAll>
   <PortraitOverlay.Saved.PruneMissing>없는 폰 {0}개 정리</PortraitOverlay.Saved.PruneMissing>
   <PortraitOverlay.Saved.DeleteAllPawnsConfirm>이 세이브의 폰별 보정 {0}개를 모두 삭제할까요?</PortraitOverlay.Saved.DeleteAllPawnsConfirm>
-  <PortraitOverlay.Saved.DeleteAllRacesConfirm>종족 보정 {0}개를 모두 삭제할까요?</PortraitOverlay.Saved.DeleteAllRacesConfirm>
   <PortraitOverlay.Hint.FirstRun>초상화 패널에 마우스를 올리면 편집 도구가 나타납니다.</PortraitOverlay.Hint.FirstRun>
   <PortraitOverlay.Hint.Close>확인</PortraitOverlay.Hint.Close>
   <PortraitOverlay.Edit.PresetFull>전신</PortraitOverlay.Edit.PresetFull>
   <PortraitOverlay.Edit.PresetUpper>상반신</PortraitOverlay.Edit.PresetUpper>
   <PortraitOverlay.Edit.PresetFace>얼굴</PortraitOverlay.Edit.PresetFace>
   <PortraitOverlay.Edit.PresetTooltip>이 구도로 맞추고 선택한 범위에 저장합니다.</PortraitOverlay.Edit.PresetTooltip>
-  <PortraitOverlay.Edit.PresetGlobalTooltip>프리셋은 폰의 모양에 맞추는 기능이라 '이 폰' 또는 '종족' 범위에서만 쓸 수 있습니다.</PortraitOverlay.Edit.PresetGlobalTooltip>
+  <PortraitOverlay.Edit.PresetGlobalTooltip>프리셋은 폰의 모양에 맞추는 기능이라 '전체'를 제외한 범위에서 쓸 수 있습니다.</PortraitOverlay.Edit.PresetGlobalTooltip>
   <PortraitOverlay.Edit.CropTooltip>드래그해서 패널 위아래를 잘라 냅니다.</PortraitOverlay.Edit.CropTooltip>
   <PortraitOverlay.Edit.ResizeTooltip>드래그해서 패널 크기를 바꿉니다.</PortraitOverlay.Edit.ResizeTooltip>
   <PortraitOverlay.Edit.ReadoutTooltip>더블클릭하면 값을 직접 입력할 수 있습니다.</PortraitOverlay.Edit.ReadoutTooltip>
@@ -97,4 +92,19 @@
   <PortraitOverlay.Adjust.Apply>적용</PortraitOverlay.Adjust.Apply>
   <PortraitOverlay.Settings.Advanced>고급 (수치 직접 입력)</PortraitOverlay.Settings.Advanced>
   <PortraitOverlay.Edit.ReadoutWithPanel>{0}배 · X {1} · Z {2} · 패널 {3}%×{4}%</PortraitOverlay.Edit.ReadoutWithPanel>
+  <PortraitOverlay.Category.Humanlike>인간형</PortraitOverlay.Category.Humanlike>
+  <PortraitOverlay.Category.Animal>동물</PortraitOverlay.Category.Animal>
+  <PortraitOverlay.Category.Mechanoid>메카노이드</PortraitOverlay.Category.Mechanoid>
+  <PortraitOverlay.Category.Insect>곤충</PortraitOverlay.Category.Insect>
+  <PortraitOverlay.Category.Anomaly>어노멀리 개체</PortraitOverlay.Category.Anomaly>
+  <PortraitOverlay.Category.Other>기타</PortraitOverlay.Category.Other>
+  <PortraitOverlay.Edit.ScopeButton>범위: {0}</PortraitOverlay.Edit.ScopeButton>
+  <PortraitOverlay.Edit.ScopeTooltip>편집을 저장할 범위를 고릅니다. 전체부터 이 폰까지, 좁은 범위가 넓은 범위 위에 덧붙여 적용됩니다. 점은 이미 보정이 저장된 범위입니다.</PortraitOverlay.Edit.ScopeTooltip>
+  <PortraitOverlay.Edit.ScopeCategory>대분류: {0}</PortraitOverlay.Edit.ScopeCategory>
+  <PortraitOverlay.Edit.ScopeVariant>세부: {0}</PortraitOverlay.Edit.ScopeVariant>
+  <PortraitOverlay.Menu.ClearScope>보정 삭제: {0}</PortraitOverlay.Menu.ClearScope>
+  <PortraitOverlay.Menu.ClearAllScopes>이 폰에 걸린 보정 모두 삭제 (전체 제외)</PortraitOverlay.Menu.ClearAllScopes>
+  <PortraitOverlay.Saved.CategoriesHeader>대분류별</PortraitOverlay.Saved.CategoriesHeader>
+  <PortraitOverlay.Saved.VariantsHeader>세부별 (제노타입·성장 단계)</PortraitOverlay.Saved.VariantsHeader>
+  <PortraitOverlay.Saved.DeleteAllConfirm>{1}의 보정 {0}개를 모두 삭제할까요?</PortraitOverlay.Saved.DeleteAllConfirm>
 </LanguageData>

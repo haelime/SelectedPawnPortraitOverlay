@@ -5,12 +5,26 @@ using Verse;
 
 namespace SelectedPawnPortraitOverlay;
 
-// Where a manual portrait correction is stored. Pawn entries live in the save, race and global ones in mod settings.
+// Where a manual portrait correction is stored, from broadest to narrowest. Each level applies on top of the
+// ones before it. Pawn entries live in the save; the others live in mod settings and apply to every save.
 public enum AdjustmentScope
 {
-    Pawn,
+    Global,
+    Category,
     Race,
-    Global
+    Variant,
+    Pawn
+}
+
+// Broad pawn groups for the Category scope.
+public enum PawnCategory
+{
+    Humanlike,
+    Animal,
+    Mechanoid,
+    Insect,
+    Anomaly,
+    Other
 }
 
 // A saved manual correction (zoom multiplier plus world-unit camera offset) on top of the automatic framing.
@@ -99,8 +113,184 @@ public sealed class SavedAdjustment : IExposable
 
 public static class PortraitAdjustments
 {
-    // Global, race, and pawn corrections combined: zoom multiplies, offsets add. Each level is a difference on top
-    // of the one below, so changing the global zoom later keeps "this pawn a bit larger" intact.
+    // Scopes stored in mod settings by a string key, in the order they apply.
+    private static readonly AdjustmentScope[] KeyedScopes = { AdjustmentScope.Category, AdjustmentScope.Race, AdjustmentScope.Variant };
+
+    // Mechanoids and Anomaly entities first, and insects before animals, because insects also count as animals.
+    public static PawnCategory GetCategory(Pawn pawn)
+    {
+        var race = pawn?.RaceProps;
+        if (race == null)
+        {
+            return PawnCategory.Other;
+        }
+
+        if (race.IsMechanoid)
+        {
+            return PawnCategory.Mechanoid;
+        }
+
+        if (race.IsAnomalyEntity)
+        {
+            return PawnCategory.Anomaly;
+        }
+
+        if (race.Insect)
+        {
+            return PawnCategory.Insect;
+        }
+
+        if (race.Animal)
+        {
+            return PawnCategory.Animal;
+        }
+
+        return race.Humanlike ? PawnCategory.Humanlike : PawnCategory.Other;
+    }
+
+    public static string CategoryLabel(PawnCategory category)
+    {
+        return ("PortraitOverlay.Category." + category).Translate();
+    }
+
+    // The variant within a race: the xenotype for humanlike pawns, the growth stage for races with several.
+    // Returns false when the pawn's race has no meaningful variant (most mechanoids and entities).
+    public static bool TryGetVariant(Pawn pawn, out string key, out string label)
+    {
+        key = null;
+        label = null;
+        if (pawn?.def == null || pawn.RaceProps == null)
+        {
+            return false;
+        }
+
+        string variantKey = null;
+        string variantLabel = null;
+        if (pawn.RaceProps.Humanlike)
+        {
+            var genes = pawn.genes;
+            if (genes?.CustomXenotype != null)
+            {
+                variantKey = "xenotype:custom:" + genes.xenotypeName;
+                variantLabel = genes.XenotypeLabelCap;
+            }
+            else if (genes?.Xenotype != null)
+            {
+                variantKey = "xenotype:" + genes.Xenotype.defName;
+                variantLabel = genes.Xenotype.LabelCap;
+            }
+        }
+        else if (pawn.RaceProps.lifeStageAges?.Count > 1 && pawn.ageTracker?.CurLifeStage != null)
+        {
+            var stage = pawn.ageTracker.CurLifeStage;
+            variantKey = "stage:" + stage.defName;
+            variantLabel = stage.LabelCap;
+        }
+
+        if (variantKey == null)
+        {
+            return false;
+        }
+
+        key = pawn.def.defName + "|" + variantKey;
+        label = pawn.def.LabelCap + " · " + variantLabel;
+        return true;
+    }
+
+    // Storage key and list label for a settings-stored scope, or false when the scope does not apply to this pawn.
+    public static bool TryGetKey(AdjustmentScope scope, Pawn pawn, out string key, out string label)
+    {
+        key = null;
+        label = null;
+        if (pawn?.def == null)
+        {
+            return false;
+        }
+
+        switch (scope)
+        {
+            case AdjustmentScope.Category:
+                var category = GetCategory(pawn);
+                key = category.ToString();
+                label = CategoryLabel(category);
+                return true;
+            case AdjustmentScope.Race:
+                key = pawn.def.defName;
+                label = pawn.def.LabelCap;
+                return true;
+            case AdjustmentScope.Variant:
+                return TryGetVariant(pawn, out key, out label);
+            default:
+                return false;
+        }
+    }
+
+    // Whether a scope can be edited for this pawn (only Variant can be missing).
+    public static bool IsAvailable(AdjustmentScope scope, Pawn pawn)
+    {
+        return scope != AdjustmentScope.Variant || TryGetVariant(pawn, out _, out _);
+    }
+
+    // Short name of a scope for this pawn, such as "Race: Thrumbo".
+    public static string ScopeLabel(AdjustmentScope scope, Pawn pawn)
+    {
+        switch (scope)
+        {
+            case AdjustmentScope.Global:
+                return "PortraitOverlay.Edit.ScopeGlobal".Translate();
+            case AdjustmentScope.Category:
+                return "PortraitOverlay.Edit.ScopeCategory".Translate(CategoryLabel(GetCategory(pawn)));
+            case AdjustmentScope.Race:
+                return "PortraitOverlay.Edit.ScopeRace".Translate(pawn.def.LabelCap);
+            case AdjustmentScope.Variant:
+                return "PortraitOverlay.Edit.ScopeVariant".Translate(TryGetVariant(pawn, out _, out var variantLabel) ? variantLabel : "-");
+            default:
+                return "PortraitOverlay.Edit.ScopePawn".Translate();
+        }
+    }
+
+    public static Dictionary<string, SavedAdjustment> SettingsStore(AdjustmentScope scope, PortraitOverlaySettings settings)
+    {
+        return scope switch
+        {
+            AdjustmentScope.Category => settings.CategoryAdjustments,
+            AdjustmentScope.Race => settings.RaceAdjustments,
+            AdjustmentScope.Variant => settings.VariantAdjustments,
+            _ => null
+        };
+    }
+
+    // Per-pawn entries of the current game, or null when no game is loaded.
+    public static Dictionary<int, SavedAdjustment> PawnStore =>
+        Current.Game?.GetComponent<SelectedPawnPortraitOverlayComponent>()?.PawnAdjustments;
+
+    // The saved entry of a pawn, category, race, or variant scope, or null. The global scope is not an entry.
+    public static SavedAdjustment Get(AdjustmentScope scope, Pawn pawn, PortraitOverlaySettings settings)
+    {
+        if (pawn == null)
+        {
+            return null;
+        }
+
+        if (scope == AdjustmentScope.Pawn)
+        {
+            var pawnStore = PawnStore;
+            return pawnStore != null && pawnStore.TryGetValue(pawn.thingIDNumber, out var own) ? own : null;
+        }
+
+        var store = SettingsStore(scope, settings);
+        return store != null && TryGetKey(scope, pawn, out var key, out _) && store.TryGetValue(key, out var entry) ? entry : null;
+    }
+
+    public static bool Has(AdjustmentScope scope, Pawn pawn, PortraitOverlaySettings settings)
+    {
+        return scope == AdjustmentScope.Global
+            ? !Mathf.Approximately(settings.GlobalOffsetX, 0f) || !Mathf.Approximately(settings.GlobalOffsetZ, 0f)
+            : Get(scope, pawn, settings) != null;
+    }
+
+    // All corrections combined from the broadest scope to the narrowest: zoom multiplies, offsets add. Each level
+    // is a difference on top of the ones before it, so changing a broad scope later keeps narrower intent intact.
     public static PortraitAdjustment Resolve(Pawn pawn, PortraitOverlaySettings settings)
     {
         return ResolveExcluding(pawn, settings, null);
@@ -112,84 +302,166 @@ public static class PortraitAdjustments
         var zoom = 1f;
         var offsetX = excluded == AdjustmentScope.Global ? 0f : settings.GlobalOffsetX;
         var offsetZ = excluded == AdjustmentScope.Global ? 0f : settings.GlobalOffsetZ;
-
-        var race = excluded == AdjustmentScope.Race ? null : GetRace(pawn, settings);
-        if (race != null)
+        foreach (var entry in Entries(pawn, settings, excluded))
         {
-            zoom *= race.Zoom;
-            offsetX += race.OffsetX;
-            offsetZ += race.OffsetZ;
-        }
-
-        var own = excluded == AdjustmentScope.Pawn ? null : GetPawn(pawn);
-        if (own != null)
-        {
-            zoom *= own.Zoom;
-            offsetX += own.OffsetX;
-            offsetZ += own.OffsetZ;
+            zoom *= entry.Zoom;
+            offsetX += entry.OffsetX;
+            offsetZ += entry.OffsetZ;
         }
 
         return new PortraitAdjustment(zoom, offsetX, offsetZ);
     }
 
-    // Combined panel size multiplier from the race and pawn entries (1, 1 when neither changes the panel).
+    // Combined panel size multiplier of every scope's entry (1, 1 when none changes the panel).
     public static Vector2 ResolvePanelScale(Pawn pawn, PortraitOverlaySettings settings, AdjustmentScope? excluded = null)
     {
         var scale = Vector2.one;
-        var race = excluded == AdjustmentScope.Race ? null : GetRace(pawn, settings);
-        if (race != null)
+        foreach (var entry in Entries(pawn, settings, excluded))
         {
-            scale.x *= race.PanelWidthScale;
-            scale.y *= race.PanelHeightScale;
-        }
-
-        var own = excluded == AdjustmentScope.Pawn ? null : GetPawn(pawn);
-        if (own != null)
-        {
-            scale.x *= own.PanelWidthScale;
-            scale.y *= own.PanelHeightScale;
+            scale.x *= entry.PanelWidthScale;
+            scale.y *= entry.PanelHeightScale;
         }
 
         return scale;
     }
 
-    // Sets a pawn or race scope's entry outright (an identity value removes it). The entry's panel size is kept
-    // unless a new one is given.
-    public static void Set(AdjustmentScope scope, Pawn pawn, PortraitOverlaySettings settings, PortraitAdjustment value, Vector2? panelScale = null)
+    private static IEnumerable<SavedAdjustment> Entries(Pawn pawn, PortraitOverlaySettings settings, AdjustmentScope? excluded)
     {
-        if (scope == AdjustmentScope.Global || pawn == null)
+        if (pawn == null)
+        {
+            yield break;
+        }
+
+        foreach (var scope in KeyedScopes)
+        {
+            var entry = scope == excluded ? null : Get(scope, pawn, settings);
+            if (entry != null)
+            {
+                yield return entry;
+            }
+        }
+
+        var own = excluded == AdjustmentScope.Pawn ? null : Get(AdjustmentScope.Pawn, pawn, settings);
+        if (own != null)
+        {
+            yield return own;
+        }
+    }
+
+    // Applies a zoom factor and offset delta to the given scope, creating or removing the stored entry as needed.
+    public static void Apply(AdjustmentScope scope, Pawn pawn, PortraitOverlaySettings settings, float zoomFactor, float deltaX, float deltaZ)
+    {
+        if (scope == AdjustmentScope.Global)
+        {
+            settings.CameraZoom = Mathf.Clamp(
+                settings.CameraZoom * zoomFactor,
+                PortraitOverlaySettings.MinCameraZoom,
+                PortraitOverlaySettings.MaxCameraZoom);
+            settings.GlobalOffsetX += deltaX;
+            settings.GlobalOffsetZ += deltaZ;
+            return;
+        }
+
+        if (!IsAvailable(scope, pawn))
         {
             return;
         }
 
-        var existing = scope == AdjustmentScope.Pawn ? GetPawn(pawn) : GetRace(pawn, settings);
+        var entry = Get(scope, pawn, settings)?.Clone() ?? new SavedAdjustment();
+        entry.Zoom *= zoomFactor;
+        entry.OffsetX += deltaX;
+        entry.OffsetZ += deltaZ;
+        Put(scope, pawn, settings, entry);
+    }
+
+    // Sets a non-global scope's entry outright (an identity value removes it). The entry's panel size is kept
+    // unless a new one is given.
+    public static void Set(AdjustmentScope scope, Pawn pawn, PortraitOverlaySettings settings, PortraitAdjustment value, Vector2? panelScale = null)
+    {
+        if (scope == AdjustmentScope.Global || pawn == null || !IsAvailable(scope, pawn))
+        {
+            return;
+        }
+
+        var existing = Get(scope, pawn, settings);
         var scale = panelScale ?? (existing != null ? new Vector2(existing.PanelWidthScale, existing.PanelHeightScale) : Vector2.one);
-        var entry = new SavedAdjustment
+        Put(scope, pawn, settings, new SavedAdjustment
         {
             Zoom = value.Zoom,
             OffsetX = value.OffsetX,
             OffsetZ = value.OffsetZ,
             PanelWidthScale = scale.x,
             PanelHeightScale = scale.y
-        };
+        });
+    }
+
+    public static void Clear(AdjustmentScope scope, Pawn pawn, PortraitOverlaySettings settings)
+    {
+        if (scope == AdjustmentScope.Global)
+        {
+            settings.GlobalOffsetX = 0f;
+            settings.GlobalOffsetZ = 0f;
+            return;
+        }
+
+        if (pawn == null)
+        {
+            return;
+        }
+
+        if (scope == AdjustmentScope.Pawn)
+        {
+            PawnStore?.Remove(pawn.thingIDNumber);
+        }
+        else if (TryGetKey(scope, pawn, out var key, out _))
+        {
+            SettingsStore(scope, settings)?.Remove(key);
+        }
+    }
+
+    // Stores an entry under the pawn's key for the scope, or removes it when it no longer changes anything.
+    private static void Put(AdjustmentScope scope, Pawn pawn, PortraitOverlaySettings settings, SavedAdjustment entry)
+    {
+        if (pawn == null)
+        {
+            return;
+        }
+
         entry.Clamp();
         if (scope == AdjustmentScope.Pawn)
         {
             entry.Label = pawn.LabelShortCap;
             Store(PawnStore, pawn.thingIDNumber, entry);
         }
-        else
+        else if (TryGetKey(scope, pawn, out var key, out var label))
         {
-            entry.Label = pawn.def.LabelCap.ToString();
-            Store(settings.RaceAdjustments, pawn.def.defName, entry);
+            entry.Label = label;
+            Store(SettingsStore(scope, settings), key, entry);
         }
     }
 
-    // Frames the pawn to a preset by writing the needed correction and panel size into a pawn or race scope.
+    private static void Store<TKey>(Dictionary<TKey, SavedAdjustment> store, TKey key, SavedAdjustment entry)
+    {
+        if (store == null)
+        {
+            return;
+        }
+
+        if (entry.IsIdentity)
+        {
+            store.Remove(key);
+        }
+        else
+        {
+            store[key] = entry;
+        }
+    }
+
+    // Frames the pawn to a preset by writing the needed correction and panel size into a non-global scope.
     // The panel size is set so the final panel is the preset's share of the base size, whatever other scopes hold.
     public static void ApplyPreset(PortraitPreset preset, AdjustmentScope scope, Pawn pawn, PortraitOverlaySettings settings)
     {
-        if (scope == AdjustmentScope.Global || pawn == null)
+        if (scope == AdjustmentScope.Global || pawn == null || !IsAvailable(scope, pawn))
         {
             return;
         }
@@ -214,146 +486,21 @@ public static class PortraitAdjustments
         Set(scope, pawn, settings, PortraitFraming.AdjustmentToReach(withoutScope, target), scopeScale);
     }
 
-    private static void Store<TKey>(Dictionary<TKey, SavedAdjustment> store, TKey key, SavedAdjustment entry)
-    {
-        if (store == null)
-        {
-            return;
-        }
-
-        if (entry.IsIdentity)
-        {
-            store.Remove(key);
-        }
-        else
-        {
-            store[key] = entry;
-        }
-    }
-
     private static PortraitBounds FallbackBounds(Pawn pawn, bool humanlike)
     {
         var graphic = humanlike ? null : pawn.ageTracker?.CurKindLifeStage?.bodyGraphicData;
         return PortraitFraming.FallbackBounds(humanlike, graphic?.drawSize.x ?? 0f, graphic?.drawSize.y ?? 0f);
-    }
-
-    public static SavedAdjustment GetRace(Pawn pawn, PortraitOverlaySettings settings)
-    {
-        var defName = pawn?.def?.defName;
-        return defName != null && settings.RaceAdjustments.TryGetValue(defName, out var adjustment) ? adjustment : null;
-    }
-
-    public static SavedAdjustment GetPawn(Pawn pawn)
-    {
-        var store = PawnStore;
-        return pawn != null && store != null && store.TryGetValue(pawn.thingIDNumber, out var adjustment) ? adjustment : null;
-    }
-
-    public static bool Has(AdjustmentScope scope, Pawn pawn, PortraitOverlaySettings settings)
-    {
-        return scope switch
-        {
-            AdjustmentScope.Pawn => GetPawn(pawn) != null,
-            AdjustmentScope.Race => GetRace(pawn, settings) != null,
-            _ => !Mathf.Approximately(settings.GlobalOffsetX, 0f) || !Mathf.Approximately(settings.GlobalOffsetZ, 0f)
-        };
-    }
-
-    // Applies a zoom factor and offset delta to the given scope, creating or removing the stored entry as needed.
-    public static void Apply(AdjustmentScope scope, Pawn pawn, PortraitOverlaySettings settings, float zoomFactor, float deltaX, float deltaZ)
-    {
-        switch (scope)
-        {
-            case AdjustmentScope.Global:
-                settings.CameraZoom = Mathf.Clamp(
-                    settings.CameraZoom * zoomFactor,
-                    PortraitOverlaySettings.MinCameraZoom,
-                    PortraitOverlaySettings.MaxCameraZoom);
-                settings.GlobalOffsetX += deltaX;
-                settings.GlobalOffsetZ += deltaZ;
-                return;
-            case AdjustmentScope.Race:
-                ApplyTo(settings.RaceAdjustments, pawn?.def?.defName, pawn?.def?.LabelCap.ToString(), zoomFactor, deltaX, deltaZ);
-                return;
-            case AdjustmentScope.Pawn:
-                if (pawn != null && PawnStore != null)
-                {
-                    ApplyTo(PawnStore, pawn.thingIDNumber, pawn.LabelShortCap, zoomFactor, deltaX, deltaZ);
-                }
-
-                return;
-        }
-    }
-
-    public static void Clear(AdjustmentScope scope, Pawn pawn, PortraitOverlaySettings settings)
-    {
-        switch (scope)
-        {
-            case AdjustmentScope.Global:
-                settings.GlobalOffsetX = 0f;
-                settings.GlobalOffsetZ = 0f;
-                return;
-            case AdjustmentScope.Race:
-                if (pawn?.def?.defName != null)
-                {
-                    settings.RaceAdjustments.Remove(pawn.def.defName);
-                }
-
-                return;
-            case AdjustmentScope.Pawn:
-                if (pawn != null)
-                {
-                    PawnStore?.Remove(pawn.thingIDNumber);
-                }
-
-                return;
-        }
-    }
-
-    // Per-pawn entries of the current game, or null when no game is loaded.
-    public static Dictionary<int, SavedAdjustment> PawnStore =>
-        Current.Game?.GetComponent<SelectedPawnPortraitOverlayComponent>()?.PawnAdjustments;
-
-    private static void ApplyTo<TKey>(
-        Dictionary<TKey, SavedAdjustment> store,
-        TKey key,
-        string label,
-        float zoomFactor,
-        float deltaX,
-        float deltaZ)
-    {
-        if (key == null)
-        {
-            return;
-        }
-
-        if (!store.TryGetValue(key, out var adjustment))
-        {
-            adjustment = new SavedAdjustment();
-            store[key] = adjustment;
-        }
-
-        adjustment.Zoom *= zoomFactor;
-        adjustment.OffsetX += deltaX;
-        adjustment.OffsetZ += deltaZ;
-        adjustment.Label = label ?? adjustment.Label;
-        adjustment.Clamp();
-
-        // An entry edited back to the identity is removed, so "has a correction" always means it changes something.
-        if (adjustment.IsIdentity)
-        {
-            store.Remove(key);
-        }
     }
 }
 
 // Everything an edit can change for one pawn, kept so Ctrl+Z can put it back.
 public sealed class AdjustmentSnapshot
 {
+    private static readonly AdjustmentScope[] KeyedScopes = { AdjustmentScope.Category, AdjustmentScope.Race, AdjustmentScope.Variant };
+
     private int pawnId;
-    private string raceDefName;
     private SavedAdjustment pawnAdjustment;
-    private SavedAdjustment raceAdjustment;
+    private readonly List<KeyedEntry> keyedEntries = new();
     private float cameraZoom;
     private float globalOffsetX;
     private float globalOffsetZ;
@@ -362,14 +509,19 @@ public sealed class AdjustmentSnapshot
     private float panelWidth;
     private float panelHeight;
 
+    private sealed class KeyedEntry
+    {
+        public AdjustmentScope Scope;
+        public string Key;
+        public SavedAdjustment Entry;
+    }
+
     public static AdjustmentSnapshot Capture(Pawn pawn, PortraitOverlaySettings settings)
     {
-        return new AdjustmentSnapshot
+        var snapshot = new AdjustmentSnapshot
         {
             pawnId = pawn?.thingIDNumber ?? -1,
-            raceDefName = pawn?.def?.defName,
-            pawnAdjustment = Copy(PortraitAdjustments.GetPawn(pawn)),
-            raceAdjustment = Copy(PortraitAdjustments.GetRace(pawn, settings)),
+            pawnAdjustment = PortraitAdjustments.Get(AdjustmentScope.Pawn, pawn, settings)?.Clone(),
             cameraZoom = settings.CameraZoom,
             globalOffsetX = settings.GlobalOffsetX,
             globalOffsetZ = settings.GlobalOffsetZ,
@@ -378,6 +530,21 @@ public sealed class AdjustmentSnapshot
             panelWidth = settings.PanelWidth,
             panelHeight = settings.PanelHeight
         };
+
+        foreach (var scope in KeyedScopes)
+        {
+            if (PortraitAdjustments.TryGetKey(scope, pawn, out var key, out _))
+            {
+                snapshot.keyedEntries.Add(new KeyedEntry
+                {
+                    Scope = scope,
+                    Key = key,
+                    Entry = PortraitAdjustments.Get(scope, pawn, settings)?.Clone()
+                });
+            }
+        }
+
+        return snapshot;
     }
 
     public void Restore(PortraitOverlaySettings settings)
@@ -388,9 +555,13 @@ public sealed class AdjustmentSnapshot
             Put(pawnStore, pawnId, pawnAdjustment);
         }
 
-        if (raceDefName != null)
+        foreach (var keyed in keyedEntries)
         {
-            Put(settings.RaceAdjustments, raceDefName, raceAdjustment);
+            var store = PortraitAdjustments.SettingsStore(keyed.Scope, settings);
+            if (store != null)
+            {
+                Put(store, keyed.Key, keyed.Entry);
+            }
         }
 
         settings.CameraZoom = cameraZoom;
@@ -411,12 +582,7 @@ public sealed class AdjustmentSnapshot
         }
         else
         {
-            store[key] = Copy(value);
+            store[key] = value.Clone();
         }
-    }
-
-    private static SavedAdjustment Copy(SavedAdjustment source)
-    {
-        return source?.Clone();
     }
 }

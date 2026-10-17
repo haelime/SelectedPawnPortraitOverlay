@@ -58,17 +58,13 @@
   <PortraitOverlay.Edit.ScopePawn>This pawn</PortraitOverlay.Edit.ScopePawn>
   <PortraitOverlay.Edit.ScopeRace>Race: {0}</PortraitOverlay.Edit.ScopeRace>
   <PortraitOverlay.Edit.ScopeGlobal>All</PortraitOverlay.Edit.ScopeGlobal>
-  <PortraitOverlay.Edit.ClearScopeTooltip>Delete the adjustment saved for this scope.</PortraitOverlay.Edit.ClearScopeTooltip>
   <PortraitOverlay.Edit.Readout>{0}x · X {1} · Z {2}</PortraitOverlay.Edit.Readout>
   <PortraitOverlay.Edit.Hint>Drag: move · Wheel: zoom (Shift: fine) · Edge tabs: crop · Corner: resize · Ctrl+Z: undo · Right-click: menu · Esc: finish</PortraitOverlay.Edit.Hint>
-  <PortraitOverlay.Menu.ClearPawn>Delete this pawn's adjustment</PortraitOverlay.Menu.ClearPawn>
-  <PortraitOverlay.Menu.ClearRace>Delete this race's adjustment</PortraitOverlay.Menu.ClearRace>
-  <PortraitOverlay.Menu.ClearBoth>Delete both</PortraitOverlay.Menu.ClearBoth>
   <PortraitOverlay.Menu.ResetAll>Reset all settings...</PortraitOverlay.Menu.ResetAll>
   <PortraitOverlay.Menu.ResetAllConfirm>Reset every Portrait Overlay setting, including race adjustments?</PortraitOverlay.Menu.ResetAllConfirm>
   <PortraitOverlay.Menu.OpenSettings>Open settings</PortraitOverlay.Menu.OpenSettings>
   <PortraitOverlay.Menu.ExitEdit>Finish editing</PortraitOverlay.Menu.ExitEdit>
-  <PortraitOverlay.Saved.Hint>Adjustments made in edit mode. Per-pawn ones are stored in the current save; race ones apply to every save.</PortraitOverlay.Saved.Hint>
+  <PortraitOverlay.Saved.Hint>Adjustments made in edit mode. Per-pawn ones are stored in the current save; category, race, and variant ones apply to every save.</PortraitOverlay.Saved.Hint>
   <PortraitOverlay.Saved.PawnsHeader>Per-pawn (this save)</PortraitOverlay.Saved.PawnsHeader>
   <PortraitOverlay.Saved.RacesHeader>Per-race</PortraitOverlay.Saved.RacesHeader>
   <PortraitOverlay.Saved.NoGame>Load a game to see per-pawn adjustments.</PortraitOverlay.Saved.NoGame>
@@ -78,14 +74,13 @@
   <PortraitOverlay.Saved.DeleteAll>Delete all</PortraitOverlay.Saved.DeleteAll>
   <PortraitOverlay.Saved.PruneMissing>Remove {0} missing</PortraitOverlay.Saved.PruneMissing>
   <PortraitOverlay.Saved.DeleteAllPawnsConfirm>Delete all {0} per-pawn adjustments in this save?</PortraitOverlay.Saved.DeleteAllPawnsConfirm>
-  <PortraitOverlay.Saved.DeleteAllRacesConfirm>Delete all {0} race adjustments?</PortraitOverlay.Saved.DeleteAllRacesConfirm>
   <PortraitOverlay.Hint.FirstRun>Hover over the portrait panel to show its edit tools.</PortraitOverlay.Hint.FirstRun>
   <PortraitOverlay.Hint.Close>Got it</PortraitOverlay.Hint.Close>
   <PortraitOverlay.Edit.PresetFull>Full body</PortraitOverlay.Edit.PresetFull>
   <PortraitOverlay.Edit.PresetUpper>Upper body</PortraitOverlay.Edit.PresetUpper>
   <PortraitOverlay.Edit.PresetFace>Face</PortraitOverlay.Edit.PresetFace>
   <PortraitOverlay.Edit.PresetTooltip>Frame the pawn this way and save it to the selected scope.</PortraitOverlay.Edit.PresetTooltip>
-  <PortraitOverlay.Edit.PresetGlobalTooltip>Presets fit one pawn's shape, so they work in the This pawn or Race scope.</PortraitOverlay.Edit.PresetGlobalTooltip>
+  <PortraitOverlay.Edit.PresetGlobalTooltip>Presets fit one pawn's shape, so they work in every scope except All.</PortraitOverlay.Edit.PresetGlobalTooltip>
   <PortraitOverlay.Edit.CropTooltip>Drag to hide the top or bottom of the panel.</PortraitOverlay.Edit.CropTooltip>
   <PortraitOverlay.Edit.ResizeTooltip>Drag to resize the panel.</PortraitOverlay.Edit.ResizeTooltip>
   <PortraitOverlay.Edit.ReadoutTooltip>Double-click to type exact values.</PortraitOverlay.Edit.ReadoutTooltip>
@@ -97,4 +92,19 @@
   <PortraitOverlay.Adjust.Apply>Apply</PortraitOverlay.Adjust.Apply>
   <PortraitOverlay.Settings.Advanced>Advanced (numeric values)</PortraitOverlay.Settings.Advanced>
   <PortraitOverlay.Edit.ReadoutWithPanel>{0}x · X {1} · Z {2} · panel {3}%×{4}%</PortraitOverlay.Edit.ReadoutWithPanel>
+  <PortraitOverlay.Category.Humanlike>Humanlike</PortraitOverlay.Category.Humanlike>
+  <PortraitOverlay.Category.Animal>Animal</PortraitOverlay.Category.Animal>
+  <PortraitOverlay.Category.Mechanoid>Mechanoid</PortraitOverlay.Category.Mechanoid>
+  <PortraitOverlay.Category.Insect>Insect</PortraitOverlay.Category.Insect>
+  <PortraitOverlay.Category.Anomaly>Anomaly entity</PortraitOverlay.Category.Anomaly>
+  <PortraitOverlay.Category.Other>Other</PortraitOverlay.Category.Other>
+  <PortraitOverlay.Edit.ScopeButton>Scope: {0}</PortraitOverlay.Edit.ScopeButton>
+  <PortraitOverlay.Edit.ScopeTooltip>Choose where edits are stored, from all pawns down to this pawn. Narrower levels apply on top of broader ones. A dot marks levels that already hold an adjustment.</PortraitOverlay.Edit.ScopeTooltip>
+  <PortraitOverlay.Edit.ScopeCategory>Category: {0}</PortraitOverlay.Edit.ScopeCategory>
+  <PortraitOverlay.Edit.ScopeVariant>Variant: {0}</PortraitOverlay.Edit.ScopeVariant>
+  <PortraitOverlay.Menu.ClearScope>Delete adjustment: {0}</PortraitOverlay.Menu.ClearScope>
+  <PortraitOverlay.Menu.ClearAllScopes>Delete all of this pawn's adjustments (except All)</PortraitOverlay.Menu.ClearAllScopes>
+  <PortraitOverlay.Saved.CategoriesHeader>Per-category</PortraitOverlay.Saved.CategoriesHeader>
+  <PortraitOverlay.Saved.VariantsHeader>Per-variant (xenotype or growth stage)</PortraitOverlay.Saved.VariantsHeader>
+  <PortraitOverlay.Saved.DeleteAllConfirm>Delete all {0} adjustments in {1}?</PortraitOverlay.Saved.DeleteAllConfirm>
 </LanguageData>
