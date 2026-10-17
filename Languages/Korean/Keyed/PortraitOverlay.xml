@@ -96,4 +96,5 @@
   <PortraitOverlay.Adjust.OffsetZ>세로 이동</PortraitOverlay.Adjust.OffsetZ>
   <PortraitOverlay.Adjust.Apply>적용</PortraitOverlay.Adjust.Apply>
   <PortraitOverlay.Settings.Advanced>고급 (수치 직접 입력)</PortraitOverlay.Settings.Advanced>
+  <PortraitOverlay.Edit.ReadoutWithPanel>{0}배 · X {1} · Z {2} · 패널 {3}%×{4}%</PortraitOverlay.Edit.ReadoutWithPanel>
 </LanguageData>

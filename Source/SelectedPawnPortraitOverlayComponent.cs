@@ -18,6 +18,8 @@ public sealed class SelectedPawnPortraitOverlayComponent : GameComponent
     private const float CropHandleThickness = 7f;
     private const float ResizeHandleSize = 10f;
     private const float PresetRowHeight = 20f;
+    private const float EditControlsGap = 3f;
+    private const float MinEditControlsWidth = 260f;
     private const float MinPanelWidth = 80f;
     private const float MinPanelHeight = 100f;
     private const float HintWidth = 240f;
@@ -84,13 +86,12 @@ public sealed class SelectedPawnPortraitOverlayComponent : GameComponent
         }
     }
 
-    // Width / height of the portrait area in the current panel, which framing fits pawns to.
-    public static float GetPortraitAspect(PortraitOverlaySettings settings)
+    // Portrait area inside a panel of the given size, matching the layout DrawPanel uses.
+    public static Vector2 PortraitSizeFor(Vector2 panelSize, PortraitOverlaySettings settings)
     {
-        var rect = BuildPanelRect(settings);
-        var width = rect.width - (2f * ContentPadding);
-        var height = rect.height - (2f * ContentPadding) - (settings.ShowName ? NameRowHeight + NameRowGap : 0f);
-        return width > 0f && height > 0f ? width / height : 1f;
+        return new Vector2(
+            Mathf.Max(1f, panelSize.x - (2f * ContentPadding)),
+            Mathf.Max(1f, panelSize.y - (2f * ContentPadding) - (settings.ShowName ? NameRowHeight + NameRowGap : 0f)));
     }
 
     // Finds a pawn by id among living map and world pawns, for labelling saved per-pawn corrections.
@@ -146,7 +147,7 @@ public sealed class SelectedPawnPortraitOverlayComponent : GameComponent
         HandleKeys(pawn, settings);
 
         settings.ClampValues();
-        var rect = BuildPanelRect(settings);
+        var rect = BuildPanelRect(settings, pawn);
         if (editing && dragMode != DragMode.None)
         {
             ContinueDrag(rect, pawn, settings);
@@ -160,8 +161,11 @@ public sealed class SelectedPawnPortraitOverlayComponent : GameComponent
 
         if (editing)
         {
-            // The window reaches a little past the panel so the crop and resize handles on its edges stay clickable.
+            // The window reaches a little past the panel so the crop and resize handles on its edges stay clickable,
+            // and below it for the edit controls, which sit outside so they never cover a small panel's portrait.
             var outer = rect.ExpandedBy(HandleMargin);
+            outer.width = Mathf.Max(outer.width, MinEditControlsWidth + (2f * HandleMargin));
+            outer.height += EditControlsHeight;
             Find.WindowStack.ImmediateWindow(
                 OverlayWindowId,
                 outer,
@@ -173,10 +177,7 @@ public sealed class SelectedPawnPortraitOverlayComponent : GameComponent
                     HandleEditInput(localRect, layout, pawn, settings);
                     DrawPanel(localRect, pawn, settings, true);
                     DrawEditOverlay(layout, pawn, settings);
-                    if (showToolbar)
-                    {
-                        DrawToolbar(ToolbarRect(layout), pawn, settings);
-                    }
+                    DrawToolbar(EditToolbarRect(layout), pawn, settings);
                 },
                 doBackground: false,
                 absorbInputAroundWindow: false,
@@ -329,10 +330,12 @@ public sealed class SelectedPawnPortraitOverlayComponent : GameComponent
         return false;
     }
 
-    private static Rect BuildPanelRect(PortraitOverlaySettings settings)
+    // The panel for a pawn: the base size from settings times any panel size its race or pawn entry sets.
+    private static Rect BuildPanelRect(PortraitOverlaySettings settings, Pawn pawn)
     {
-        var width = Mathf.Min(settings.PanelWidth, UI.screenWidth - 8f);
-        var height = Mathf.Min(settings.PanelHeight, UI.screenHeight - 8f);
+        var scale = PortraitAdjustments.ResolvePanelScale(pawn, settings);
+        var width = Mathf.Min(settings.PanelWidth * scale.x, UI.screenWidth - 8f);
+        var height = Mathf.Min(settings.PanelHeight * scale.y, UI.screenHeight - 8f);
         var maxX = Mathf.Max(PortraitOverlaySettings.MinPanelX, UI.screenWidth - width);
         var x = Mathf.Clamp(settings.PanelX, PortraitOverlaySettings.MinPanelX, maxX);
         var y = Mathf.Clamp(settings.PanelY, 0f, Mathf.Max(0f, UI.screenHeight - height));
@@ -583,23 +586,20 @@ public sealed class SelectedPawnPortraitOverlayComponent : GameComponent
     {
         var currentEvent = Event.current;
         var mouse = currentEvent.mousePosition;
-        var overButtons = (settings.ShowHoverToolbar && ToolbarRect(layout).Contains(mouse)) || PresetRowRect(layout).Contains(mouse);
+        var overButtons = EditToolbarRect(layout).Contains(mouse) || PresetRowRect(layout).Contains(mouse);
         var overScopeChips = ScopeBarRect(layout).Contains(mouse) && mouse.x < ScopeChipsEnd;
         var overPortrait = layout.Visible.Contains(mouse) && !ScopeBarRect(layout).Contains(mouse) && !overButtons;
 
         switch (currentEvent.type)
         {
+            case EventType.MouseDown when currentEvent.button == 0 && currentEvent.clickCount == 2 && ReadoutRect(layout).Contains(mouse):
+                Find.WindowStack.Add(new Dialog_PortraitAdjustment(editScope, pawn, () => PushUndo(pawn, settings)));
+                currentEvent.Use();
+                break;
             case EventType.MouseDown when currentEvent.button == 0:
                 var mode = DragModeAt(mouse, layout, overPortrait, overScopeChips);
                 if (mode == DragMode.None)
                 {
-                    break;
-                }
-
-                if (mode == DragMode.Pan && currentEvent.clickCount == 2 && ReadoutRect(layout, settings).Contains(mouse))
-                {
-                    Find.WindowStack.Add(new Dialog_PortraitAdjustment(editScope, pawn, () => PushUndo(pawn, settings)));
-                    currentEvent.Use();
                     break;
                 }
 
@@ -707,8 +707,10 @@ public sealed class SelectedPawnPortraitOverlayComponent : GameComponent
                     PortraitOverlaySettings.CutoffMax(settings.TopCutoff));
                 break;
             case DragMode.Resize:
-                settings.PanelWidth = Mathf.Max(MinPanelWidth, settings.PanelWidth + delta.x);
-                settings.PanelHeight = Mathf.Max(MinPanelHeight, settings.PanelHeight + delta.y);
+                // The handle moves the scaled panel's corner; the base size changes by the unscaled amount.
+                var scale = PortraitAdjustments.ResolvePanelScale(pawn, settings);
+                settings.PanelWidth = Mathf.Max(MinPanelWidth, settings.PanelWidth + (delta.x / Mathf.Max(0.01f, scale.x)));
+                settings.PanelHeight = Mathf.Max(MinPanelHeight, settings.PanelHeight + (delta.y / Mathf.Max(0.01f, scale.y)));
                 break;
         }
 
@@ -733,16 +735,25 @@ public sealed class SelectedPawnPortraitOverlayComponent : GameComponent
         return new Rect(visible.xMax - (ResizeHandleSize / 2f), visible.yMax - (ResizeHandleSize / 2f), ResizeHandleSize, ResizeHandleSize);
     }
 
-    private static Rect PresetRowRect(PanelLayout layout)
+    // Edit controls stack below the panel: readout, presets, then the toolbar.
+    private static float EditControlsHeight => CropHandleThickness + EditControlsGap + ReadoutHeight + 2f + PresetRowHeight + 2f + ToolbarHeight;
+
+    private static Rect ReadoutRect(PanelLayout layout)
     {
-        var bottom = layout.Visible.yMax - ToolbarInset - ToolbarHeight - 2f;
-        return new Rect(layout.Visible.x + ToolbarInset, bottom - PresetRowHeight, layout.Visible.width - (2f * ToolbarInset), PresetRowHeight);
+        var top = layout.Visible.yMax + CropHandleThickness + EditControlsGap;
+        return new Rect(layout.Visible.x, top, Mathf.Max(layout.Visible.width, MinEditControlsWidth), ReadoutHeight);
     }
 
-    private static Rect ReadoutRect(PanelLayout layout, PortraitOverlaySettings settings)
+    private static Rect PresetRowRect(PanelLayout layout)
     {
-        var preset = PresetRowRect(layout);
-        return new Rect(preset.x, preset.y - 2f - ReadoutHeight, preset.width, ReadoutHeight);
+        var readout = ReadoutRect(layout);
+        return new Rect(readout.x, readout.yMax + 2f, readout.width, PresetRowHeight);
+    }
+
+    private static Rect EditToolbarRect(PanelLayout layout)
+    {
+        var presets = PresetRowRect(layout);
+        return new Rect(presets.x, presets.yMax + 2f, presets.width, ToolbarHeight);
     }
 
     // Right edge of the last scope chip drawn, so the rest of the scope bar can serve as a drag handle.
@@ -892,10 +903,9 @@ public sealed class SelectedPawnPortraitOverlayComponent : GameComponent
         x = DrawScopeChip(x, bar, AdjustmentScope.Race, "PortraitOverlay.Edit.ScopeRace".Translate(pawn.def.LabelCap), pawn, settings);
         ScopeChipsEnd = DrawScopeChip(x, bar, AdjustmentScope.Global, "PortraitOverlay.Edit.ScopeGlobal".Translate(), pawn, settings);
 
-        DrawPresetRow(PresetRowRect(layout), pawn, settings, layout.Portrait.size);
-
-        var readout = ReadoutRect(layout, settings);
-        Widgets.DrawBoxSolid(readout, BarBackground);
+        var readout = ReadoutRect(layout);
+        Widgets.DrawBoxSolid(new Rect(readout.x, readout.y, readout.width, EditToolbarRect(layout).yMax - readout.y), BarBackground);
+        DrawPresetRow(PresetRowRect(layout), pawn, settings);
         Text.Anchor = TextAnchor.MiddleCenter;
         Widgets.Label(readout, ScopeReadout(pawn, settings));
         TooltipHandler.TipRegion(readout, "PortraitOverlay.Edit.ReadoutTooltip".Translate());
@@ -903,7 +913,7 @@ public sealed class SelectedPawnPortraitOverlayComponent : GameComponent
         // The hint would cover the right-click menu, which opens right where the mouse is.
         if (Find.WindowStack.FloatMenu == null)
         {
-            var portraitArea = new Rect(layout.Visible.x, bar.yMax, layout.Visible.width, Mathf.Max(0f, readout.y - bar.yMax));
+            var portraitArea = new Rect(layout.Visible.x, bar.yMax, layout.Visible.width, Mathf.Max(0f, layout.Visible.yMax - bar.yMax));
             TooltipHandler.TipRegion(portraitArea, "PortraitOverlay.Edit.Hint".Translate());
         }
 
@@ -911,7 +921,7 @@ public sealed class SelectedPawnPortraitOverlayComponent : GameComponent
         Text.Font = previousFont;
     }
 
-    private void DrawPresetRow(Rect row, Pawn pawn, PortraitOverlaySettings settings, Vector2 portraitSize)
+    private void DrawPresetRow(Rect row, Pawn pawn, PortraitOverlaySettings settings)
     {
         if (row.width <= 0f)
         {
@@ -920,18 +930,18 @@ public sealed class SelectedPawnPortraitOverlayComponent : GameComponent
 
         var usable = editScope != AdjustmentScope.Global;
         var width = row.width / 3f;
-        DrawPresetButton(new Rect(row.x, row.y, width, row.height), PortraitPreset.FullBody, "PortraitOverlay.Edit.PresetFull", usable, pawn, settings, portraitSize);
-        DrawPresetButton(new Rect(row.x + width, row.y, width, row.height), PortraitPreset.UpperBody, "PortraitOverlay.Edit.PresetUpper", usable, pawn, settings, portraitSize);
-        DrawPresetButton(new Rect(row.x + (2f * width), row.y, width, row.height), PortraitPreset.Face, "PortraitOverlay.Edit.PresetFace", usable, pawn, settings, portraitSize);
+        DrawPresetButton(new Rect(row.x, row.y, width, row.height), PortraitPreset.FullBody, "PortraitOverlay.Edit.PresetFull", usable, pawn, settings);
+        DrawPresetButton(new Rect(row.x + width, row.y, width, row.height), PortraitPreset.UpperBody, "PortraitOverlay.Edit.PresetUpper", usable, pawn, settings);
+        DrawPresetButton(new Rect(row.x + (2f * width), row.y, width, row.height), PortraitPreset.Face, "PortraitOverlay.Edit.PresetFace", usable, pawn, settings);
     }
 
-    private void DrawPresetButton(Rect rect, PortraitPreset preset, string labelKey, bool usable, Pawn pawn, PortraitOverlaySettings settings, Vector2 portraitSize)
+    private void DrawPresetButton(Rect rect, PortraitPreset preset, string labelKey, bool usable, Pawn pawn, PortraitOverlaySettings settings)
     {
         var button = rect.ContractedBy(1f);
         if (Widgets.ButtonText(button, labelKey.Translate(), true, true, usable) && usable)
         {
             PushUndo(pawn, settings);
-            PortraitAdjustments.ApplyPreset(preset, editScope, pawn, portraitSize, settings);
+            PortraitAdjustments.ApplyPreset(preset, editScope, pawn, settings);
             if (editScope == AdjustmentScope.Race)
             {
                 PortraitOverlayMod.SaveSettings();
@@ -986,30 +996,15 @@ public sealed class SelectedPawnPortraitOverlayComponent : GameComponent
 
     private string ScopeReadout(Pawn pawn, PortraitOverlaySettings settings)
     {
-        float zoom;
-        float offsetX;
-        float offsetZ;
-        switch (editScope)
+        if (editScope == AdjustmentScope.Global)
         {
-            case AdjustmentScope.Global:
-                zoom = settings.CameraZoom;
-                offsetX = settings.GlobalOffsetX;
-                offsetZ = settings.GlobalOffsetZ;
-                break;
-            default:
-                var saved = editScope == AdjustmentScope.Pawn
-                    ? PortraitAdjustments.GetPawn(pawn)
-                    : PortraitAdjustments.GetRace(pawn, settings);
-                zoom = saved?.Zoom ?? 1f;
-                offsetX = saved?.OffsetX ?? 0f;
-                offsetZ = saved?.OffsetZ ?? 0f;
-                break;
+            return SavedAdjustment.Format(settings.CameraZoom, settings.GlobalOffsetX, settings.GlobalOffsetZ, 1f, 1f);
         }
 
-        return "PortraitOverlay.Edit.Readout".Translate(
-            zoom.ToString("F2", System.Globalization.CultureInfo.InvariantCulture),
-            SavedAdjustment.FormatOffset(offsetX),
-            SavedAdjustment.FormatOffset(offsetZ));
+        var saved = editScope == AdjustmentScope.Pawn
+            ? PortraitAdjustments.GetPawn(pawn)
+            : PortraitAdjustments.GetRace(pawn, settings);
+        return saved?.Summary() ?? SavedAdjustment.Format(1f, 0f, 0f, 1f, 1f);
     }
 
     private static void DrawPanel(Rect rect, Pawn pawn, PortraitOverlaySettings settings, bool editing)

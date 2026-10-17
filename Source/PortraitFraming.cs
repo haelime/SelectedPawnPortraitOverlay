@@ -340,10 +340,13 @@ public static class PortraitFraming
                 width = Math.Min(bounds.Width, (maxZ - minZ) * 1.4f);
                 break;
             default:
-                minZ = bounds.MinZ;
-                maxZ = bounds.MaxZ;
-                width = bounds.Width;
-                break;
+                // Full body: a little more room, with the pawn raised so its feet clear the bottom edge.
+                var fullHeight = Math.Max(bounds.Height, bounds.Width / aspect) * FullBodyMargin;
+                return new PortraitFrame(
+                    Math.Max(2f / fullHeight, MinZoom),
+                    bounds.CenterX,
+                    0f,
+                    bounds.CenterZ - (FullBodyLift * fullHeight));
         }
 
         var height = Math.Max(maxZ - minZ, width / aspect) * PresetMargin;
@@ -353,6 +356,18 @@ public static class PortraitFraming
         }
 
         return new PortraitFrame(Math.Max(2f / height, MinZoom), bounds.CenterX, 0f, (minZ + maxZ) / 2f);
+    }
+
+    // Panel size each preset uses, as a share of the base panel size: close-ups use a smaller panel so the
+    // magnified pawn does not take over the screen.
+    public static (float Width, float Height) PresetPanelScale(PortraitPreset preset)
+    {
+        return preset switch
+        {
+            PortraitPreset.UpperBody => (1f, 0.75f),
+            PortraitPreset.Face => (0.8f, 0.55f),
+            _ => (1f, 1f)
+        };
     }
 
     // The correction that turns a frame computed without this scope's adjustment into the target frame.
@@ -381,6 +396,8 @@ public static class PortraitFraming
     }
 
     private const float PresetMargin = 1.08f;
+    private const float FullBodyMargin = 1.14f;
+    private const float FullBodyLift = 0.05f;
     private const float UpperBodyFraction = 0.6f;
     private const float FaceFraction = 0.35f;
     // A humanlike head with hair spans about 0.5 world units around its center.

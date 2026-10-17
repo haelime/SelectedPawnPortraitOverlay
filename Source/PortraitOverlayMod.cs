@@ -23,7 +23,7 @@ public sealed class PortraitOverlayMod : Mod
     private const float InfoLabelHeight = 34f;
     private const float RemoveButtonWidth = 90f;
     private const float SavedRowHeight = 28f;
-    private const float SavedSummaryWidth = 190f;
+    private const float SavedSummaryWidth = 320f;
 
     private enum SettingsTab
     {

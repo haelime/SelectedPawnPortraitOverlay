@@ -18,15 +18,31 @@ public sealed class SavedAdjustment : IExposable
 {
     public const float MinZoom = 0.1f;
     public const float MaxZoom = 10f;
+    public const float MinPanelScale = 0.2f;
+    public const float MaxPanelScale = 3f;
 
     public float Zoom = 1f;
     public float OffsetX;
     public float OffsetZ;
 
+    // Panel size relative to the base size in settings, so a close-up preset can use a smaller panel.
+    public float PanelWidthScale = 1f;
+    public float PanelHeightScale = 1f;
+
     // Shown in the saved-adjustments list when the pawn or race can no longer be found.
     public string Label;
 
-    public bool IsIdentity => Mathf.Approximately(Zoom, 1f) && Mathf.Approximately(OffsetX, 0f) && Mathf.Approximately(OffsetZ, 0f);
+    public bool IsIdentity => Mathf.Approximately(Zoom, 1f)
+        && Mathf.Approximately(OffsetX, 0f)
+        && Mathf.Approximately(OffsetZ, 0f)
+        && !HasPanelScale;
+
+    public bool HasPanelScale => !Mathf.Approximately(PanelWidthScale, 1f) || !Mathf.Approximately(PanelHeightScale, 1f);
+
+    public SavedAdjustment Clone()
+    {
+        return (SavedAdjustment)MemberwiseClone();
+    }
 
     public PortraitAdjustment ToAdjustment()
     {
@@ -38,14 +54,27 @@ public sealed class SavedAdjustment : IExposable
         Zoom = Mathf.Clamp(float.IsNaN(Zoom) || float.IsInfinity(Zoom) ? 1f : Zoom, MinZoom, MaxZoom);
         OffsetX = float.IsNaN(OffsetX) || float.IsInfinity(OffsetX) ? 0f : OffsetX;
         OffsetZ = float.IsNaN(OffsetZ) || float.IsInfinity(OffsetZ) ? 0f : OffsetZ;
+        PanelWidthScale = Mathf.Clamp(float.IsNaN(PanelWidthScale) ? 1f : PanelWidthScale, MinPanelScale, MaxPanelScale);
+        PanelHeightScale = Mathf.Clamp(float.IsNaN(PanelHeightScale) ? 1f : PanelHeightScale, MinPanelScale, MaxPanelScale);
     }
 
     public string Summary()
     {
-        return "PortraitOverlay.Edit.Readout".Translate(
-            Zoom.ToString("F2", CultureInfo.InvariantCulture),
-            FormatOffset(OffsetX),
-            FormatOffset(OffsetZ));
+        return Format(Zoom, OffsetX, OffsetZ, PanelWidthScale, PanelHeightScale);
+    }
+
+    public static string Format(float zoom, float offsetX, float offsetZ, float panelWidthScale, float panelHeightScale)
+    {
+        var zoomText = zoom.ToString("F2", CultureInfo.InvariantCulture);
+        var hasPanelScale = !Mathf.Approximately(panelWidthScale, 1f) || !Mathf.Approximately(panelHeightScale, 1f);
+        return hasPanelScale
+            ? "PortraitOverlay.Edit.ReadoutWithPanel".Translate(
+                zoomText,
+                FormatOffset(offsetX),
+                FormatOffset(offsetZ),
+                Mathf.RoundToInt(panelWidthScale * 100f).ToString(),
+                Mathf.RoundToInt(panelHeightScale * 100f).ToString())
+            : "PortraitOverlay.Edit.Readout".Translate(zoomText, FormatOffset(offsetX), FormatOffset(offsetZ));
     }
 
     public static string FormatOffset(float value)
@@ -58,6 +87,8 @@ public sealed class SavedAdjustment : IExposable
         Scribe_Values.Look(ref Zoom, "zoom", 1f);
         Scribe_Values.Look(ref OffsetX, "offsetX", 0f);
         Scribe_Values.Look(ref OffsetZ, "offsetZ", 0f);
+        Scribe_Values.Look(ref PanelWidthScale, "panelWidthScale", 1f);
+        Scribe_Values.Look(ref PanelHeightScale, "panelHeightScale", 1f);
         Scribe_Values.Look(ref Label, "label");
         if (Scribe.mode == LoadSaveMode.LoadingVars)
         {
@@ -101,21 +132,74 @@ public static class PortraitAdjustments
         return new PortraitAdjustment(zoom, offsetX, offsetZ);
     }
 
-    // Sets a pawn or race scope's entry outright (an identity value removes it).
-    public static void Set(AdjustmentScope scope, Pawn pawn, PortraitOverlaySettings settings, PortraitAdjustment value)
+    // Combined panel size multiplier from the race and pawn entries (1, 1 when neither changes the panel).
+    public static Vector2 ResolvePanelScale(Pawn pawn, PortraitOverlaySettings settings, AdjustmentScope? excluded = null)
     {
-        Clear(scope, pawn, settings);
-        Apply(scope, pawn, settings, value.Zoom, value.OffsetX, value.OffsetZ);
+        var scale = Vector2.one;
+        var race = excluded == AdjustmentScope.Race ? null : GetRace(pawn, settings);
+        if (race != null)
+        {
+            scale.x *= race.PanelWidthScale;
+            scale.y *= race.PanelHeightScale;
+        }
+
+        var own = excluded == AdjustmentScope.Pawn ? null : GetPawn(pawn);
+        if (own != null)
+        {
+            scale.x *= own.PanelWidthScale;
+            scale.y *= own.PanelHeightScale;
+        }
+
+        return scale;
     }
 
-    // Frames the pawn to a preset by writing the needed correction into a pawn or race scope.
-    // portraitSize is the portrait area of the panel, which the preset is fitted to.
-    public static void ApplyPreset(PortraitPreset preset, AdjustmentScope scope, Pawn pawn, Vector2 portraitSize, PortraitOverlaySettings settings)
+    // Sets a pawn or race scope's entry outright (an identity value removes it). The entry's panel size is kept
+    // unless a new one is given.
+    public static void Set(AdjustmentScope scope, Pawn pawn, PortraitOverlaySettings settings, PortraitAdjustment value, Vector2? panelScale = null)
     {
         if (scope == AdjustmentScope.Global || pawn == null)
         {
             return;
         }
+
+        var existing = scope == AdjustmentScope.Pawn ? GetPawn(pawn) : GetRace(pawn, settings);
+        var scale = panelScale ?? (existing != null ? new Vector2(existing.PanelWidthScale, existing.PanelHeightScale) : Vector2.one);
+        var entry = new SavedAdjustment
+        {
+            Zoom = value.Zoom,
+            OffsetX = value.OffsetX,
+            OffsetZ = value.OffsetZ,
+            PanelWidthScale = scale.x,
+            PanelHeightScale = scale.y
+        };
+        entry.Clamp();
+        if (scope == AdjustmentScope.Pawn)
+        {
+            entry.Label = pawn.LabelShortCap;
+            Store(PawnStore, pawn.thingIDNumber, entry);
+        }
+        else
+        {
+            entry.Label = pawn.def.LabelCap.ToString();
+            Store(settings.RaceAdjustments, pawn.def.defName, entry);
+        }
+    }
+
+    // Frames the pawn to a preset by writing the needed correction and panel size into a pawn or race scope.
+    // The panel size is set so the final panel is the preset's share of the base size, whatever other scopes hold.
+    public static void ApplyPreset(PortraitPreset preset, AdjustmentScope scope, Pawn pawn, PortraitOverlaySettings settings)
+    {
+        if (scope == AdjustmentScope.Global || pawn == null)
+        {
+            return;
+        }
+
+        var (widthScale, heightScale) = PortraitFraming.PresetPanelScale(preset);
+        var otherScale = ResolvePanelScale(pawn, settings, scope);
+        var scopeScale = new Vector2(widthScale / Mathf.Max(0.01f, otherScale.x), heightScale / Mathf.Max(0.01f, otherScale.y));
+        var portraitSize = SelectedPawnPortraitOverlayComponent.PortraitSizeFor(
+            new Vector2(settings.PanelWidth * widthScale, settings.PanelHeight * heightScale),
+            settings);
 
         var humanlike = pawn.RaceProps?.Humanlike == true;
         var bounds = PortraitFitCache.GetBounds(pawn, settings) ?? FallbackBounds(pawn, humanlike);
@@ -127,7 +211,24 @@ public static class PortraitAdjustments
             portraitSize,
             settings,
             ResolveExcluding(pawn, settings, scope));
-        Set(scope, pawn, settings, PortraitFraming.AdjustmentToReach(withoutScope, target));
+        Set(scope, pawn, settings, PortraitFraming.AdjustmentToReach(withoutScope, target), scopeScale);
+    }
+
+    private static void Store<TKey>(Dictionary<TKey, SavedAdjustment> store, TKey key, SavedAdjustment entry)
+    {
+        if (store == null)
+        {
+            return;
+        }
+
+        if (entry.IsIdentity)
+        {
+            store.Remove(key);
+        }
+        else
+        {
+            store[key] = entry;
+        }
     }
 
     private static PortraitBounds FallbackBounds(Pawn pawn, bool humanlike)
@@ -316,8 +417,6 @@ public sealed class AdjustmentSnapshot
 
     private static SavedAdjustment Copy(SavedAdjustment source)
     {
-        return source == null
-            ? null
-            : new SavedAdjustment { Zoom = source.Zoom, OffsetX = source.OffsetX, OffsetZ = source.OffsetZ, Label = source.Label };
+        return source?.Clone();
     }
 }

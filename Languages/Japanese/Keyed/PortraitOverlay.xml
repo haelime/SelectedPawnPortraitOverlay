@@ -96,4 +96,5 @@
   <PortraitOverlay.Adjust.OffsetZ>Vertical offset</PortraitOverlay.Adjust.OffsetZ>
   <PortraitOverlay.Adjust.Apply>Apply</PortraitOverlay.Adjust.Apply>
   <PortraitOverlay.Settings.Advanced>Advanced (numeric values)</PortraitOverlay.Settings.Advanced>
+  <PortraitOverlay.Edit.ReadoutWithPanel>{0}x · X {1} · Z {2} · panel {3}%×{4}%</PortraitOverlay.Edit.ReadoutWithPanel>
 </LanguageData>
