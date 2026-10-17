@@ -43,25 +43,22 @@
   <PortraitOverlay.Settings.AutoFitPortraitTooltip>폰을 한 번 렌더링해서 실제로 그려진 영역을 재고, 그 크기에 맞춰 초상화를 맞춥니다. 동물, 메카노이드, 곤충, 개체는 사람과 비슷한 크기로 보이고 그려진 부분의 가운데에 맞춰집니다. 인간형 폰(모드 종족 포함)은 확대하지 않고, 큰 모자나 날개처럼 평소보다 훨씬 커질 때만 축소하므로 보통 정착민의 구도는 그대로입니다.</PortraitOverlay.Settings.AutoFitPortraitTooltip>
   <PortraitOverlay.Settings.RaceNotLoaded>{0} (불러오지 않음)</PortraitOverlay.Settings.RaceNotLoaded>
   <PortraitOverlay.Settings.ShowHoverToolbar>마우스를 올리면 편집 도구 막대 표시</PortraitOverlay.Settings.ShowHoverToolbar>
-  <PortraitOverlay.Settings.ShowHoverToolbarTooltip>패널에 마우스를 올리면 아래쪽에 편집 · 초기화 · 고정 · 설정 버튼이 나타납니다.</PortraitOverlay.Settings.ShowHoverToolbarTooltip>
+  <PortraitOverlay.Settings.ShowHoverToolbarTooltip>패널에 마우스를 올리면 아래쪽에 편집 · 초기화 · 설정 버튼이 나타납니다.</PortraitOverlay.Settings.ShowHoverToolbarTooltip>
   <PortraitOverlay.Settings.TabSaved>저장된 보정</PortraitOverlay.Settings.TabSaved>
   <PortraitOverlay.Settings.ResetPawnAdjustmentsConfirm>설정을 초기화했습니다. 이 세이브에 저장된 폰별 보정 {0}개도 삭제할까요?</PortraitOverlay.Settings.ResetPawnAdjustmentsConfirm>
   <PortraitOverlay.Toolbar.Edit>편집</PortraitOverlay.Toolbar.Edit>
   <PortraitOverlay.Toolbar.Done>완료</PortraitOverlay.Toolbar.Done>
   <PortraitOverlay.Toolbar.EditTooltip>이 초상화를 편집합니다. 드래그로 이동, 휠로 줌(Shift는 미세 조정), 우클릭으로 메뉴를 엽니다.</PortraitOverlay.Toolbar.EditTooltip>
   <PortraitOverlay.Toolbar.Reset>초기화</PortraitOverlay.Toolbar.Reset>
-  <PortraitOverlay.Toolbar.ResetTooltip>이 폰의 보정을 지우고 자동 구도로 되돌립니다.</PortraitOverlay.Toolbar.ResetTooltip>
-  <PortraitOverlay.Toolbar.Pin>고정</PortraitOverlay.Toolbar.Pin>
-  <PortraitOverlay.Toolbar.Unpin>고정 해제</PortraitOverlay.Toolbar.Unpin>
+  <PortraitOverlay.Toolbar.ResetTooltip>{0} 대분류 보정을 지웁니다. 종족·세부·폰 보정은 남으며, 편집 모드의 우클릭 메뉴에서 지울 수 있습니다.</PortraitOverlay.Toolbar.ResetTooltip>
   <PortraitOverlay.Toolbar.PinTooltip>다른 폰을 선택해도 이 폰을 계속 표시합니다.</PortraitOverlay.Toolbar.PinTooltip>
   <PortraitOverlay.Toolbar.Settings>설정</PortraitOverlay.Toolbar.Settings>
   <PortraitOverlay.Edit.ScopePawn>이 폰</PortraitOverlay.Edit.ScopePawn>
   <PortraitOverlay.Edit.ScopeRace>종족: {0}</PortraitOverlay.Edit.ScopeRace>
-  <PortraitOverlay.Edit.ScopeGlobal>전체</PortraitOverlay.Edit.ScopeGlobal>
   <PortraitOverlay.Edit.Readout>{0}배 · X {1} · Z {2}</PortraitOverlay.Edit.Readout>
   <PortraitOverlay.Edit.Hint>드래그: 이동 · 휠: 줌(Shift: 미세) · 위아래 탭: 자르기 · 모서리: 크기 · Ctrl+Z: 되돌리기 · 우클릭: 메뉴 · Esc: 끝내기</PortraitOverlay.Edit.Hint>
   <PortraitOverlay.Menu.ResetAll>모든 설정 초기화...</PortraitOverlay.Menu.ResetAll>
-  <PortraitOverlay.Menu.ResetAllConfirm>종족 보정을 포함해 초상화 오버레이의 모든 설정을 초기화할까요?</PortraitOverlay.Menu.ResetAllConfirm>
+  <PortraitOverlay.Menu.ResetAllConfirm>대분류·종족·세부 보정을 포함해 초상화 오버레이의 모든 설정을 초기화할까요?</PortraitOverlay.Menu.ResetAllConfirm>
   <PortraitOverlay.Menu.OpenSettings>설정 열기</PortraitOverlay.Menu.OpenSettings>
   <PortraitOverlay.Menu.ExitEdit>편집 끝내기</PortraitOverlay.Menu.ExitEdit>
   <PortraitOverlay.Saved.Hint>편집 모드에서 만든 보정입니다. 폰별 보정은 현재 세이브에, 대분류·종족·세부 보정은 모든 세이브에 공통으로 저장됩니다.</PortraitOverlay.Saved.Hint>
@@ -80,7 +77,6 @@
   <PortraitOverlay.Edit.PresetUpper>상반신</PortraitOverlay.Edit.PresetUpper>
   <PortraitOverlay.Edit.PresetFace>얼굴</PortraitOverlay.Edit.PresetFace>
   <PortraitOverlay.Edit.PresetTooltip>이 구도로 맞추고 선택한 범위에 저장합니다.</PortraitOverlay.Edit.PresetTooltip>
-  <PortraitOverlay.Edit.PresetGlobalTooltip>'전체'에 프리셋을 걸면 모든 폰이 각자 모양에 맞춰 이 구도로 보이고 패널 크기도 함께 바뀝니다. 다른 범위의 보정은 그 위에 덧붙습니다.</PortraitOverlay.Edit.PresetGlobalTooltip>
   <PortraitOverlay.Edit.CropTooltip>드래그해서 패널 위아래를 잘라 냅니다.</PortraitOverlay.Edit.CropTooltip>
   <PortraitOverlay.Edit.ResizeTooltip>드래그해서 패널 크기를 바꿉니다.</PortraitOverlay.Edit.ResizeTooltip>
   <PortraitOverlay.Edit.ReadoutTooltip>더블클릭하면 값을 직접 입력할 수 있습니다.</PortraitOverlay.Edit.ReadoutTooltip>
@@ -99,11 +95,11 @@
   <PortraitOverlay.Category.Anomaly>어노멀리 개체</PortraitOverlay.Category.Anomaly>
   <PortraitOverlay.Category.Other>기타</PortraitOverlay.Category.Other>
   <PortraitOverlay.Edit.ScopeButton>범위: {0}</PortraitOverlay.Edit.ScopeButton>
-  <PortraitOverlay.Edit.ScopeTooltip>편집을 저장할 범위를 고릅니다. 전체부터 이 폰까지, 좁은 범위가 넓은 범위 위에 덧붙여 적용됩니다. 점은 이미 보정이 저장된 범위입니다.</PortraitOverlay.Edit.ScopeTooltip>
+  <PortraitOverlay.Edit.ScopeTooltip>편집을 저장할 범위를 고릅니다. 대분류부터 이 폰까지, 좁은 범위가 넓은 범위 위에 덧붙여 적용됩니다. 점은 이미 보정이 저장된 범위입니다.</PortraitOverlay.Edit.ScopeTooltip>
   <PortraitOverlay.Edit.ScopeCategory>대분류: {0}</PortraitOverlay.Edit.ScopeCategory>
   <PortraitOverlay.Edit.ScopeVariant>세부: {0}</PortraitOverlay.Edit.ScopeVariant>
   <PortraitOverlay.Menu.ClearScope>보정 삭제: {0}</PortraitOverlay.Menu.ClearScope>
-  <PortraitOverlay.Menu.ClearAllScopes>이 폰에 걸린 보정 모두 삭제 (전체 제외)</PortraitOverlay.Menu.ClearAllScopes>
+  <PortraitOverlay.Menu.ClearAllScopes>이 폰에 걸린 보정 모두 삭제</PortraitOverlay.Menu.ClearAllScopes>
   <PortraitOverlay.Saved.CategoriesHeader>대분류별</PortraitOverlay.Saved.CategoriesHeader>
   <PortraitOverlay.Saved.VariantsHeader>세부별 (제노타입·성장 단계)</PortraitOverlay.Saved.VariantsHeader>
   <PortraitOverlay.Saved.DeleteAllConfirm>{1}의 보정 {0}개를 모두 삭제할까요?</PortraitOverlay.Saved.DeleteAllConfirm>
@@ -111,9 +107,9 @@
   <PortraitOverlay.ScopeHelp.Race>이 종족의 모든 폰에 적용됩니다(예: 모든 트럼보, 모든 인간). 그림이 유난히 크거나 작은 종족, 모드 종족을 맞출 때 쓰세요.</PortraitOverlay.ScopeHelp.Race>
   <PortraitOverlay.ScopeHelp.Variant>같은 종족 안에서 이 제노타입(인간형)이나 성장 단계(동물)에만 적용됩니다. 새끼와 성체, 체형이 다른 제노타입을 따로 맞출 때 쓰세요.</PortraitOverlay.ScopeHelp.Variant>
   <PortraitOverlay.ScopeHelp.Pawn>이 폰에만 적용되고 세이브 파일에 저장됩니다. 특정 정착민만 다르게 보이게 하고 싶을 때 쓰세요.</PortraitOverlay.ScopeHelp.Pawn>
-  <PortraitOverlay.ScopeHelp.Global>모든 폰에 적용됩니다. 패널(프레임) 크기를 맞추는 용도 외에는 권장하지 않습니다. 폰마다 모양이 달라서 줌이나 위치 하나로는 고르게 맞지 않습니다. 여기서 프리셋을 고르면 폰마다 자기 모양에 맞춰 같은 구도가 적용됩니다.</PortraitOverlay.ScopeHelp.Global>
   <PortraitOverlay.ScopeHelp.VariantUnavailable>이 폰에는 세부 단계가 없습니다. 인간형은 Biotech이 있어야 제노타입별로 나뉘고, 메카노이드처럼 성장 단계가 하나뿐인 종족도 해당되지 않습니다.</PortraitOverlay.ScopeHelp.VariantUnavailable>
-  <PortraitOverlay.Edit.ReadoutPreset>{0} 프리셋 · {1}</PortraitOverlay.Edit.ReadoutPreset>
-  <PortraitOverlay.Saved.GlobalHeader>전체</PortraitOverlay.Saved.GlobalHeader>
-  <PortraitOverlay.Saved.GlobalPreset>전체 ({0} 프리셋)</PortraitOverlay.Saved.GlobalPreset>
+  <PortraitOverlay.Toolbar.ResetConfirm>{0} 대분류 보정을 지울까요? 이 대분류의 모든 폰에 적용되던 보정입니다.</PortraitOverlay.Toolbar.ResetConfirm>
+  <PortraitOverlay.Toolbar.UnpinTooltip>고정을 풀고 다시 선택한 폰을 따라갑니다.</PortraitOverlay.Toolbar.UnpinTooltip>
+  <PortraitOverlay.Settings.ShowPinButton>고정(핀) 버튼 표시</PortraitOverlay.Settings.ShowPinButton>
+  <PortraitOverlay.Settings.ShowPinButtonTooltip>패널에 마우스를 올리면 오른쪽 위에 핀 버튼이 나타납니다. 고정하면 다른 폰을 선택해도 이 폰을 계속 표시하고, 고정 중에는 핀이 항상 보입니다. 끄면 고정도 풀립니다.</PortraitOverlay.Settings.ShowPinButtonTooltip>
 </LanguageData>

@@ -13,6 +13,10 @@ public sealed class SelectedPawnPortraitOverlayComponent : GameComponent
     private const int UnsupportedVehiclePawnWarningId = 18467232;
     private const int ToolbarWindowId = 18467234;
     private const int HintWindowId = 18467235;
+    private const int PinWindowId = 18467236;
+    private const float PinButtonSize = 20f;
+    private const float PinButtonInset = 3f;
+    private const string PinTexturePath = "UI/PortraitOverlay/Pin";
     private const float HandleMargin = 10f;
     private const float CropHandleWidth = 34f;
     private const float CropHandleThickness = 7f;
@@ -39,14 +43,13 @@ public sealed class SelectedPawnPortraitOverlayComponent : GameComponent
     private const float FineWheelZoomStep = 1.01f;
 
     private static readonly Color EditAccent = new(0.94f, 0.62f, 0.15f);
-    // Scope menu order: category down to this pawn, with All last because it is rarely the right choice.
+    // Scope menu order: category down to this pawn.
     private static readonly AdjustmentScope[] ScopeOrder =
     {
         AdjustmentScope.Category,
         AdjustmentScope.Race,
         AdjustmentScope.Variant,
-        AdjustmentScope.Pawn,
-        AdjustmentScope.Global
+        AdjustmentScope.Pawn
     };
 
     // Delete entries in the right-click menu, narrowest first.
@@ -55,8 +58,7 @@ public sealed class SelectedPawnPortraitOverlayComponent : GameComponent
         AdjustmentScope.Pawn,
         AdjustmentScope.Variant,
         AdjustmentScope.Race,
-        AdjustmentScope.Category,
-        AdjustmentScope.Global
+        AdjustmentScope.Category
     };
     private static readonly Color BarBackground = new(0f, 0f, 0f, 0.6f);
 
@@ -68,6 +70,8 @@ public sealed class SelectedPawnPortraitOverlayComponent : GameComponent
     private Vector2 dragStartMousePosition;
     private Pawn lastDisplayedPawn;
     private Pawn pinnedPawn;
+    private static Texture2D pinTexture;
+    private static bool pinTextureResolved;
 
     private bool editing;
     private Pawn editPawn;
@@ -172,7 +176,11 @@ public sealed class SelectedPawnPortraitOverlayComponent : GameComponent
             ContinueDrag(rect, pawn, settings);
         }
         // Mouse.IsOver reports false under a window, and the panel itself is a window when dragging is allowed.
-        var showToolbar = settings.ShowHoverToolbar && (editing || rect.Contains(Event.current.mousePosition));
+        var hovered = rect.Contains(Event.current.mousePosition);
+        var showToolbar = settings.ShowHoverToolbar && (editing || hovered);
+
+        // The pin stays visible while pinned, so it is always clear why the panel no longer follows the selection.
+        var showPin = settings.ShowPinButton && (hovered || pinnedPawn == pawn);
         if (settings.ShowHoverToolbar && !settings.HoverToolbarHintShown && !editing)
         {
             DrawFirstRunHint(rect, settings);
@@ -220,6 +228,11 @@ public sealed class SelectedPawnPortraitOverlayComponent : GameComponent
                     {
                         DrawToolbar(ToolbarRect(layout), pawn, settings);
                     }
+
+                    if (showPin)
+                    {
+                        DrawPinButton(PinButtonRect(layout), pawn);
+                    }
                 },
                 doBackground: false,
                 absorbInputAroundWindow: false,
@@ -246,13 +259,26 @@ public sealed class SelectedPawnPortraitOverlayComponent : GameComponent
                 absorbInputAroundWindow: false,
                 0f);
         }
+
+        if (showPin)
+        {
+            var pinRect = PinButtonRect(ComputeLayout(rect, settings));
+            Find.WindowStack.ImmediateWindow(
+                PinWindowId,
+                pinRect,
+                WindowLayer.GameUI,
+                delegate { DrawPinButton(new Rect(0f, 0f, pinRect.width, pinRect.height), pawn); },
+                doBackground: false,
+                absorbInputAroundWindow: false,
+                0f);
+        }
     }
 
     private Pawn GetPawnToDisplay(PortraitOverlaySettings settings)
     {
         if (pinnedPawn != null)
         {
-            if (!pinnedPawn.Destroyed && ShouldDisplayPawn(pinnedPawn))
+            if (settings.ShowPinButton && !pinnedPawn.Destroyed && ShouldDisplayPawn(pinnedPawn))
             {
                 return pinnedPawn;
             }
@@ -407,6 +433,12 @@ public sealed class SelectedPawnPortraitOverlayComponent : GameComponent
             visible.yMax - ToolbarHeight - ToolbarInset,
             Mathf.Max(0f, visible.width - (2f * ToolbarInset)),
             ToolbarHeight);
+    }
+
+    private static Rect PinButtonRect(PanelLayout layout)
+    {
+        var visible = layout.Visible;
+        return new Rect(visible.xMax - PinButtonSize - PinButtonInset, visible.y + PinButtonInset, PinButtonSize, PinButtonSize);
     }
 
     private static Rect ScopeBarRect(PanelLayout layout)
@@ -797,18 +829,13 @@ public sealed class SelectedPawnPortraitOverlayComponent : GameComponent
             options.Add(new FloatMenuOption("PortraitOverlay.Menu.Undo".Translate(), () => Undo(settings)));
         }
 
-        // One delete entry per scope that holds a correction for this pawn, narrowest first. "Delete all" leaves the
-        // All scope alone, since it frames every pawn, not just this one.
+        // One delete entry per scope that holds a correction for this pawn, narrowest first.
         var saved = new List<AdjustmentScope>();
         foreach (var scope in ClearOrder)
         {
             if (PortraitAdjustments.Has(scope, pawn, settings))
             {
-                if (scope != AdjustmentScope.Global)
-                {
-                    saved.Add(scope);
-                }
-
+                saved.Add(scope);
                 options.Add(new FloatMenuOption(
                     "PortraitOverlay.Menu.ClearScope".Translate(PortraitAdjustments.ScopeLabel(scope, pawn)),
                     () => ClearScope(scope, pawn, settings)));
@@ -829,11 +856,7 @@ public sealed class SelectedPawnPortraitOverlayComponent : GameComponent
             }));
         }
 
-        options.Add(new FloatMenuOption("PortraitOverlay.Menu.ResetAll".Translate(), () =>
-            Find.WindowStack.Add(Dialog_MessageBox.CreateConfirmation(
-                "PortraitOverlay.Menu.ResetAllConfirm".Translate(),
-                () => PortraitOverlayMod.ResetAllSettings(),
-                true))));
+        options.Add(new FloatMenuOption("PortraitOverlay.Menu.ResetAll".Translate(), PortraitOverlayMod.ConfirmResetAllSettings));
         options.Add(new FloatMenuOption("PortraitOverlay.Menu.OpenSettings".Translate(), OpenSettings));
         options.Add(new FloatMenuOption("PortraitOverlay.Menu.ExitEdit".Translate(), ExitEditMode));
         return options;
@@ -908,9 +931,8 @@ public sealed class SelectedPawnPortraitOverlayComponent : GameComponent
         Widgets.DrawBoxSolid(rect, BarBackground);
         var previousFont = Text.Font;
         Text.Font = GameFont.Tiny;
-        var buttonWidth = rect.width / 4f;
-        var hasPawnAdjustment = PortraitAdjustments.Has(AdjustmentScope.Pawn, pawn, settings);
-        var pinned = pinnedPawn == pawn;
+        var buttonWidth = rect.width / 3f;
+        var hasCategoryAdjustment = PortraitAdjustments.Has(AdjustmentScope.Category, pawn, settings);
 
         var editRect = new Rect(rect.x, rect.y, buttonWidth, rect.height).ContractedBy(1f);
         if (Widgets.ButtonText(editRect, (editing ? "PortraitOverlay.Toolbar.Done" : "PortraitOverlay.Toolbar.Edit").Translate(), true, true, true))
@@ -927,29 +949,64 @@ public sealed class SelectedPawnPortraitOverlayComponent : GameComponent
 
         TooltipHandler.TipRegion(editRect, "PortraitOverlay.Toolbar.EditTooltip".Translate());
 
+        // Reset clears the category level, the one edit mode starts on, so it undoes what an edit usually changed.
+        var categoryLabel = PortraitAdjustments.CategoryLabel(PortraitAdjustments.GetCategory(pawn));
         var resetRect = new Rect(rect.x + buttonWidth, rect.y, buttonWidth, rect.height).ContractedBy(1f);
-        if (Widgets.ButtonText(resetRect, "PortraitOverlay.Toolbar.Reset".Translate(), true, true, hasPawnAdjustment) && hasPawnAdjustment)
+        if (Widgets.ButtonText(resetRect, "PortraitOverlay.Toolbar.Reset".Translate(), true, true, hasCategoryAdjustment) && hasCategoryAdjustment)
         {
-            ClearScope(AdjustmentScope.Pawn, pawn, settings);
+            if (editing)
+            {
+                // Edit mode has Ctrl+Z, so no confirmation there.
+                ClearScope(AdjustmentScope.Category, pawn, settings);
+            }
+            else
+            {
+                Find.WindowStack.Add(Dialog_MessageBox.CreateConfirmation(
+                    "PortraitOverlay.Toolbar.ResetConfirm".Translate(categoryLabel),
+                    () => ClearScope(AdjustmentScope.Category, pawn, settings),
+                    true));
+            }
         }
 
-        TooltipHandler.TipRegion(resetRect, "PortraitOverlay.Toolbar.ResetTooltip".Translate());
+        TooltipHandler.TipRegion(resetRect, "PortraitOverlay.Toolbar.ResetTooltip".Translate(categoryLabel));
 
-        var pinRect = new Rect(rect.x + (2f * buttonWidth), rect.y, buttonWidth, rect.height).ContractedBy(1f);
-        if (Widgets.ButtonText(pinRect, (pinned ? "PortraitOverlay.Toolbar.Unpin" : "PortraitOverlay.Toolbar.Pin").Translate(), true, true, true))
-        {
-            pinnedPawn = pinned ? null : pawn;
-        }
-
-        TooltipHandler.TipRegion(pinRect, "PortraitOverlay.Toolbar.PinTooltip".Translate());
-
-        var settingsRect = new Rect(rect.x + (3f * buttonWidth), rect.y, buttonWidth, rect.height).ContractedBy(1f);
+        var settingsRect = new Rect(rect.x + (2f * buttonWidth), rect.y, buttonWidth, rect.height).ContractedBy(1f);
         if (Widgets.ButtonText(settingsRect, "PortraitOverlay.Toolbar.Settings".Translate(), true, true, true))
         {
             OpenSettings();
         }
 
         Text.Font = previousFont;
+    }
+
+    // The pin in the panel's top-right corner: keeps showing this pawn when another is selected.
+    private void DrawPinButton(Rect rect, Pawn pawn)
+    {
+        var pinned = pinnedPawn == pawn;
+        Widgets.DrawBoxSolid(rect, BarBackground);
+        var baseColor = pinned ? EditAccent : new Color(0.8f, 0.8f, 0.8f, 0.75f);
+        var hoverColor = pinned ? Color.white : GenUI.MouseoverColor;
+        var texture = PinTexture();
+        var clicked = texture != null
+            ? Widgets.ButtonImage(rect.ContractedBy(2f), texture, baseColor, hoverColor)
+            : Widgets.ButtonText(rect, "P", false);
+        if (clicked)
+        {
+            pinnedPawn = pinned ? null : pawn;
+        }
+
+        TooltipHandler.TipRegion(rect, (pinned ? "PortraitOverlay.Toolbar.UnpinTooltip" : "PortraitOverlay.Toolbar.PinTooltip").Translate());
+    }
+
+    private static Texture2D PinTexture()
+    {
+        if (!pinTextureResolved)
+        {
+            pinTexture = ContentFinder<Texture2D>.Get(PinTexturePath, false) ?? ContentFinder<Texture2D>.Get("UI/Icons/Pin", false);
+            pinTextureResolved = true;
+        }
+
+        return pinTexture;
     }
 
     private void DrawEditOverlay(PanelLayout layout, Pawn pawn, PortraitOverlaySettings settings)
@@ -1018,7 +1075,7 @@ public sealed class SelectedPawnPortraitOverlayComponent : GameComponent
             }
         }
 
-        TooltipHandler.TipRegion(button, (editScope == AdjustmentScope.Global ? "PortraitOverlay.Edit.PresetGlobalTooltip" : "PortraitOverlay.Edit.PresetTooltip").Translate());
+        TooltipHandler.TipRegion(button, "PortraitOverlay.Edit.PresetTooltip".Translate());
     }
 
     // The scope button: shows where edits are stored and opens the scope menu. Returns its right edge.
@@ -1055,10 +1112,7 @@ public sealed class SelectedPawnPortraitOverlayComponent : GameComponent
 
     private string ScopeReadout(Pawn pawn, PortraitOverlaySettings settings)
     {
-        var summary = PortraitAdjustments.Get(editScope, pawn, settings)?.Summary() ?? SavedAdjustment.Format(1f, 0f, 0f, 1f, 1f);
-        return editScope == AdjustmentScope.Global && settings.UseGlobalPreset
-            ? "PortraitOverlay.Edit.ReadoutPreset".Translate(PortraitAdjustments.PresetLabel(settings.GlobalPreset), summary)
-            : summary;
+        return PortraitAdjustments.Get(editScope, pawn, settings)?.Summary() ?? SavedAdjustment.Format(1f, 0f, 0f, 1f, 1f);
     }
 
     private static void DrawPanel(Rect rect, Pawn pawn, PortraitOverlaySettings settings, bool editing)

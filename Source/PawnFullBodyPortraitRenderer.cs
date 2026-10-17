@@ -35,15 +35,6 @@ public static class PawnFullBodyPortraitRenderer
     public static PortraitFrame ComputeFrame(Pawn pawn, Vector2 size, PortraitOverlaySettings settings, PortraitAdjustment adjustment)
     {
         var aspect = size.y > 0f ? size.x / size.y : 1f;
-        if (settings.UseGlobalPreset)
-        {
-            // An "All" preset frames every pawn by its own shape first; corrections then apply on top.
-            var humanlike = pawn.RaceProps?.Humanlike == true;
-            var bounds = PortraitFitCache.GetBounds(pawn, settings) ?? PortraitAdjustments.FallbackBounds(pawn, humanlike);
-            var headZ = GetHumanlikeHeadZ(pawn, GetRotation(pawn, settings));
-            return PortraitFraming.WithAdjustment(PortraitFraming.PresetFrame(settings.GlobalPreset, bounds, headZ, aspect), adjustment);
-        }
-
         return PortraitFraming.Compute(
             settings.CameraZoom,
             settings.FaceEmphasis,

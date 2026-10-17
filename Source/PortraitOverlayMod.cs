@@ -141,6 +141,10 @@ public sealed class PortraitOverlayMod : Mod
             "PortraitOverlay.Settings.ShowHoverToolbar".Translate(),
             ref settings.ShowHoverToolbar,
             "PortraitOverlay.Settings.ShowHoverToolbarTooltip".Translate());
+        listing.CheckboxLabeled(
+            "PortraitOverlay.Settings.ShowPinButton".Translate(),
+            ref settings.ShowPinButton,
+            "PortraitOverlay.Settings.ShowPinButtonTooltip".Translate());
         listing.GapLine();
         listing.CheckboxLabeled("PortraitOverlay.Settings.ShowAnimals".Translate(), ref settings.ShowAnimals);
         listing.CheckboxLabeled("PortraitOverlay.Settings.ShowMechanoids".Translate(), ref settings.ShowMechanoids);
@@ -276,7 +280,7 @@ public sealed class PortraitOverlayMod : Mod
 
         if (listing.ButtonText("PortraitOverlay.Settings.ResetAllSettings".Translate()))
         {
-            ResetAllSettings();
+            ConfirmResetAllSettings();
         }
     }
 
@@ -342,30 +346,6 @@ public sealed class PortraitOverlayMod : Mod
         DrawKeyedSection(listing, "PortraitOverlay.Saved.CategoriesHeader", settings.CategoryAdjustments, CategoryKeyLabel);
         DrawKeyedSection(listing, "PortraitOverlay.Saved.RacesHeader", settings.RaceAdjustments, GetRaceLabel);
         DrawKeyedSection(listing, "PortraitOverlay.Saved.VariantsHeader", settings.VariantAdjustments, null);
-        DrawGlobalSection(listing, settings);
-    }
-
-    // The All scope: an optional preset every pawn is framed to, plus a correction for every pawn.
-    private static void DrawGlobalSection(Listing_Standard listing, PortraitOverlaySettings settings)
-    {
-        listing.GapLine();
-        listing.Label("PortraitOverlay.Saved.GlobalHeader".Translate());
-        var adjustment = settings.GlobalAdjustment ?? new SavedAdjustment();
-        if (!settings.UseGlobalPreset && adjustment.IsIdentity)
-        {
-            DrawMutedLine(listing, "PortraitOverlay.Saved.Empty".Translate());
-            return;
-        }
-
-        var name = settings.UseGlobalPreset
-            ? "PortraitOverlay.Saved.GlobalPreset".Translate(PortraitAdjustments.PresetLabel(settings.GlobalPreset)).ToString()
-            : "PortraitOverlay.Edit.ScopeGlobal".Translate().ToString();
-        if (DrawSavedRow(listing, name, adjustment))
-        {
-            settings.GlobalAdjustment = new SavedAdjustment();
-            settings.UseGlobalPreset = false;
-            SaveSettings();
-        }
     }
 
     // One settings-stored level (category, race, or variant). labelFor names an entry from its key; without one,
@@ -441,6 +421,15 @@ public sealed class PortraitOverlayMod : Mod
         GUI.color = new Color(0.72f, 0.72f, 0.72f);
         Widgets.Label(rect, text);
         GUI.color = previousColor;
+    }
+
+    // Asks before resetting, since it also deletes every category, race, and variant adjustment.
+    public static void ConfirmResetAllSettings()
+    {
+        Find.WindowStack.Add(Dialog_MessageBox.CreateConfirmation(
+            "PortraitOverlay.Menu.ResetAllConfirm".Translate(),
+            ResetAllSettings,
+            true));
     }
 
     // Resets every mod setting. Per-pawn corrections live in the save, so clearing them is asked separately.
@@ -588,7 +577,7 @@ public sealed class PortraitOverlayMod : Mod
     {
         const float checkboxHeight = 32f;
         const float spacing = 96f;
-        const int checkboxCount = 10;
+        const int checkboxCount = 11;
         return (checkboxCount * checkboxHeight) + spacing;
     }
 
