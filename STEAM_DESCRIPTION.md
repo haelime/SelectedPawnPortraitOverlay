@@ -36,8 +36,7 @@ Below are Steam-ready description texts using Steam formatting tags.
 
 [h3]언어 지원[/h3]
 [list]
-[*]전체 번역: 한국어, 영어
-[*]일본어, 중국어 간체, 러시아어: 기본 설정 번역 (편집 모드 등 새 기능은 영어)
+[*]정식 번역: 한국어, 영어, 일본어, 중국어 간체, 러시아어
 [*]그 외 RimWorld 공식 지원 언어는 영어 fallback 텍스트 포함
 [/list]
 
@@ -78,8 +77,7 @@ Full-body framing is the default for everyone, including existing users after up
 
 [h3]Language Support[/h3]
 [list]
-[*]Fully localized: Korean, English
-[*]Japanese, Simplified Chinese, Russian: core settings localized (newer features such as edit mode are in English)
+[*]Fully localized: Korean, English, Japanese, Simplified Chinese, and Russian
 [*]Includes English fallback text for RimWorld's other officially supported languages
 [/list]
 
@@ -120,8 +118,7 @@ If you enjoy this mod, please consider supporting it on [url=https://ko-fi.com/h
 
 [h3]言語対応[/h3]
 [list]
-[*]完全翻訳: 韓国語、英語
-[*]日本語、中国語簡体字、ロシア語: 基本設定のみ翻訳（編集モードなどの新機能は英語）
+[*]正式翻訳: 韓国語、英語、日本語、中国語簡体字、ロシア語
 [*]そのほかのRimWorld公式対応言語には英語のフォールバックテキストを含みます
 [/list]
 
@@ -162,8 +159,7 @@ If you enjoy this mod, please consider supporting it on [url=https://ko-fi.com/h
 
 [h3]语言支持[/h3]
 [list]
-[*]完整本地化: 韩语、英语
-[*]日语、简体中文、俄语: 仅本地化基础设置（编辑模式等新功能为英文）
+[*]完整本地化: 韩语、英语、日语、简体中文、俄语
 [*]其余 RimWorld 官方支持语言提供英文 fallback 文本
 [/list]
 
@@ -204,8 +200,7 @@ If you enjoy this mod, please consider supporting it on [url=https://ko-fi.com/h
 
 [h3]Поддержка языков[/h3]
 [list]
-[*]Полная локализация: корейский и английский
-[*]Японский, упрощённый китайский и русский: переведены основные настройки (новые функции, например режим редактирования, на английском)
+[*]Полная локализация: корейский, английский, японский, упрощённый китайский и русский
 [*]Для остальных официально поддерживаемых RimWorld языков добавлен английский fallback-текст
 [/list]
 
