@@ -25,8 +25,8 @@ Below are Steam-ready description texts using Steam formatting tags.
 [*]동물, 메카노이드, Anomaly 실체, 수감자, 노예 필터
 [/list]
 
-[h3]기존 사용자 안내[/h3]
-업데이트해도 기존 구도는 그대로입니다. 새 구도를 쓰려면 설정의 초상화 탭에서 "초상화 자동 맞춤"과 "모든 폰을 전신 구도로"를 켜 주세요. 새로 설치하면 처음부터 전신 구도로 나옵니다.
+[h3]구도 안내[/h3]
+기존 사용자도 업데이트 후에는 전신 구도가 기본입니다. 이전 구도로 돌아가려면 설정의 초상화 탭에서 "모든 폰을 전신 구도로"를 끄세요.
 
 [h3]지원 버전[/h3]
 [list]
@@ -67,8 +67,8 @@ It renders the selected pawn as a front-facing full-body portrait, and you can z
 [*]Filters for animals, mechanoids, Anomaly entities, prisoners, and slaves
 [/list]
 
-[h3]Existing Users[/h3]
-Updating keeps your current framing. To use the new framing, turn on "Auto-fit portrait" and "Frame every pawn full body" in the Portrait tab of the settings. New installs start with full-body framing.
+[h3]Framing[/h3]
+Full-body framing is the default for everyone, including existing users after updating. To go back to the earlier framing, turn off "Frame every pawn full body" in the Portrait tab of the settings.
 
 [h3]Supported Version[/h3]
 [list]
@@ -109,8 +109,8 @@ If you enjoy this mod, please consider supporting it on [url=https://ko-fi.com/h
 [*]動物、メカノイド、Anomalyエンティティ、囚人、奴隷の表示フィルター
 [/list]
 
-[h3]既存ユーザーの方へ[/h3]
-アップデート後も、これまでの構図はそのままです。新しい構図を使うには、設定の Portrait タブで「Auto-fit portrait」と「Frame every pawn full body」をオンにしてください。新規インストールでは最初から全身の構図になります。
+[h3]構図について[/h3]
+アップデート後は既存ユーザーも含め、全身の構図がデフォルトになります。以前の構図に戻すには、設定の Portrait タブで「Frame every pawn full body」をオフにしてください。
 
 [h3]対応バージョン[/h3]
 [list]
@@ -151,8 +151,8 @@ If you enjoy this mod, please consider supporting it on [url=https://ko-fi.com/h
 [*]动物、机械族、Anomaly 实体、囚犯、奴隶过滤选项
 [/list]
 
-[h3]老用户须知[/h3]
-更新后原有构图保持不变。如需使用新构图，请在设置的 Portrait 标签页中开启 "Auto-fit portrait" 和 "Frame every pawn full body"。新安装默认使用全身构图。
+[h3]构图说明[/h3]
+更新后所有用户（包括老用户）默认使用全身构图。如需恢复以前的构图，请在设置的 Portrait 标签页中关闭 "Frame every pawn full body"。
 
 [h3]支持版本[/h3]
 [list]
@@ -193,8 +193,8 @@ If you enjoy this mod, please consider supporting it on [url=https://ko-fi.com/h
 [*]Фильтры для животных, механоидов, сущностей Anomaly, заключённых и рабов
 [/list]
 
-[h3]Для тех, кто уже пользуется модом[/h3]
-После обновления прежнее кадрирование сохраняется. Чтобы попробовать новое, включите «Auto-fit portrait» и «Frame every pawn full body» на вкладке Portrait в настройках. При новой установке все пешки сразу показываются в полный рост.
+[h3]Кадрирование[/h3]
+После обновления кадрирование в полный рост используется по умолчанию у всех, включая тех, кто уже пользовался модом. Чтобы вернуть прежнее, отключите «Frame every pawn full body» на вкладке Portrait в настройках.
 
 [h3]Поддерживаемая версия[/h3]
 [list]
