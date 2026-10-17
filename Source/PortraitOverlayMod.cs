@@ -164,6 +164,13 @@ public sealed class PortraitOverlayMod : Mod
             "PortraitOverlay.Settings.AutoFitPortrait".Translate(),
             ref settings.AutoFitPortrait,
             "PortraitOverlay.Settings.AutoFitPortraitTooltip".Translate());
+        var previousEnabled = GUI.enabled;
+        GUI.enabled = previousEnabled && settings.AutoFitPortrait;
+        listing.CheckboxLabeled(
+            "PortraitOverlay.Settings.FullBodyFraming".Translate(),
+            ref settings.FullBodyFraming,
+            "PortraitOverlay.Settings.FullBodyFramingTooltip".Translate());
+        GUI.enabled = previousEnabled;
 
         listing.GapLine();
         DrawSliderWithNumericField(
@@ -197,6 +204,8 @@ public sealed class PortraitOverlayMod : Mod
                 "F2",
                 numericMin: PortraitOverlaySettings.MinCameraZoom,
                 numericMax: PortraitOverlaySettings.MaxCameraZoom);
+            // Full-body framing places the pawn by its drawn area, so face emphasis has nothing to do there.
+            GUI.enabled = previousEnabled && !(settings.AutoFitPortrait && settings.FullBodyFraming);
             DrawSliderWithNumericField(
                 listing,
                 "PortraitOverlay.Settings.FaceEmphasis".Translate(FormatPercent(settings.FaceEmphasis)),
@@ -206,6 +215,7 @@ public sealed class PortraitOverlayMod : Mod
                 1f,
                 "F2",
                 numericMax: PortraitOverlaySettings.MaxFaceEmphasis);
+            GUI.enabled = previousEnabled;
             DrawSliderWithNumericField(
                 listing,
                 "PortraitOverlay.Settings.TopCutoff".Translate(FormatPercent(settings.TopCutoff)),
@@ -588,7 +598,7 @@ public sealed class PortraitOverlayMod : Mod
         const float buttonHeight = 36f;
         const float spacing = 128f;
         const float infoLabelBlockHeight = InfoLabelHeight + 4f;
-        const int checkboxCount = 6;
+        const int checkboxCount = 7;
         const int advancedSliderCount = 8;
         const int buttonCount = 3;
 
@@ -609,7 +619,7 @@ public sealed class PortraitOverlayMod : Mod
             + Block(settings.CategoryAdjustments.Count)
             + Block(settings.RaceAdjustments.Count)
             + Block(settings.VariantAdjustments.Count);
-        return InfoLabelHeight + 8f + (5f * headerHeight) + blocks + SavedRowHeight + 112f;
+        return InfoLabelHeight + 8f + (4f * headerHeight) + blocks + SavedRowHeight + 112f;
     }
 
     public override void WriteSettings()

@@ -15,7 +15,7 @@ public sealed class PortraitOverlaySettings : ModSettings
     public const float MaxCombinedVerticalCutoff = 0.9f;
 
     // Bump when a setting needs migrating. Files written before versioning load as version 0.
-    private const int CurrentSettingsVersion = 2;
+    private const int CurrentSettingsVersion = 3;
 
     private const bool DefaultEnabled = true;
     private const bool DefaultShowBackground = true;
@@ -36,11 +36,12 @@ public sealed class PortraitOverlaySettings : ModSettings
     private const float DefaultPanelWidth = 240f;
     private const float DefaultPanelHeight = 360f;
     private const float DefaultBackgroundAlpha = 0.45f;
-    private const float DefaultCameraZoom = 1.02f;
+    public const float DefaultCameraZoom = 1.02f;
     private const float DefaultFaceEmphasis = 0.2f;
     private const float DefaultTopCutoff = 0f;
     private const float DefaultBottomCutoff = 0f;
     private const bool DefaultAutoFitPortrait = true;
+    private const bool DefaultFullBodyFraming = true;
     private const bool DefaultShowHoverToolbar = true;
     private const bool DefaultShowPinButton = true;
 
@@ -69,6 +70,10 @@ public sealed class PortraitOverlaySettings : ModSettings
     public float TopCutoff = DefaultTopCutoff;
     public float BottomCutoff = DefaultBottomCutoff;
     public bool AutoFitPortrait = DefaultAutoFitPortrait;
+
+    // With auto-fit on, frame every pawn whole by its measured size instead of the human-based framing below
+    // (zoom still applies; face emphasis does not).
+    public bool FullBodyFraming = DefaultFullBodyFraming;
     public bool ShowHoverToolbar = DefaultShowHoverToolbar;
     public bool ShowPinButton = DefaultShowPinButton;
 
@@ -112,6 +117,7 @@ public sealed class PortraitOverlaySettings : ModSettings
         Scribe_Values.Look(ref TopCutoff, nameof(TopCutoff), DefaultTopCutoff);
         Scribe_Values.Look(ref BottomCutoff, nameof(BottomCutoff), DefaultBottomCutoff);
         Scribe_Values.Look(ref AutoFitPortrait, nameof(AutoFitPortrait), DefaultAutoFitPortrait);
+        Scribe_Values.Look(ref FullBodyFraming, nameof(FullBodyFraming), DefaultFullBodyFraming);
         Scribe_Values.Look(ref ShowHoverToolbar, nameof(ShowHoverToolbar), DefaultShowHoverToolbar);
         Scribe_Values.Look(ref ShowPinButton, nameof(ShowPinButton), DefaultShowPinButton);
         Scribe_Values.Look(ref HoverToolbarHintShown, nameof(HoverToolbarHintShown), false);
@@ -144,6 +150,12 @@ public sealed class PortraitOverlaySettings : ModSettings
         if (settingsVersion < 1)
         {
             AutoFitPortrait = false;
+        }
+
+        // Full-body framing is the default for new installs only; existing users keep the framing they know.
+        if (settingsVersion < 3)
+        {
+            FullBodyFraming = false;
         }
 
         if (legacyRaceZoom != null)
@@ -219,6 +231,7 @@ public sealed class PortraitOverlaySettings : ModSettings
         TopCutoff = DefaultTopCutoff;
         BottomCutoff = DefaultBottomCutoff;
         AutoFitPortrait = DefaultAutoFitPortrait;
+        FullBodyFraming = DefaultFullBodyFraming;
         ShowHoverToolbar = DefaultShowHoverToolbar;
         ShowPinButton = DefaultShowPinButton;
         RaceAdjustments.Clear();

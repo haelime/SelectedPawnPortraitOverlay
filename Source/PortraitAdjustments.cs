@@ -464,7 +464,10 @@ public static class PortraitAdjustments
         var bounds = PortraitFitCache.GetBounds(pawn, settings) ?? FallbackBounds(pawn, humanlike);
         var headZ = PawnFullBodyPortraitRenderer.GetHumanlikeHeadZ(pawn, PawnFullBodyPortraitRenderer.GetRotation(pawn, settings));
         var aspect = portraitSize.y > 0f ? portraitSize.x / portraitSize.y : 1f;
-        var target = PortraitFraming.PresetFrame(preset, bounds, headZ, aspect);
+        // Full body keeps auto-fit's magnification limits so small, low-resolution pawns are not blown up.
+        var target = preset == PortraitPreset.FullBody
+            ? PortraitFraming.FullBodyFrame(bounds, aspect, humanlike, humanlike ? null : PortraitRaceScale.TexelDensity(pawn))
+            : PortraitFraming.PresetFrame(preset, bounds, headZ, aspect);
         var withoutScope = PawnFullBodyPortraitRenderer.ComputeFrame(
             pawn,
             portraitSize,

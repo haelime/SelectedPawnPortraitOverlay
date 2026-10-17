@@ -30,6 +30,12 @@ public static class PortraitRaceScale
             : 1f);
     }
 
+    // Body texture pixels per world unit for a non-humanlike pawn, or null when unknown.
+    public static float? TexelDensity(Pawn pawn)
+    {
+        return GetTexelDensity(GetBodyGraphicData(pawn));
+    }
+
     private static GraphicData GetBodyGraphicData(Pawn pawn)
     {
         var lifeStage = pawn.ageTracker?.CurKindLifeStage;

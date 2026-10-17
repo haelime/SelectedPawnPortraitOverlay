@@ -112,4 +112,6 @@
   <PortraitOverlay.Toolbar.UnpinTooltip>Unpin: follow the selected pawn again.</PortraitOverlay.Toolbar.UnpinTooltip>
   <PortraitOverlay.Settings.ShowPinButton>Show the pin button</PortraitOverlay.Settings.ShowPinButton>
   <PortraitOverlay.Settings.ShowPinButtonTooltip>Hovering the panel shows a pin button in its top-right corner. Pinning keeps this pawn on screen when another is selected; the pin stays visible while pinned. Turning this off also unpins.</PortraitOverlay.Settings.ShowPinButtonTooltip>
+  <PortraitOverlay.Settings.FullBodyFraming>Frame every pawn full body</PortraitOverlay.Settings.FullBodyFraming>
+  <PortraitOverlay.Settings.FullBodyFramingTooltip>With auto-fit on, every pawn is framed whole by its measured size. Small pawns with low-resolution art are not magnified past the point where they blur, so they sit a little smaller. Zoom still applies; face emphasis does not. Off: the earlier framing, close to full body with a slight lean toward the face. On by default for new installs; adjustments saved under the earlier framing may need redoing.</PortraitOverlay.Settings.FullBodyFramingTooltip>
 </LanguageData>

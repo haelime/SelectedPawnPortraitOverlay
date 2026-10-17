@@ -370,6 +370,23 @@ public static class PortraitFraming
         };
     }
 
+    // Full-body framing with the same magnification limits as auto-fit: a non-humanlike pawn is never magnified
+    // past its texel cap relative to the reference human, and humanlike pawns (children, say) never past the
+    // reference human, so small, low-resolution pawns stay sharp and simply sit smaller in the frame.
+    public static PortraitFrame FullBodyFrame(PortraitBounds bounds, float aspect, bool humanlike, float? texelDensity)
+    {
+        var frame = PresetFrame(PortraitPreset.FullBody, bounds, null, aspect);
+        var reference = PresetFrame(PortraitPreset.FullBody, FallbackBounds(true, 0f, 0f), null, aspect);
+        var maxZoom = reference.Zoom * (humanlike ? 1f : MaxScaleForTexelDensity(texelDensity));
+        if (!(frame.Zoom > maxZoom))
+        {
+            return frame;
+        }
+
+        // Keep the same lift, measured against the larger view the capped zoom shows.
+        return new PortraitFrame(maxZoom, bounds.CenterX, 0f, bounds.CenterZ - (FullBodyLift * 2f / maxZoom));
+    }
+
     // A frame with a manual correction applied on top: zoom multiplies, offsets add.
     public static PortraitFrame WithAdjustment(PortraitFrame frame, PortraitAdjustment adjustment)
     {

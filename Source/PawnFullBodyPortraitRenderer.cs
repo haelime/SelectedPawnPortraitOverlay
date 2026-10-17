@@ -35,12 +35,29 @@ public static class PawnFullBodyPortraitRenderer
     public static PortraitFrame ComputeFrame(Pawn pawn, Vector2 size, PortraitOverlaySettings settings, PortraitAdjustment adjustment)
     {
         var aspect = size.y > 0f ? size.x / size.y : 1f;
+        if (settings.AutoFitPortrait && settings.FullBodyFraming)
+        {
+            // The zoom setting still scales the whole frame, relative to its default.
+            var frame = FullBodyFrame(pawn, aspect, settings);
+            var zoomFactor = settings.CameraZoom / PortraitOverlaySettings.DefaultCameraZoom;
+            frame = new PortraitFrame(Math.Max(frame.Zoom * zoomFactor, PortraitFraming.MinZoom), frame.OffsetX, frame.OffsetY, frame.OffsetZ);
+            return PortraitFraming.WithAdjustment(frame, adjustment);
+        }
+
         return PortraitFraming.Compute(
             settings.CameraZoom,
             settings.FaceEmphasis,
             PortraitRaceScale.For(pawn, aspect, settings),
             GetHumanlikeHeadZ(pawn, GetRotation(pawn, settings)),
             adjustment);
+    }
+
+    // The pawn framed whole, by its measured drawn area when available.
+    public static PortraitFrame FullBodyFrame(Pawn pawn, float aspect, PortraitOverlaySettings settings)
+    {
+        var humanlike = pawn.RaceProps?.Humanlike == true;
+        var bounds = PortraitFitCache.GetBounds(pawn, settings) ?? PortraitAdjustments.FallbackBounds(pawn, humanlike);
+        return PortraitFraming.FullBodyFrame(bounds, aspect, humanlike, humanlike ? null : PortraitRaceScale.TexelDensity(pawn));
     }
 
     public static Rot4 GetRotation(Pawn pawn, PortraitOverlaySettings settings)
