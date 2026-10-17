@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Verse;
 
@@ -6,6 +8,17 @@ namespace SelectedPawnPortraitOverlay;
 public sealed class PortraitOverlaySettings : ModSettings
 {
     public const float MinPanelX = -64f;
+    // Numeric input limits; the settings sliders only cover the recommended range.
+    public const float MinCameraZoom = PortraitFraming.MinZoom;
+    public const float MaxCameraZoom = 5f;
+    public const float MaxFaceEmphasis = 3f;
+    public const float MaxCutoff = 0.9f;
+    public const float MaxCombinedVerticalCutoff = 0.9f;
+    public const float MinRaceZoom = 0.1f;
+    public const float MaxRaceZoom = 5f;
+
+    // Bump when a setting needs migrating. Files written before versioning load as version 0.
+    private const int CurrentSettingsVersion = 1;
 
     private const bool DefaultEnabled = true;
     private const bool DefaultShowBackground = true;
@@ -30,8 +43,7 @@ public sealed class PortraitOverlaySettings : ModSettings
     private const float DefaultFaceEmphasis = 0.2f;
     private const float DefaultTopCutoff = 0f;
     private const float DefaultBottomCutoff = 0f;
-    private const float MaximumCutoff = 0.35f;
-    private const float MaximumCombinedVerticalCutoff = 0.8f;
+    private const bool DefaultAutoFitPortrait = true;
 
     public bool Enabled = DefaultEnabled;
     public bool ShowBackground = DefaultShowBackground;
@@ -57,6 +69,12 @@ public sealed class PortraitOverlaySettings : ModSettings
     public float FaceEmphasis = DefaultFaceEmphasis;
     public float TopCutoff = DefaultTopCutoff;
     public float BottomCutoff = DefaultBottomCutoff;
+    public bool AutoFitPortrait = DefaultAutoFitPortrait;
+
+    // Race defName -> zoom scale relative to human framing. Keyed by name so races from removed mods are kept harmlessly.
+    public Dictionary<string, float> RaceZoomOverrides = new();
+
+    private int settingsVersion = CurrentSettingsVersion;
 
     public Vector2 PanelSize => new(PanelWidth, PanelHeight);
 
@@ -85,7 +103,37 @@ public sealed class PortraitOverlaySettings : ModSettings
         Scribe_Values.Look(ref FaceEmphasis, nameof(FaceEmphasis), DefaultFaceEmphasis);
         Scribe_Values.Look(ref TopCutoff, nameof(TopCutoff), DefaultTopCutoff);
         Scribe_Values.Look(ref BottomCutoff, nameof(BottomCutoff), DefaultBottomCutoff);
+        Scribe_Values.Look(ref AutoFitPortrait, nameof(AutoFitPortrait), DefaultAutoFitPortrait);
+        Scribe_Collections.Look(ref RaceZoomOverrides, nameof(RaceZoomOverrides), LookMode.Value, LookMode.Value);
+        Scribe_Values.Look(ref settingsVersion, "SettingsVersion", 0);
+
+        if (Scribe.mode == LoadSaveMode.LoadingVars)
+        {
+            MigrateLoadedSettings();
+        }
+
+        RaceZoomOverrides ??= new Dictionary<string, float>();
+        ClampRaceZoomOverrides();
         ClampValues();
+    }
+
+    // Users who configured the mod before auto-fit existed keep the framing they tuned; new installs get it on.
+    private void MigrateLoadedSettings()
+    {
+        if (settingsVersion < 1)
+        {
+            AutoFitPortrait = false;
+        }
+
+        settingsVersion = CurrentSettingsVersion;
+    }
+
+    private void ClampRaceZoomOverrides()
+    {
+        foreach (var defName in RaceZoomOverrides.Keys.ToList())
+        {
+            RaceZoomOverrides[defName] = Mathf.Clamp(EnsureFinite(RaceZoomOverrides[defName], 1f), MinRaceZoom, MaxRaceZoom);
+        }
     }
 
     public void ClampValues()
@@ -96,15 +144,15 @@ public sealed class PortraitOverlaySettings : ModSettings
         PanelWidth = Mathf.Max(1f, EnsureFinite(PanelWidth, DefaultPanelWidth));
         PanelHeight = Mathf.Max(1f, EnsureFinite(PanelHeight, DefaultPanelHeight));
         BackgroundAlpha = Mathf.Clamp01(BackgroundAlpha);
-        CameraZoom = Mathf.Clamp(CameraZoom, 0.75f, 1.45f);
-        FaceEmphasis = Mathf.Clamp01(FaceEmphasis);
-        TopCutoff = Mathf.Clamp(TopCutoff, 0f, MaximumCutoff);
-        BottomCutoff = Mathf.Clamp(BottomCutoff, 0f, MaximumCutoff);
+        CameraZoom = Mathf.Clamp(EnsureFinite(CameraZoom, DefaultCameraZoom), MinCameraZoom, MaxCameraZoom);
+        FaceEmphasis = Mathf.Clamp(EnsureFinite(FaceEmphasis, DefaultFaceEmphasis), 0f, MaxFaceEmphasis);
+        TopCutoff = Mathf.Clamp(EnsureFinite(TopCutoff, DefaultTopCutoff), 0f, MaxCutoff);
+        BottomCutoff = Mathf.Clamp(EnsureFinite(BottomCutoff, DefaultBottomCutoff), 0f, MaxCutoff);
 
         var totalVerticalCutoff = TopCutoff + BottomCutoff;
-        if (totalVerticalCutoff > MaximumCombinedVerticalCutoff)
+        if (totalVerticalCutoff > MaxCombinedVerticalCutoff)
         {
-            var scale = MaximumCombinedVerticalCutoff / totalVerticalCutoff;
+            var scale = MaxCombinedVerticalCutoff / totalVerticalCutoff;
             TopCutoff *= scale;
             BottomCutoff *= scale;
         }
@@ -144,6 +192,8 @@ public sealed class PortraitOverlaySettings : ModSettings
         FaceEmphasis = DefaultFaceEmphasis;
         TopCutoff = DefaultTopCutoff;
         BottomCutoff = DefaultBottomCutoff;
+        AutoFitPortrait = DefaultAutoFitPortrait;
+        RaceZoomOverrides.Clear();
         ClampValues();
     }
 

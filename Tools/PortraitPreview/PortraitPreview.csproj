@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- The mod's framing math, compiled here unchanged so previews match what the mod renders. -->
+    <Compile Include="..\..\Source\PortraitFraming.cs" Link="PortraitFraming.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AssetRipper.TextureDecoder" Version="2.6.3" />
+    <PackageReference Include="ZstdSharp.Port" Version="0.8.*" />
+  </ItemGroup>
+</Project>

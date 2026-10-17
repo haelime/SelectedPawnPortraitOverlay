@@ -11,11 +11,6 @@ namespace SelectedPawnPortraitOverlay;
 public static class PawnFullBodyPortraitRenderer
 {
     private static readonly MethodInfo PortraitGetMethod = ResolvePortraitGetMethod();
-    private const float FaceEmphasisVerticalOffset = 0.3f;
-    private const float FaceEmphasisDepthOffset = 0.7f;
-    private const float FaceEmphasisZoomFactor = 0.25f;
-    private const float MinimumEffectiveZoom = 0.65f;
-    private const float MaximumEffectiveZoom = 2.2f;
 
     public static Texture Render(Pawn pawn, Vector2 size, PortraitOverlaySettings settings)
     {
@@ -25,17 +20,27 @@ public static class PawnFullBodyPortraitRenderer
         }
 
         var rotation = settings.LivePortrait ? pawn.Rotation : Rot4.South;
-        var effectiveFaceEmphasis = Mathf.Pow(settings.FaceEmphasis, 0.5f);
-        var cameraOffset = new Vector3(
-            0f,
-            effectiveFaceEmphasis * FaceEmphasisVerticalOffset,
-            effectiveFaceEmphasis * FaceEmphasisDepthOffset);
-        var zoom = settings.CameraZoom + (effectiveFaceEmphasis * FaceEmphasisZoomFactor);
-
-        zoom = Mathf.Clamp(zoom, MinimumEffectiveZoom, MaximumEffectiveZoom);
-        var args = BuildArguments(PortraitGetMethod.GetParameters(), pawn, size, rotation, cameraOffset, zoom, settings);
+        var aspect = size.y > 0f ? size.x / size.y : 1f;
+        var frame = PortraitFraming.Compute(
+            settings.CameraZoom,
+            settings.FaceEmphasis,
+            PortraitRaceScale.For(pawn, aspect, settings),
+            GetHumanlikeHeadZ(pawn, rotation),
+            PortraitAdjustment.Identity);
+        var cameraOffset = new Vector3(frame.OffsetX, frame.OffsetY, frame.OffsetZ);
+        var args = BuildArguments(PortraitGetMethod.GetParameters(), pawn, size, rotation, cameraOffset, frame.Zoom, settings);
         var texture = PortraitGetMethod.Invoke(null, args) as Texture;
         return texture ?? BaseContent.BadTex;
+    }
+
+    private static float? GetHumanlikeHeadZ(Pawn pawn, Rot4 rotation)
+    {
+        if (pawn.story?.bodyType == null || pawn.Drawer?.renderer == null)
+        {
+            return null;
+        }
+
+        return pawn.Drawer.renderer.BaseHeadOffsetAt(rotation).z;
     }
 
     private static MethodInfo ResolvePortraitGetMethod()

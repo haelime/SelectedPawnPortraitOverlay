@@ -11,6 +11,9 @@ public sealed class SelectedPawnPortraitOverlayComponent : GameComponent
     private const int UnsupportedVehiclePawnWarningId = 18467232;
     private const float DragStartThreshold = 5f;
     private const int OverlayGuiDepth = 100;
+    private const float ContentPadding = 8f;
+    private const float NameRowHeight = 24f;
+    private const float NameRowGap = 6f;
 
     private bool isDragging;
     private bool dragArmed;
@@ -19,6 +22,17 @@ public sealed class SelectedPawnPortraitOverlayComponent : GameComponent
 
     public SelectedPawnPortraitOverlayComponent(Game game)
     {
+        // Pawns from a previous game are gone; their measurements would only take cache slots.
+        PortraitFitCache.Clear();
+    }
+
+    // Width / height of the portrait area in the current panel, which framing fits pawns to.
+    public static float GetPortraitAspect(PortraitOverlaySettings settings)
+    {
+        var rect = BuildPanelRect(settings);
+        var width = rect.width - (2f * ContentPadding);
+        var height = rect.height - (2f * ContentPadding) - (settings.ShowName ? NameRowHeight + NameRowGap : 0f);
+        return width > 0f && height > 0f ? width / height : 1f;
     }
 
     public override void GameComponentOnGUI()
@@ -240,14 +254,18 @@ public sealed class SelectedPawnPortraitOverlayComponent : GameComponent
             rect.y + topCutPixels,
             rect.width,
             Mathf.Max(0f, rect.height - topCutPixels - bottomCutPixels));
-        var contentRect = rect.ContractedBy(8f);
+        var contentRect = rect.ContractedBy(ContentPadding);
         var titleRect = Rect.zero;
         var portraitRect = contentRect;
 
         if (settings.ShowName)
         {
-            titleRect = new Rect(contentRect.x, contentRect.y, contentRect.width, 24f);
-            portraitRect = new Rect(contentRect.x, titleRect.yMax + 6f, contentRect.width, contentRect.height - 30f);
+            titleRect = new Rect(contentRect.x, contentRect.y, contentRect.width, NameRowHeight);
+            portraitRect = new Rect(
+                contentRect.x,
+                titleRect.yMax + NameRowGap,
+                contentRect.width,
+                contentRect.height - NameRowHeight - NameRowGap);
         }
 
         if (settings.ShowName)
@@ -288,6 +306,14 @@ public sealed class SelectedPawnPortraitOverlayComponent : GameComponent
             Widgets.Label(localTitleRect, "PortraitOverlay.Overlay.Title".Translate(pawn.Name?.ToStringShort ?? pawn.LabelShortCap));
             Text.Anchor = previousAnchor;
             Text.Font = previousFont;
+        }
+
+        // Textures are only drawn on repaint; rendering on layout and input events too would repeat the
+        // portrait render (and any measurement) several times a frame for nothing.
+        if (Event.current.type != EventType.Repaint)
+        {
+            GUI.EndGroup();
+            return;
         }
 
         var portrait = PortraitRenderCache.GetPortrait(pawn, portraitRect.size, settings);

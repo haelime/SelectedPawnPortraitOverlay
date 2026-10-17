@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using UnityEngine;
 using Verse;
 
@@ -19,6 +20,7 @@ public sealed class PortraitOverlayMod : Mod
     private const float SettingLabelHeight = 24f;
     private const float SettingControlHeight = 28f;
     private const float InfoLabelHeight = 34f;
+    private const float RemoveButtonWidth = 90f;
 
     private enum SettingsTab
     {
@@ -39,6 +41,7 @@ public sealed class PortraitOverlayMod : Mod
     private string panelHeightBuffer;
     private string panelXBuffer;
     private string panelYBuffer;
+    private readonly Dictionary<string, string> raceZoomBuffers = new();
 
     public static PortraitOverlaySettings Settings { get; private set; }
 
@@ -74,7 +77,7 @@ public sealed class PortraitOverlayMod : Mod
                 DrawScrollableListing(contentRect, ref generalScrollPosition, GetGeneralTabHeight(), DrawGeneralTab);
                 break;
             case SettingsTab.Portrait:
-                DrawScrollableListing(contentRect, ref portraitScrollPosition, GetPortraitTabHeight(), DrawPortraitTab);
+                DrawScrollableListing(contentRect, ref portraitScrollPosition, GetPortraitTabHeight(settings), DrawPortraitTab);
                 break;
         }
 
@@ -140,6 +143,7 @@ public sealed class PortraitOverlayMod : Mod
         listing.CheckboxLabeled("PortraitOverlay.Settings.LivePortrait".Translate(), ref settings.LivePortrait);
 
         listing.GapLine();
+        DrawInfoLabel(listing, "PortraitOverlay.Settings.PanelNumericInputHint".Translate());
         DrawSliderWithNumericField(
             listing,
             "PortraitOverlay.Settings.BackgroundAlpha".Translate(FormatPercent(settings.BackgroundAlpha)),
@@ -155,7 +159,9 @@ public sealed class PortraitOverlayMod : Mod
             ref cameraZoomBuffer,
             0.75f,
             1.45f,
-            "F2");
+            "F2",
+            numericMin: PortraitOverlaySettings.MinCameraZoom,
+            numericMax: PortraitOverlaySettings.MaxCameraZoom);
         DrawSliderWithNumericField(
             listing,
             "PortraitOverlay.Settings.FaceEmphasis".Translate(FormatPercent(settings.FaceEmphasis)),
@@ -163,7 +169,8 @@ public sealed class PortraitOverlayMod : Mod
             ref faceEmphasisBuffer,
             0f,
             1f,
-            "F2");
+            "F2",
+            numericMax: PortraitOverlaySettings.MaxFaceEmphasis);
         DrawSliderWithNumericField(
             listing,
             "PortraitOverlay.Settings.TopCutoff".Translate(FormatPercent(settings.TopCutoff)),
@@ -171,7 +178,8 @@ public sealed class PortraitOverlayMod : Mod
             ref topCutoffBuffer,
             0f,
             0.35f,
-            "F2");
+            "F2",
+            numericMax: GetCutoffNumericMax(settings.BottomCutoff));
         DrawSliderWithNumericField(
             listing,
             "PortraitOverlay.Settings.BottomCutoff".Translate(FormatPercent(settings.BottomCutoff)),
@@ -179,10 +187,13 @@ public sealed class PortraitOverlayMod : Mod
             ref bottomCutoffBuffer,
             0f,
             0.35f,
-            "F2");
+            "F2",
+            numericMax: GetCutoffNumericMax(settings.TopCutoff));
 
         listing.GapLine();
-        DrawInfoLabel(listing, "PortraitOverlay.Settings.PanelNumericInputHint".Translate());
+        DrawRaceZoomSection(listing, settings);
+
+        listing.GapLine();
         DrawSliderWithNumericField(
             listing,
             "PortraitOverlay.Settings.PanelWidth".Translate(settings.PanelWidth.ToString("F0")),
@@ -240,6 +251,104 @@ public sealed class PortraitOverlayMod : Mod
         }
     }
 
+    private void DrawRaceZoomSection(Listing_Standard listing, PortraitOverlaySettings settings)
+    {
+        listing.CheckboxLabeled(
+            "PortraitOverlay.Settings.AutoFitPortrait".Translate(),
+            ref settings.AutoFitPortrait,
+            "PortraitOverlay.Settings.AutoFitPortraitTooltip".Translate());
+        DrawInfoLabel(listing, "PortraitOverlay.Settings.RaceZoomHint".Translate());
+
+        string removedDefName = null;
+        foreach (var defName in settings.RaceZoomOverrides.Keys.OrderBy(GetRaceLabel).ToList())
+        {
+            var value = settings.RaceZoomOverrides[defName];
+            raceZoomBuffers.TryGetValue(defName, out var buffer);
+
+            var labelRect = listing.GetRect(SettingLabelHeight);
+            Widgets.Label(
+                labelRect.LeftPartPixels(labelRect.width - RemoveButtonWidth - SliderFieldGap),
+                "PortraitOverlay.Settings.RaceZoom".Translate(GetRaceLabel(defName), value.ToString("F2")));
+            if (Widgets.ButtonText(labelRect.RightPartPixels(RemoveButtonWidth), "PortraitOverlay.Settings.RemoveRace".Translate()))
+            {
+                removedDefName = defName;
+            }
+
+            DrawSliderRow(
+                listing,
+                ref value,
+                ref buffer,
+                0.25f,
+                3f,
+                "F2",
+                PortraitOverlaySettings.MinRaceZoom,
+                PortraitOverlaySettings.MaxRaceZoom);
+            settings.RaceZoomOverrides[defName] = value;
+            raceZoomBuffers[defName] = buffer;
+        }
+
+        if (removedDefName != null)
+        {
+            settings.RaceZoomOverrides.Remove(removedDefName);
+            raceZoomBuffers.Remove(removedDefName);
+        }
+
+        var selectedPawn = Current.ProgramState == ProgramState.Playing
+            ? Find.Selector?.SingleSelectedThing as Pawn
+            : null;
+        var canAddSelected = selectedPawn?.def != null && !settings.RaceZoomOverrides.ContainsKey(selectedPawn.def.defName);
+        var previousColor = GUI.color;
+        if (!canAddSelected)
+        {
+            GUI.color = Color.gray;
+        }
+
+        if (listing.ButtonText("PortraitOverlay.Settings.AddSelectedRace".Translate()) && canAddSelected)
+        {
+            // Start from the scale the pawn renders with now, so adding an entry does not change the portrait.
+            settings.RaceZoomOverrides[selectedPawn.def.defName] = PortraitRaceScale
+                .For(selectedPawn, SelectedPawnPortraitOverlayComponent.GetPortraitAspect(settings), settings)
+                .Scale;
+        }
+
+        GUI.color = previousColor;
+        if (listing.ButtonText("PortraitOverlay.Settings.AddRace".Translate()))
+        {
+            Find.WindowStack.Add(new FloatMenu(BuildAddRaceOptions(settings)));
+        }
+    }
+
+    private static List<FloatMenuOption> BuildAddRaceOptions(PortraitOverlaySettings settings)
+    {
+        return DefDatabase<ThingDef>.AllDefsListForReading
+            .Where(def => def.race != null && !settings.RaceZoomOverrides.ContainsKey(def.defName))
+            .OrderBy(def => def.label)
+            .Select(def => new FloatMenuOption(
+                $"{def.LabelCap} ({def.defName})",
+                () => settings.RaceZoomOverrides[def.defName] = PortraitRaceScale.DefaultFor(
+                    def,
+                    SelectedPawnPortraitOverlayComponent.GetPortraitAspect(settings),
+                    settings)))
+            .ToList();
+    }
+
+    private static string GetRaceLabel(string defName)
+    {
+        var def = DefDatabase<ThingDef>.GetNamedSilentFail(defName);
+        return def != null
+            ? def.LabelCap.ToString()
+            : "PortraitOverlay.Settings.RaceNotLoaded".Translate(defName).ToString();
+    }
+
+    // Cap each cutoff by what the other leaves, so a typed value is never rescaled out from under its field.
+    private static float GetCutoffNumericMax(float otherCutoff)
+    {
+        return Mathf.Clamp(
+            PortraitOverlaySettings.MaxCombinedVerticalCutoff - otherCutoff,
+            0f,
+            PortraitOverlaySettings.MaxCutoff);
+    }
+
     private static string FormatPercent(float value)
     {
         return Mathf.RoundToInt(value * 100f) + "%";
@@ -270,7 +379,19 @@ public sealed class PortraitOverlayMod : Mod
         float? numericMax = null)
     {
         listing.Label(label);
+        DrawSliderRow(listing, ref value, ref buffer, sliderMin, sliderMax, format, numericMin, numericMax);
+    }
 
+    private static void DrawSliderRow(
+        Listing_Standard listing,
+        ref float value,
+        ref string buffer,
+        float sliderMin,
+        float sliderMax,
+        string format,
+        float? numericMin = null,
+        float? numericMax = null)
+    {
         var rowRect = listing.GetRect(SettingControlHeight);
         var sliderRect = new Rect(
             rowRect.x,
@@ -318,6 +439,7 @@ public sealed class PortraitOverlayMod : Mod
         panelHeightBuffer = FormatFloat(settings.PanelHeight, "F0");
         panelXBuffer = FormatFloat(settings.PanelX, "F0");
         panelYBuffer = FormatFloat(settings.PanelY, "F0");
+        raceZoomBuffers.Clear();
     }
 
     private static string FormatFloat(float value, string format)
@@ -341,22 +463,33 @@ public sealed class PortraitOverlayMod : Mod
         return (checkboxCount * checkboxHeight) + spacing;
     }
 
-    private static float GetPortraitTabHeight()
+    private static float GetPortraitTabHeight(PortraitOverlaySettings settings)
     {
         const float checkboxHeight = 32f;
         const float sliderBlockHeight = SettingLabelHeight + SettingControlHeight + 4f;
         const float buttonHeight = 36f;
         const float spacing = 128f;
         const float infoLabelBlockHeight = InfoLabelHeight + 4f;
-        const int checkboxCount = 5;
+        const int checkboxCount = 6;
         const int sliderCount = 9;
-        const int buttonCount = 2;
+        const int buttonCount = 4;
+        const int infoLabelCount = 2;
+        const float raceZoomSpacing = 16f;
 
         return (checkboxCount * checkboxHeight)
-            + (sliderCount * sliderBlockHeight)
-            + infoLabelBlockHeight
+            + ((sliderCount + settings.RaceZoomOverrides.Count) * sliderBlockHeight)
+            + (infoLabelCount * infoLabelBlockHeight)
             + (buttonCount * buttonHeight)
-            + spacing;
+            + spacing
+            + raceZoomSpacing;
+    }
+
+    public override void WriteSettings()
+    {
+        base.WriteSettings();
+
+        // Measurements depend on the portrait settings; start fresh after they change.
+        PortraitFitCache.Clear();
     }
 
     public static void SaveSettings()

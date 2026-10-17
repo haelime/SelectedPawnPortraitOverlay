@@ -5,3 +5,4 @@ Assemblies/
 *.user
 *.suo
 *.cache
+Tools/PortraitPreview/out/

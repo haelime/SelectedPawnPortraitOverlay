@@ -17,7 +17,7 @@
   <PortraitOverlay.Settings.PanelHeight>패널 높이: {0}px</PortraitOverlay.Settings.PanelHeight>
   <PortraitOverlay.Settings.PositionX>패널 X 위치: {0}</PortraitOverlay.Settings.PositionX>
   <PortraitOverlay.Settings.PositionY>패널 Y 위치: {0}</PortraitOverlay.Settings.PositionY>
-  <PortraitOverlay.Settings.PanelNumericInputHint>슬라이더는 권장 범위를 표시하고, 숫자 입력은 더 넓은 패널 크기와 위치 값을 직접 설정할 수 있습니다.</PortraitOverlay.Settings.PanelNumericInputHint>
+  <PortraitOverlay.Settings.PanelNumericInputHint>슬라이더는 권장 범위를 표시하고, 숫자 입력으로는 줌, 얼굴 강조, cutoff, 패널 크기와 위치를 더 넓은 범위로 설정할 수 있습니다.</PortraitOverlay.Settings.PanelNumericInputHint>
   <PortraitOverlay.Settings.BackgroundAlpha>배경 투명도: {0}</PortraitOverlay.Settings.BackgroundAlpha>
   <PortraitOverlay.Settings.Zoom>초상화 줌: {0}</PortraitOverlay.Settings.Zoom>
   <PortraitOverlay.Settings.FaceEmphasis>얼굴 강조: {0}</PortraitOverlay.Settings.FaceEmphasis>
@@ -39,4 +39,12 @@
   <PortraitOverlay.Settings.SectionRendering>렌더링</PortraitOverlay.Settings.SectionRendering>
   <PortraitOverlay.Settings.SectionFilters>필터</PortraitOverlay.Settings.SectionFilters>
   <PortraitOverlay.Settings.SectionLayout>배치</PortraitOverlay.Settings.SectionLayout>
+  <PortraitOverlay.Settings.AutoFitPortrait>초상화 자동 맞춤</PortraitOverlay.Settings.AutoFitPortrait>
+  <PortraitOverlay.Settings.AutoFitPortraitTooltip>폰을 한 번 렌더링해서 실제로 그려진 영역을 재고, 그 크기에 맞춰 초상화를 맞춥니다. 동물, 메카노이드, 곤충, 개체는 사람과 비슷한 크기로 보이고 그려진 부분의 가운데에 맞춰집니다. 인간형 폰(모드 종족 포함)은 확대하지 않고, 큰 모자나 날개처럼 평소보다 훨씬 커질 때만 축소하므로 보통 정착민의 구도는 그대로입니다.</PortraitOverlay.Settings.AutoFitPortraitTooltip>
+  <PortraitOverlay.Settings.RaceZoomHint>종족별 줌은 자동 맞춤보다 우선합니다. 1.00은 사람과 같은 기준이고, 값이 클수록 확대됩니다.</PortraitOverlay.Settings.RaceZoomHint>
+  <PortraitOverlay.Settings.RaceZoom>{0}: {1}배</PortraitOverlay.Settings.RaceZoom>
+  <PortraitOverlay.Settings.RaceNotLoaded>{0} (불러오지 않음)</PortraitOverlay.Settings.RaceNotLoaded>
+  <PortraitOverlay.Settings.AddSelectedRace>선택한 폰의 종족 추가</PortraitOverlay.Settings.AddSelectedRace>
+  <PortraitOverlay.Settings.AddRace>종족 추가...</PortraitOverlay.Settings.AddRace>
+  <PortraitOverlay.Settings.RemoveRace>삭제</PortraitOverlay.Settings.RemoveRace>
 </LanguageData>

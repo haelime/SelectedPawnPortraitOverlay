@@ -17,7 +17,7 @@
   <PortraitOverlay.Settings.PanelHeight>Panel height: {0}px</PortraitOverlay.Settings.PanelHeight>
   <PortraitOverlay.Settings.PositionX>Panel X position: {0}</PortraitOverlay.Settings.PositionX>
   <PortraitOverlay.Settings.PositionY>Panel Y position: {0}</PortraitOverlay.Settings.PositionY>
-  <PortraitOverlay.Settings.PanelNumericInputHint>Sliders show the recommended range. Numeric input can set wider panel size and position values.</PortraitOverlay.Settings.PanelNumericInputHint>
+  <PortraitOverlay.Settings.PanelNumericInputHint>Sliders show the recommended range. Numeric input accepts wider values for zoom, face emphasis, cutoffs, and panel size and position.</PortraitOverlay.Settings.PanelNumericInputHint>
   <PortraitOverlay.Settings.BackgroundAlpha>Background opacity: {0}</PortraitOverlay.Settings.BackgroundAlpha>
   <PortraitOverlay.Settings.Zoom>Portrait zoom: {0}</PortraitOverlay.Settings.Zoom>
   <PortraitOverlay.Settings.FaceEmphasis>Face emphasis: {0}</PortraitOverlay.Settings.FaceEmphasis>
@@ -39,4 +39,12 @@
   <PortraitOverlay.Settings.SectionRendering>Rendering</PortraitOverlay.Settings.SectionRendering>
   <PortraitOverlay.Settings.SectionFilters>Filters</PortraitOverlay.Settings.SectionFilters>
   <PortraitOverlay.Settings.SectionLayout>Layout</PortraitOverlay.Settings.SectionLayout>
+  <PortraitOverlay.Settings.AutoFitPortrait>Auto-fit portrait</PortraitOverlay.Settings.AutoFitPortrait>
+  <PortraitOverlay.Settings.AutoFitPortraitTooltip>Renders each pawn once to measure the area it actually covers, then sizes the portrait to it. Animals, mechanoids, insects, and entities are shown at about a human's size and centered on what is drawn. Humanlike pawns, including modded races, are never zoomed in; they only zoom out when something like a large hat or wings makes them much bigger than usual, so ordinary colonists keep their framing.</PortraitOverlay.Settings.AutoFitPortraitTooltip>
+  <PortraitOverlay.Settings.RaceZoomHint>Per-race zoom overrides auto-fit. 1.00 frames the race like a human; larger values zoom in.</PortraitOverlay.Settings.RaceZoomHint>
+  <PortraitOverlay.Settings.RaceZoom>{0}: {1}x</PortraitOverlay.Settings.RaceZoom>
+  <PortraitOverlay.Settings.RaceNotLoaded>{0} (not loaded)</PortraitOverlay.Settings.RaceNotLoaded>
+  <PortraitOverlay.Settings.AddSelectedRace>Add selected pawn's race</PortraitOverlay.Settings.AddSelectedRace>
+  <PortraitOverlay.Settings.AddRace>Add race...</PortraitOverlay.Settings.AddRace>
+  <PortraitOverlay.Settings.RemoveRace>Remove</PortraitOverlay.Settings.RemoveRace>
 </LanguageData>

@@ -8,6 +8,11 @@ public static class ModCompatibility
 {
     public static T WithPortraitWeaponRenderMode<T>(Func<T> render)
     {
+        return WithPortraitWeaponMode(ShowWeaponsUnderPortraitMode.WhileDrafted, render);
+    }
+
+    public static T WithPortraitWeaponMode<T>(ShowWeaponsUnderPortraitMode mode, Func<T> render)
+    {
         if (render == null)
         {
             return default;
@@ -15,12 +20,12 @@ public static class ModCompatibility
 
         // These are global game preferences; restore them even when portrait rendering throws.
         var originalMode = Prefs.ShowWeaponsUnderPortraitMode;
-        if (originalMode == ShowWeaponsUnderPortraitMode.WhileDrafted)
+        if (originalMode == mode)
         {
             return render();
         }
 
-        Prefs.ShowWeaponsUnderPortraitMode = ShowWeaponsUnderPortraitMode.WhileDrafted;
+        Prefs.ShowWeaponsUnderPortraitMode = mode;
         try
         {
             return render();
