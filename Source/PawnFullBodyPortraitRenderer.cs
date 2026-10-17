@@ -22,14 +22,8 @@ public static class PawnFullBodyPortraitRenderer
             return BaseContent.BadTex;
         }
 
-        var rotation = settings.LivePortrait ? pawn.Rotation : Rot4.South;
-        var aspect = size.y > 0f ? size.x / size.y : 1f;
-        var frame = PortraitFraming.Compute(
-            settings.CameraZoom,
-            settings.FaceEmphasis,
-            PortraitRaceScale.For(pawn, aspect, settings),
-            GetHumanlikeHeadZ(pawn, rotation),
-            PortraitAdjustments.Resolve(pawn, settings));
+        var rotation = GetRotation(pawn, settings);
+        var frame = ComputeFrame(pawn, size, settings, PortraitAdjustments.Resolve(pawn, settings));
         LastZoom = frame.Zoom;
         var cameraOffset = new Vector3(frame.OffsetX, frame.OffsetY, frame.OffsetZ);
         var args = BuildArguments(PortraitGetMethod.GetParameters(), pawn, size, rotation, cameraOffset, frame.Zoom, settings);
@@ -37,7 +31,24 @@ public static class PawnFullBodyPortraitRenderer
         return texture ?? BaseContent.BadTex;
     }
 
-    private static float? GetHumanlikeHeadZ(Pawn pawn, Rot4 rotation)
+    // Camera framing for a pawn in a portrait of the given size with the given manual correction.
+    public static PortraitFrame ComputeFrame(Pawn pawn, Vector2 size, PortraitOverlaySettings settings, PortraitAdjustment adjustment)
+    {
+        var aspect = size.y > 0f ? size.x / size.y : 1f;
+        return PortraitFraming.Compute(
+            settings.CameraZoom,
+            settings.FaceEmphasis,
+            PortraitRaceScale.For(pawn, aspect, settings),
+            GetHumanlikeHeadZ(pawn, GetRotation(pawn, settings)),
+            adjustment);
+    }
+
+    public static Rot4 GetRotation(Pawn pawn, PortraitOverlaySettings settings)
+    {
+        return settings.LivePortrait ? pawn.Rotation : Rot4.South;
+    }
+
+    public static float? GetHumanlikeHeadZ(Pawn pawn, Rot4 rotation)
     {
         if (pawn.story?.bodyType == null || pawn.Drawer?.renderer == null)
         {

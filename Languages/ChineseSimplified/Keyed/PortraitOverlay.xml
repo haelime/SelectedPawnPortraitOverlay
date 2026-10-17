@@ -60,7 +60,7 @@
   <PortraitOverlay.Edit.ScopeGlobal>All</PortraitOverlay.Edit.ScopeGlobal>
   <PortraitOverlay.Edit.ClearScopeTooltip>Delete the adjustment saved for this scope.</PortraitOverlay.Edit.ClearScopeTooltip>
   <PortraitOverlay.Edit.Readout>{0}x · X {1} · Z {2}</PortraitOverlay.Edit.Readout>
-  <PortraitOverlay.Edit.Hint>Drag: move · Wheel: zoom (Shift: fine) · Right-click: menu · Esc: finish</PortraitOverlay.Edit.Hint>
+  <PortraitOverlay.Edit.Hint>Drag: move · Wheel: zoom (Shift: fine) · Edge tabs: crop · Corner: resize · Ctrl+Z: undo · Right-click: menu · Esc: finish</PortraitOverlay.Edit.Hint>
   <PortraitOverlay.Menu.ClearPawn>Delete this pawn's adjustment</PortraitOverlay.Menu.ClearPawn>
   <PortraitOverlay.Menu.ClearRace>Delete this race's adjustment</PortraitOverlay.Menu.ClearRace>
   <PortraitOverlay.Menu.ClearBoth>Delete both</PortraitOverlay.Menu.ClearBoth>
@@ -79,4 +79,21 @@
   <PortraitOverlay.Saved.PruneMissing>Remove {0} missing</PortraitOverlay.Saved.PruneMissing>
   <PortraitOverlay.Saved.DeleteAllPawnsConfirm>Delete all {0} per-pawn adjustments in this save?</PortraitOverlay.Saved.DeleteAllPawnsConfirm>
   <PortraitOverlay.Saved.DeleteAllRacesConfirm>Delete all {0} race adjustments?</PortraitOverlay.Saved.DeleteAllRacesConfirm>
+  <PortraitOverlay.Hint.FirstRun>Hover over the portrait panel to show its edit tools.</PortraitOverlay.Hint.FirstRun>
+  <PortraitOverlay.Hint.Close>Got it</PortraitOverlay.Hint.Close>
+  <PortraitOverlay.Edit.PresetFull>Full body</PortraitOverlay.Edit.PresetFull>
+  <PortraitOverlay.Edit.PresetUpper>Upper body</PortraitOverlay.Edit.PresetUpper>
+  <PortraitOverlay.Edit.PresetFace>Face</PortraitOverlay.Edit.PresetFace>
+  <PortraitOverlay.Edit.PresetTooltip>Frame the pawn this way and save it to the selected scope.</PortraitOverlay.Edit.PresetTooltip>
+  <PortraitOverlay.Edit.PresetGlobalTooltip>Presets fit one pawn's shape, so they work in the This pawn or Race scope.</PortraitOverlay.Edit.PresetGlobalTooltip>
+  <PortraitOverlay.Edit.CropTooltip>Drag to hide the top or bottom of the panel.</PortraitOverlay.Edit.CropTooltip>
+  <PortraitOverlay.Edit.ResizeTooltip>Drag to resize the panel.</PortraitOverlay.Edit.ResizeTooltip>
+  <PortraitOverlay.Edit.ReadoutTooltip>Double-click to type exact values.</PortraitOverlay.Edit.ReadoutTooltip>
+  <PortraitOverlay.Menu.Undo>Undo (Ctrl+Z)</PortraitOverlay.Menu.Undo>
+  <PortraitOverlay.Adjust.Title>Adjustment: {0}</PortraitOverlay.Adjust.Title>
+  <PortraitOverlay.Adjust.Zoom>Zoom</PortraitOverlay.Adjust.Zoom>
+  <PortraitOverlay.Adjust.OffsetX>Horizontal offset</PortraitOverlay.Adjust.OffsetX>
+  <PortraitOverlay.Adjust.OffsetZ>Vertical offset</PortraitOverlay.Adjust.OffsetZ>
+  <PortraitOverlay.Adjust.Apply>Apply</PortraitOverlay.Adjust.Apply>
+  <PortraitOverlay.Settings.Advanced>Advanced (numeric values)</PortraitOverlay.Settings.Advanced>
 </LanguageData>

@@ -304,8 +304,100 @@ public static class PortraitFraming
         return new PortraitFrame(zoom, offsetX, offsetY, offsetZ);
     }
 
+    // Camera framing a preset aims for, in the pawn's local world units: Zoom is the final camera zoom and
+    // (CenterX, CenterZ) the view center. bounds is the pawn's drawn area; headZ is set for humanlike pawns.
+    public static PortraitFrame PresetFrame(PortraitPreset preset, PortraitBounds bounds, float? headZ, float aspect)
+    {
+        if (!(aspect > 0f))
+        {
+            aspect = 1f;
+        }
+
+        float minZ;
+        float maxZ;
+        float width;
+        switch (preset)
+        {
+            case PortraitPreset.UpperBody when headZ.HasValue:
+                // RimWorld heads are about half a pawn's height, so a fraction of the body would be all head.
+                // Frame from above the hair down to about the waist instead.
+                maxZ = Math.Max(bounds.MaxZ, headZ.Value + HeadVisualHalfHeight);
+                minZ = headZ.Value - UpperBodyBelowHead;
+                width = bounds.Width;
+                break;
+            case PortraitPreset.UpperBody:
+                maxZ = bounds.MaxZ;
+                minZ = maxZ - (UpperBodyFraction * bounds.Height);
+                width = bounds.Width;
+                break;
+            case PortraitPreset.Face when headZ.HasValue:
+                // Head center a little above the middle, with about one and a half head heights of room.
+                var viewHeight = 2f * HeadVisualHalfHeight * FaceViewHeads;
+                return new PortraitFrame(2f / viewHeight, 0f, 0f, headZ.Value - (FaceHeadLift * viewHeight));
+            case PortraitPreset.Face:
+                minZ = bounds.MaxZ - (FaceFraction * bounds.Height);
+                maxZ = bounds.MaxZ;
+                width = Math.Min(bounds.Width, (maxZ - minZ) * 1.4f);
+                break;
+            default:
+                minZ = bounds.MinZ;
+                maxZ = bounds.MaxZ;
+                width = bounds.Width;
+                break;
+        }
+
+        var height = Math.Max(maxZ - minZ, width / aspect) * PresetMargin;
+        if (!(height > 0f))
+        {
+            height = 2f;
+        }
+
+        return new PortraitFrame(Math.Max(2f / height, MinZoom), bounds.CenterX, 0f, (minZ + maxZ) / 2f);
+    }
+
+    // The correction that turns a frame computed without this scope's adjustment into the target frame.
+    public static PortraitAdjustment AdjustmentToReach(PortraitFrame withoutScope, PortraitFrame target)
+    {
+        var zoom = withoutScope.Zoom > 0f ? target.Zoom / withoutScope.Zoom : 1f;
+        return new PortraitAdjustment(zoom, target.OffsetX - withoutScope.OffsetX, target.OffsetZ - withoutScope.OffsetZ);
+    }
+
+    // Drawn area assumed when a pawn has no measurement: the reference human, or the graphic's drawSize.
+    public static PortraitBounds FallbackBounds(bool humanlike, float drawSizeX, float drawSizeY)
+    {
+        if (humanlike || !(drawSizeX > 0f) || !(drawSizeY > 0f))
+        {
+            return new PortraitBounds(
+                -ReferenceFitWidth / 2f,
+                ReferenceFitWidth / 2f,
+                ReferenceFitCenterZ - (ReferenceFitHeight / 2f),
+                ReferenceFitCenterZ + (ReferenceFitHeight / 2f));
+        }
+
+        // Graphics leave transparent padding; most of the art sits in the middle 70% of the quad.
+        var halfX = drawSizeX * 0.35f;
+        var halfZ = drawSizeY * 0.35f;
+        return new PortraitBounds(-halfX, halfX, -halfZ, halfZ);
+    }
+
+    private const float PresetMargin = 1.08f;
+    private const float UpperBodyFraction = 0.6f;
+    private const float FaceFraction = 0.35f;
+    // A humanlike head with hair spans about 0.5 world units around its center.
+    private const float HeadVisualHalfHeight = 0.25f;
+    private const float UpperBodyBelowHead = 0.6f;
+    private const float FaceViewHeads = 1.5f;
+    private const float FaceHeadLift = 0.03f;
+
     private static float Clamp(float value, float min, float max)
     {
         return Math.Min(Math.Max(value, min), max);
     }
+}
+
+public enum PortraitPreset
+{
+    FullBody,
+    UpperBody,
+    Face
 }

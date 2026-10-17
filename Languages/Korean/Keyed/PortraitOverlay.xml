@@ -60,7 +60,7 @@
   <PortraitOverlay.Edit.ScopeGlobal>전체</PortraitOverlay.Edit.ScopeGlobal>
   <PortraitOverlay.Edit.ClearScopeTooltip>이 범위에 저장된 보정을 지웁니다.</PortraitOverlay.Edit.ClearScopeTooltip>
   <PortraitOverlay.Edit.Readout>{0}배 · X {1} · Z {2}</PortraitOverlay.Edit.Readout>
-  <PortraitOverlay.Edit.Hint>드래그: 이동 · 휠: 줌(Shift: 미세) · 우클릭: 메뉴 · Esc: 끝내기</PortraitOverlay.Edit.Hint>
+  <PortraitOverlay.Edit.Hint>드래그: 이동 · 휠: 줌(Shift: 미세) · 위아래 탭: 자르기 · 모서리: 크기 · Ctrl+Z: 되돌리기 · 우클릭: 메뉴 · Esc: 끝내기</PortraitOverlay.Edit.Hint>
   <PortraitOverlay.Menu.ClearPawn>이 폰 보정 삭제</PortraitOverlay.Menu.ClearPawn>
   <PortraitOverlay.Menu.ClearRace>이 종족 보정 삭제</PortraitOverlay.Menu.ClearRace>
   <PortraitOverlay.Menu.ClearBoth>둘 다 삭제</PortraitOverlay.Menu.ClearBoth>
@@ -79,4 +79,21 @@
   <PortraitOverlay.Saved.PruneMissing>없는 폰 {0}개 정리</PortraitOverlay.Saved.PruneMissing>
   <PortraitOverlay.Saved.DeleteAllPawnsConfirm>이 세이브의 폰별 보정 {0}개를 모두 삭제할까요?</PortraitOverlay.Saved.DeleteAllPawnsConfirm>
   <PortraitOverlay.Saved.DeleteAllRacesConfirm>종족 보정 {0}개를 모두 삭제할까요?</PortraitOverlay.Saved.DeleteAllRacesConfirm>
+  <PortraitOverlay.Hint.FirstRun>초상화 패널에 마우스를 올리면 편집 도구가 나타납니다.</PortraitOverlay.Hint.FirstRun>
+  <PortraitOverlay.Hint.Close>확인</PortraitOverlay.Hint.Close>
+  <PortraitOverlay.Edit.PresetFull>전신</PortraitOverlay.Edit.PresetFull>
+  <PortraitOverlay.Edit.PresetUpper>상반신</PortraitOverlay.Edit.PresetUpper>
+  <PortraitOverlay.Edit.PresetFace>얼굴</PortraitOverlay.Edit.PresetFace>
+  <PortraitOverlay.Edit.PresetTooltip>이 구도로 맞추고 선택한 범위에 저장합니다.</PortraitOverlay.Edit.PresetTooltip>
+  <PortraitOverlay.Edit.PresetGlobalTooltip>프리셋은 폰의 모양에 맞추는 기능이라 '이 폰' 또는 '종족' 범위에서만 쓸 수 있습니다.</PortraitOverlay.Edit.PresetGlobalTooltip>
+  <PortraitOverlay.Edit.CropTooltip>드래그해서 패널 위아래를 잘라 냅니다.</PortraitOverlay.Edit.CropTooltip>
+  <PortraitOverlay.Edit.ResizeTooltip>드래그해서 패널 크기를 바꿉니다.</PortraitOverlay.Edit.ResizeTooltip>
+  <PortraitOverlay.Edit.ReadoutTooltip>더블클릭하면 값을 직접 입력할 수 있습니다.</PortraitOverlay.Edit.ReadoutTooltip>
+  <PortraitOverlay.Menu.Undo>되돌리기 (Ctrl+Z)</PortraitOverlay.Menu.Undo>
+  <PortraitOverlay.Adjust.Title>보정 직접 입력: {0}</PortraitOverlay.Adjust.Title>
+  <PortraitOverlay.Adjust.Zoom>줌 배율</PortraitOverlay.Adjust.Zoom>
+  <PortraitOverlay.Adjust.OffsetX>가로 이동</PortraitOverlay.Adjust.OffsetX>
+  <PortraitOverlay.Adjust.OffsetZ>세로 이동</PortraitOverlay.Adjust.OffsetZ>
+  <PortraitOverlay.Adjust.Apply>적용</PortraitOverlay.Adjust.Apply>
+  <PortraitOverlay.Settings.Advanced>고급 (수치 직접 입력)</PortraitOverlay.Settings.Advanced>
 </LanguageData>

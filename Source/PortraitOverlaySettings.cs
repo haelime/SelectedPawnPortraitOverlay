@@ -70,6 +70,9 @@ public sealed class PortraitOverlaySettings : ModSettings
     public bool AutoFitPortrait = DefaultAutoFitPortrait;
     public bool ShowHoverToolbar = DefaultShowHoverToolbar;
 
+    // Set once the player has seen or dismissed the "hover the panel for edit tools" hint.
+    public bool HoverToolbarHintShown;
+
     // Camera offset applied to every portrait, edited with the "global" scope in edit mode.
     public float GlobalOffsetX;
     public float GlobalOffsetZ;
@@ -108,6 +111,7 @@ public sealed class PortraitOverlaySettings : ModSettings
         Scribe_Values.Look(ref BottomCutoff, nameof(BottomCutoff), DefaultBottomCutoff);
         Scribe_Values.Look(ref AutoFitPortrait, nameof(AutoFitPortrait), DefaultAutoFitPortrait);
         Scribe_Values.Look(ref ShowHoverToolbar, nameof(ShowHoverToolbar), DefaultShowHoverToolbar);
+        Scribe_Values.Look(ref HoverToolbarHintShown, nameof(HoverToolbarHintShown), false);
         Scribe_Values.Look(ref GlobalOffsetX, nameof(GlobalOffsetX), 0f);
         Scribe_Values.Look(ref GlobalOffsetZ, nameof(GlobalOffsetZ), 0f);
         Scribe_Collections.Look(ref RaceAdjustments, nameof(RaceAdjustments), LookMode.Value, LookMode.Deep);
@@ -217,6 +221,12 @@ public sealed class PortraitOverlaySettings : ModSettings
         GlobalOffsetZ = 0f;
         RaceAdjustments.Clear();
         ClampValues();
+    }
+
+    // Largest value one cutoff may take given the other, so the pair never hides more than the combined limit.
+    public static float CutoffMax(float otherCutoff)
+    {
+        return Mathf.Clamp(MaxCombinedVerticalCutoff - otherCutoff, 0f, MaxCutoff);
     }
 
     public void ApplyFilterDependencies()

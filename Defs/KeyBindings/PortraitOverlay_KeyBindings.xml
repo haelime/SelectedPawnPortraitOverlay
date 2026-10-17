@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <KeyBindingDef ParentName="GameKeyBinding">
+    <defName>PortraitOverlay_ToggleEditMode</defName>
+    <label>portrait overlay: toggle edit mode</label>
+  </KeyBindingDef>
+</Defs>

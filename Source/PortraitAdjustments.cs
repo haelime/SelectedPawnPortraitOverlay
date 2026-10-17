@@ -72,11 +72,17 @@ public static class PortraitAdjustments
     // of the one below, so changing the global zoom later keeps "this pawn a bit larger" intact.
     public static PortraitAdjustment Resolve(Pawn pawn, PortraitOverlaySettings settings)
     {
-        var zoom = 1f;
-        var offsetX = settings.GlobalOffsetX;
-        var offsetZ = settings.GlobalOffsetZ;
+        return ResolveExcluding(pawn, settings, null);
+    }
 
-        var race = GetRace(pawn, settings);
+    // The combined correction without one scope's own entry, which is what that scope's entry is applied on top of.
+    public static PortraitAdjustment ResolveExcluding(Pawn pawn, PortraitOverlaySettings settings, AdjustmentScope? excluded)
+    {
+        var zoom = 1f;
+        var offsetX = excluded == AdjustmentScope.Global ? 0f : settings.GlobalOffsetX;
+        var offsetZ = excluded == AdjustmentScope.Global ? 0f : settings.GlobalOffsetZ;
+
+        var race = excluded == AdjustmentScope.Race ? null : GetRace(pawn, settings);
         if (race != null)
         {
             zoom *= race.Zoom;
@@ -84,7 +90,7 @@ public static class PortraitAdjustments
             offsetZ += race.OffsetZ;
         }
 
-        var own = GetPawn(pawn);
+        var own = excluded == AdjustmentScope.Pawn ? null : GetPawn(pawn);
         if (own != null)
         {
             zoom *= own.Zoom;
@@ -93,6 +99,41 @@ public static class PortraitAdjustments
         }
 
         return new PortraitAdjustment(zoom, offsetX, offsetZ);
+    }
+
+    // Sets a pawn or race scope's entry outright (an identity value removes it).
+    public static void Set(AdjustmentScope scope, Pawn pawn, PortraitOverlaySettings settings, PortraitAdjustment value)
+    {
+        Clear(scope, pawn, settings);
+        Apply(scope, pawn, settings, value.Zoom, value.OffsetX, value.OffsetZ);
+    }
+
+    // Frames the pawn to a preset by writing the needed correction into a pawn or race scope.
+    // portraitSize is the portrait area of the panel, which the preset is fitted to.
+    public static void ApplyPreset(PortraitPreset preset, AdjustmentScope scope, Pawn pawn, Vector2 portraitSize, PortraitOverlaySettings settings)
+    {
+        if (scope == AdjustmentScope.Global || pawn == null)
+        {
+            return;
+        }
+
+        var humanlike = pawn.RaceProps?.Humanlike == true;
+        var bounds = PortraitFitCache.GetBounds(pawn, settings) ?? FallbackBounds(pawn, humanlike);
+        var headZ = PawnFullBodyPortraitRenderer.GetHumanlikeHeadZ(pawn, PawnFullBodyPortraitRenderer.GetRotation(pawn, settings));
+        var aspect = portraitSize.y > 0f ? portraitSize.x / portraitSize.y : 1f;
+        var target = PortraitFraming.PresetFrame(preset, bounds, headZ, aspect);
+        var withoutScope = PawnFullBodyPortraitRenderer.ComputeFrame(
+            pawn,
+            portraitSize,
+            settings,
+            ResolveExcluding(pawn, settings, scope));
+        Set(scope, pawn, settings, PortraitFraming.AdjustmentToReach(withoutScope, target));
+    }
+
+    private static PortraitBounds FallbackBounds(Pawn pawn, bool humanlike)
+    {
+        var graphic = humanlike ? null : pawn.ageTracker?.CurKindLifeStage?.bodyGraphicData;
+        return PortraitFraming.FallbackBounds(humanlike, graphic?.drawSize.x ?? 0f, graphic?.drawSize.y ?? 0f);
     }
 
     public static SavedAdjustment GetRace(Pawn pawn, PortraitOverlaySettings settings)
@@ -202,5 +243,81 @@ public static class PortraitAdjustments
         {
             store.Remove(key);
         }
+    }
+}
+
+// Everything an edit can change for one pawn, kept so Ctrl+Z can put it back.
+public sealed class AdjustmentSnapshot
+{
+    private int pawnId;
+    private string raceDefName;
+    private SavedAdjustment pawnAdjustment;
+    private SavedAdjustment raceAdjustment;
+    private float cameraZoom;
+    private float globalOffsetX;
+    private float globalOffsetZ;
+    private float topCutoff;
+    private float bottomCutoff;
+    private float panelWidth;
+    private float panelHeight;
+
+    public static AdjustmentSnapshot Capture(Pawn pawn, PortraitOverlaySettings settings)
+    {
+        return new AdjustmentSnapshot
+        {
+            pawnId = pawn?.thingIDNumber ?? -1,
+            raceDefName = pawn?.def?.defName,
+            pawnAdjustment = Copy(PortraitAdjustments.GetPawn(pawn)),
+            raceAdjustment = Copy(PortraitAdjustments.GetRace(pawn, settings)),
+            cameraZoom = settings.CameraZoom,
+            globalOffsetX = settings.GlobalOffsetX,
+            globalOffsetZ = settings.GlobalOffsetZ,
+            topCutoff = settings.TopCutoff,
+            bottomCutoff = settings.BottomCutoff,
+            panelWidth = settings.PanelWidth,
+            panelHeight = settings.PanelHeight
+        };
+    }
+
+    public void Restore(PortraitOverlaySettings settings)
+    {
+        var pawnStore = PortraitAdjustments.PawnStore;
+        if (pawnStore != null && pawnId >= 0)
+        {
+            Put(pawnStore, pawnId, pawnAdjustment);
+        }
+
+        if (raceDefName != null)
+        {
+            Put(settings.RaceAdjustments, raceDefName, raceAdjustment);
+        }
+
+        settings.CameraZoom = cameraZoom;
+        settings.GlobalOffsetX = globalOffsetX;
+        settings.GlobalOffsetZ = globalOffsetZ;
+        settings.TopCutoff = topCutoff;
+        settings.BottomCutoff = bottomCutoff;
+        settings.PanelWidth = panelWidth;
+        settings.PanelHeight = panelHeight;
+        settings.ClampValues();
+    }
+
+    private static void Put<TKey>(Dictionary<TKey, SavedAdjustment> store, TKey key, SavedAdjustment value)
+    {
+        if (value == null)
+        {
+            store.Remove(key);
+        }
+        else
+        {
+            store[key] = Copy(value);
+        }
+    }
+
+    private static SavedAdjustment Copy(SavedAdjustment source)
+    {
+        return source == null
+            ? null
+            : new SavedAdjustment { Zoom = source.Zoom, OffsetX = source.OffsetX, OffsetZ = source.OffsetZ, Label = source.Label };
     }
 }

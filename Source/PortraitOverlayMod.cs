@@ -37,6 +37,7 @@ public sealed class PortraitOverlayMod : Mod
     private Vector2 generalScrollPosition;
     private Vector2 portraitScrollPosition;
     private Vector2 savedScrollPosition;
+    private bool showAdvanced;
     private string backgroundAlphaBuffer;
     private string cameraZoomBuffer;
     private string faceEmphasisBuffer;
@@ -155,56 +156,6 @@ public sealed class PortraitOverlayMod : Mod
         listing.CheckboxLabeled("PortraitOverlay.Settings.RenderHeadgear".Translate(), ref settings.RenderHeadgear);
         listing.CheckboxLabeled("PortraitOverlay.Settings.RenderApparel".Translate(), ref settings.RenderApparel);
         listing.CheckboxLabeled("PortraitOverlay.Settings.LivePortrait".Translate(), ref settings.LivePortrait);
-
-        listing.GapLine();
-        DrawInfoLabel(listing, "PortraitOverlay.Settings.PanelNumericInputHint".Translate());
-        DrawSliderWithNumericField(
-            listing,
-            "PortraitOverlay.Settings.BackgroundAlpha".Translate(FormatPercent(settings.BackgroundAlpha)),
-            ref settings.BackgroundAlpha,
-            ref backgroundAlphaBuffer,
-            0f,
-            0.95f,
-            "F2");
-        DrawSliderWithNumericField(
-            listing,
-            "PortraitOverlay.Settings.Zoom".Translate(settings.CameraZoom.ToString("F2")),
-            ref settings.CameraZoom,
-            ref cameraZoomBuffer,
-            0.75f,
-            1.45f,
-            "F2",
-            numericMin: PortraitOverlaySettings.MinCameraZoom,
-            numericMax: PortraitOverlaySettings.MaxCameraZoom);
-        DrawSliderWithNumericField(
-            listing,
-            "PortraitOverlay.Settings.FaceEmphasis".Translate(FormatPercent(settings.FaceEmphasis)),
-            ref settings.FaceEmphasis,
-            ref faceEmphasisBuffer,
-            0f,
-            1f,
-            "F2",
-            numericMax: PortraitOverlaySettings.MaxFaceEmphasis);
-        DrawSliderWithNumericField(
-            listing,
-            "PortraitOverlay.Settings.TopCutoff".Translate(FormatPercent(settings.TopCutoff)),
-            ref settings.TopCutoff,
-            ref topCutoffBuffer,
-            0f,
-            0.35f,
-            "F2",
-            numericMax: GetCutoffNumericMax(settings.BottomCutoff));
-        DrawSliderWithNumericField(
-            listing,
-            "PortraitOverlay.Settings.BottomCutoff".Translate(FormatPercent(settings.BottomCutoff)),
-            ref settings.BottomCutoff,
-            ref bottomCutoffBuffer,
-            0f,
-            0.35f,
-            "F2",
-            numericMax: GetCutoffNumericMax(settings.TopCutoff));
-
-        listing.GapLine();
         listing.CheckboxLabeled(
             "PortraitOverlay.Settings.AutoFitPortrait".Translate(),
             ref settings.AutoFitPortrait,
@@ -213,44 +164,107 @@ public sealed class PortraitOverlayMod : Mod
         listing.GapLine();
         DrawSliderWithNumericField(
             listing,
-            "PortraitOverlay.Settings.PanelWidth".Translate(settings.PanelWidth.ToString("F0")),
-            ref settings.PanelWidth,
-            ref panelWidthBuffer,
-            180f,
-            420f,
-            "F0",
-            numericMin: 1f,
-            numericMax: 1000000f);
-        DrawSliderWithNumericField(
-            listing,
-            "PortraitOverlay.Settings.PanelHeight".Translate(settings.PanelHeight.ToString("F0")),
-            ref settings.PanelHeight,
-            ref panelHeightBuffer,
-            240f,
-            520f,
-            "F0",
-            numericMin: 1f,
-            numericMax: 1000000f);
-        DrawSliderWithNumericField(
-            listing,
-            "PortraitOverlay.Settings.PositionX".Translate(settings.PanelX.ToString("F0")),
-            ref settings.PanelX,
-            ref panelXBuffer,
-            PortraitOverlaySettings.MinPanelX,
-            1200f,
-            "F0",
-            numericMin: -1000000f,
-            numericMax: 1000000f);
-        DrawSliderWithNumericField(
-            listing,
-            "PortraitOverlay.Settings.PositionY".Translate(settings.PanelY.ToString("F0")),
-            ref settings.PanelY,
-            ref panelYBuffer,
+            "PortraitOverlay.Settings.BackgroundAlpha".Translate(FormatPercent(settings.BackgroundAlpha)),
+            ref settings.BackgroundAlpha,
+            ref backgroundAlphaBuffer,
             0f,
-            700f,
-            "F0",
-            numericMin: -1000000f,
-            numericMax: 1000000f);
+            0.95f,
+            "F2");
+
+        listing.GapLine();
+
+        // Numeric framing and layout controls are folded away; edit mode on the panel is the usual way to adjust.
+        var toggleLabel = (showAdvanced ? "▼ " : "▶ ") + "PortraitOverlay.Settings.Advanced".Translate();
+        if (listing.ButtonText(toggleLabel))
+        {
+            showAdvanced = !showAdvanced;
+        }
+
+        if (showAdvanced)
+        {
+            DrawInfoLabel(listing, "PortraitOverlay.Settings.PanelNumericInputHint".Translate());
+            DrawSliderWithNumericField(
+                listing,
+                "PortraitOverlay.Settings.Zoom".Translate(settings.CameraZoom.ToString("F2")),
+                ref settings.CameraZoom,
+                ref cameraZoomBuffer,
+                0.75f,
+                1.45f,
+                "F2",
+                numericMin: PortraitOverlaySettings.MinCameraZoom,
+                numericMax: PortraitOverlaySettings.MaxCameraZoom);
+            DrawSliderWithNumericField(
+                listing,
+                "PortraitOverlay.Settings.FaceEmphasis".Translate(FormatPercent(settings.FaceEmphasis)),
+                ref settings.FaceEmphasis,
+                ref faceEmphasisBuffer,
+                0f,
+                1f,
+                "F2",
+                numericMax: PortraitOverlaySettings.MaxFaceEmphasis);
+            DrawSliderWithNumericField(
+                listing,
+                "PortraitOverlay.Settings.TopCutoff".Translate(FormatPercent(settings.TopCutoff)),
+                ref settings.TopCutoff,
+                ref topCutoffBuffer,
+                0f,
+                0.35f,
+                "F2",
+                numericMax: GetCutoffNumericMax(settings.BottomCutoff));
+            DrawSliderWithNumericField(
+                listing,
+                "PortraitOverlay.Settings.BottomCutoff".Translate(FormatPercent(settings.BottomCutoff)),
+                ref settings.BottomCutoff,
+                ref bottomCutoffBuffer,
+                0f,
+                0.35f,
+                "F2",
+                numericMax: GetCutoffNumericMax(settings.TopCutoff));
+
+
+            listing.GapLine();
+            DrawSliderWithNumericField(
+                listing,
+                "PortraitOverlay.Settings.PanelWidth".Translate(settings.PanelWidth.ToString("F0")),
+                ref settings.PanelWidth,
+                ref panelWidthBuffer,
+                180f,
+                420f,
+                "F0",
+                numericMin: 1f,
+                numericMax: 1000000f);
+            DrawSliderWithNumericField(
+                listing,
+                "PortraitOverlay.Settings.PanelHeight".Translate(settings.PanelHeight.ToString("F0")),
+                ref settings.PanelHeight,
+                ref panelHeightBuffer,
+                240f,
+                520f,
+                "F0",
+                numericMin: 1f,
+                numericMax: 1000000f);
+            DrawSliderWithNumericField(
+                listing,
+                "PortraitOverlay.Settings.PositionX".Translate(settings.PanelX.ToString("F0")),
+                ref settings.PanelX,
+                ref panelXBuffer,
+                PortraitOverlaySettings.MinPanelX,
+                1200f,
+                "F0",
+                numericMin: -1000000f,
+                numericMax: 1000000f);
+            DrawSliderWithNumericField(
+                listing,
+                "PortraitOverlay.Settings.PositionY".Translate(settings.PanelY.ToString("F0")),
+                ref settings.PanelY,
+                ref panelYBuffer,
+                0f,
+                700f,
+                "F0",
+                numericMin: -1000000f,
+                numericMax: 1000000f);
+
+        }
 
         listing.GapLine();
         if (listing.ButtonText("PortraitOverlay.Settings.ResetWindowSettings".Translate()))
@@ -418,10 +432,7 @@ public sealed class PortraitOverlayMod : Mod
     // Cap each cutoff by what the other leaves, so a typed value is never rescaled out from under its field.
     private static float GetCutoffNumericMax(float otherCutoff)
     {
-        return Mathf.Clamp(
-            PortraitOverlaySettings.MaxCombinedVerticalCutoff - otherCutoff,
-            0f,
-            PortraitOverlaySettings.MaxCutoff);
+        return PortraitOverlaySettings.CutoffMax(otherCutoff);
     }
 
     private static string FormatPercent(float value)
@@ -537,7 +548,7 @@ public sealed class PortraitOverlayMod : Mod
         return (checkboxCount * checkboxHeight) + spacing;
     }
 
-    private static float GetPortraitTabHeight()
+    private float GetPortraitTabHeight()
     {
         const float checkboxHeight = 32f;
         const float sliderBlockHeight = SettingLabelHeight + SettingControlHeight + 4f;
@@ -545,12 +556,12 @@ public sealed class PortraitOverlayMod : Mod
         const float spacing = 128f;
         const float infoLabelBlockHeight = InfoLabelHeight + 4f;
         const int checkboxCount = 6;
-        const int sliderCount = 9;
-        const int buttonCount = 2;
+        const int advancedSliderCount = 8;
+        const int buttonCount = 3;
 
         return (checkboxCount * checkboxHeight)
-            + (sliderCount * sliderBlockHeight)
-            + infoLabelBlockHeight
+            + sliderBlockHeight
+            + (showAdvanced ? (advancedSliderCount * sliderBlockHeight) + infoLabelBlockHeight + 16f : 0f)
             + (buttonCount * buttonHeight)
             + spacing
             + 16f;
