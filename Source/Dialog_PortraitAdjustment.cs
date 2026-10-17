@@ -32,19 +32,10 @@ public sealed class Dialog_PortraitAdjustment : Window
         forcePause = false;
 
         var settings = PortraitOverlayMod.Settings;
-        if (scope == AdjustmentScope.Global)
-        {
-            zoom = settings.CameraZoom;
-            offsetX = settings.GlobalOffsetX;
-            offsetZ = settings.GlobalOffsetZ;
-        }
-        else
-        {
-            var saved = PortraitAdjustments.Get(scope, pawn, settings);
-            zoom = saved?.Zoom ?? 1f;
-            offsetX = saved?.OffsetX ?? 0f;
-            offsetZ = saved?.OffsetZ ?? 0f;
-        }
+        var saved = PortraitAdjustments.Get(scope, pawn, settings);
+        zoom = saved?.Zoom ?? 1f;
+        offsetX = saved?.OffsetX ?? 0f;
+        offsetZ = saved?.OffsetZ ?? 0f;
 
         zoomBuffer = zoom.ToString("F2", CultureInfo.InvariantCulture);
         offsetXBuffer = offsetX.ToString("F2", CultureInfo.InvariantCulture);
@@ -65,9 +56,7 @@ public sealed class Dialog_PortraitAdjustment : Window
         Text.Font = GameFont.Small;
 
         var y = inRect.y + 42f;
-        var zoomMin = scope == AdjustmentScope.Global ? PortraitOverlaySettings.MinCameraZoom : SavedAdjustment.MinZoom;
-        var zoomMax = scope == AdjustmentScope.Global ? PortraitOverlaySettings.MaxCameraZoom : SavedAdjustment.MaxZoom;
-        DrawField(ref y, inRect, "PortraitOverlay.Adjust.Zoom".Translate(), ref zoom, ref zoomBuffer, zoomMin, zoomMax);
+        DrawField(ref y, inRect, "PortraitOverlay.Adjust.Zoom".Translate(), ref zoom, ref zoomBuffer, SavedAdjustment.MinZoom, SavedAdjustment.MaxZoom);
         DrawField(ref y, inRect, "PortraitOverlay.Adjust.OffsetX".Translate(), ref offsetX, ref offsetXBuffer, -10f, 10f);
         DrawField(ref y, inRect, "PortraitOverlay.Adjust.OffsetZ".Translate(), ref offsetZ, ref offsetZBuffer, -10f, 10f);
 
@@ -75,17 +64,7 @@ public sealed class Dialog_PortraitAdjustment : Window
         if (Widgets.ButtonText(buttonRect, "PortraitOverlay.Adjust.Apply".Translate()))
         {
             beforeChange?.Invoke();
-            if (scope == AdjustmentScope.Global)
-            {
-                settings.CameraZoom = zoom;
-                settings.GlobalOffsetX = offsetX;
-                settings.GlobalOffsetZ = offsetZ;
-                settings.ClampValues();
-            }
-            else
-            {
-                PortraitAdjustments.Set(scope, pawn, settings, new PortraitAdjustment(zoom, offsetX, offsetZ));
-            }
+            PortraitAdjustments.Set(scope, pawn, settings, new PortraitAdjustment(zoom, offsetX, offsetZ));
 
             if (scope != AdjustmentScope.Pawn)
             {

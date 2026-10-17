@@ -39,13 +39,24 @@ public sealed class SelectedPawnPortraitOverlayComponent : GameComponent
     private const float FineWheelZoomStep = 1.01f;
 
     private static readonly Color EditAccent = new(0.94f, 0.62f, 0.15f);
+    // Scope menu order: category down to this pawn, with All last because it is rarely the right choice.
     private static readonly AdjustmentScope[] ScopeOrder =
     {
-        AdjustmentScope.Global,
         AdjustmentScope.Category,
         AdjustmentScope.Race,
         AdjustmentScope.Variant,
-        AdjustmentScope.Pawn
+        AdjustmentScope.Pawn,
+        AdjustmentScope.Global
+    };
+
+    // Delete entries in the right-click menu, narrowest first.
+    private static readonly AdjustmentScope[] ClearOrder =
+    {
+        AdjustmentScope.Pawn,
+        AdjustmentScope.Variant,
+        AdjustmentScope.Race,
+        AdjustmentScope.Category,
+        AdjustmentScope.Global
     };
     private static readonly Color BarBackground = new(0f, 0f, 0f, 0.6f);
 
@@ -60,7 +71,7 @@ public sealed class SelectedPawnPortraitOverlayComponent : GameComponent
 
     private bool editing;
     private Pawn editPawn;
-    private AdjustmentScope editScope = AdjustmentScope.Pawn;
+    private AdjustmentScope editScope = AdjustmentScope.Category;
     private DragMode dragMode;
     private bool settingsChangedInEdit;
     private readonly List<AdjustmentSnapshot> undoStack = new();
@@ -560,7 +571,9 @@ public sealed class SelectedPawnPortraitOverlayComponent : GameComponent
     {
         editing = true;
         editPawn = pawn;
-        editScope = AdjustmentScope.Pawn;
+
+        // Category first: one edit then covers every similar pawn, which is the usual intent.
+        editScope = AdjustmentScope.Category;
         dragMode = DragMode.None;
         settingsChangedInEdit = false;
         if (!settings.HoverToolbarHintShown)
@@ -784,15 +797,18 @@ public sealed class SelectedPawnPortraitOverlayComponent : GameComponent
             options.Add(new FloatMenuOption("PortraitOverlay.Menu.Undo".Translate(), () => Undo(settings)));
         }
 
-        // One delete entry per scope that holds a correction for this pawn, narrowest first. The global scope is
-        // reset from the settings instead, so a stray click here cannot undo the base framing.
+        // One delete entry per scope that holds a correction for this pawn, narrowest first. "Delete all" leaves the
+        // All scope alone, since it frames every pawn, not just this one.
         var saved = new List<AdjustmentScope>();
-        for (var i = ScopeOrder.Length - 1; i > 0; i--)
+        foreach (var scope in ClearOrder)
         {
-            var scope = ScopeOrder[i];
             if (PortraitAdjustments.Has(scope, pawn, settings))
             {
-                saved.Add(scope);
+                if (scope != AdjustmentScope.Global)
+                {
+                    saved.Add(scope);
+                }
+
                 options.Add(new FloatMenuOption(
                     "PortraitOverlay.Menu.ClearScope".Translate(PortraitAdjustments.ScopeLabel(scope, pawn)),
                     () => ClearScope(scope, pawn, settings)));
@@ -842,12 +858,26 @@ public sealed class SelectedPawnPortraitOverlayComponent : GameComponent
             }
 
             var target = scope;
-            options.Add(PortraitAdjustments.IsAvailable(scope, pawn)
+            var available = PortraitAdjustments.IsAvailable(scope, pawn);
+            var option = available
                 ? new FloatMenuOption(label, () => editScope = target)
-                : new FloatMenuOption(label, null));
+                : new FloatMenuOption(label, null);
+            option.tooltip = new TipSignal(ScopeHelp(scope, available));
+            options.Add(option);
         }
 
         return options;
+    }
+
+    // Guidance shown when hovering a scope in the scope menu.
+    private static string ScopeHelp(AdjustmentScope scope, bool available)
+    {
+        if (!available)
+        {
+            return "PortraitOverlay.ScopeHelp.VariantUnavailable".Translate();
+        }
+
+        return ("PortraitOverlay.ScopeHelp." + scope).Translate();
     }
 
     private void ClearScope(AdjustmentScope scope, Pawn pawn, PortraitOverlaySettings settings)
@@ -968,7 +998,7 @@ public sealed class SelectedPawnPortraitOverlayComponent : GameComponent
             return;
         }
 
-        var usable = editScope != AdjustmentScope.Global;
+        var usable = PortraitAdjustments.IsAvailable(editScope, pawn);
         var width = row.width / 3f;
         DrawPresetButton(new Rect(row.x, row.y, width, row.height), PortraitPreset.FullBody, "PortraitOverlay.Edit.PresetFull", usable, pawn, settings);
         DrawPresetButton(new Rect(row.x + width, row.y, width, row.height), PortraitPreset.UpperBody, "PortraitOverlay.Edit.PresetUpper", usable, pawn, settings);
@@ -988,7 +1018,7 @@ public sealed class SelectedPawnPortraitOverlayComponent : GameComponent
             }
         }
 
-        TooltipHandler.TipRegion(button, (usable ? "PortraitOverlay.Edit.PresetTooltip" : "PortraitOverlay.Edit.PresetGlobalTooltip").Translate());
+        TooltipHandler.TipRegion(button, (editScope == AdjustmentScope.Global ? "PortraitOverlay.Edit.PresetGlobalTooltip" : "PortraitOverlay.Edit.PresetTooltip").Translate());
     }
 
     // The scope button: shows where edits are stored and opens the scope menu. Returns its right edge.
@@ -996,7 +1026,7 @@ public sealed class SelectedPawnPortraitOverlayComponent : GameComponent
     {
         if (!PortraitAdjustments.IsAvailable(editScope, pawn))
         {
-            editScope = AdjustmentScope.Pawn;
+            editScope = AdjustmentScope.Category;
         }
 
         var label = "PortraitOverlay.Edit.ScopeButton".Translate(PortraitAdjustments.ScopeLabel(editScope, pawn)).ToString();
@@ -1025,12 +1055,10 @@ public sealed class SelectedPawnPortraitOverlayComponent : GameComponent
 
     private string ScopeReadout(Pawn pawn, PortraitOverlaySettings settings)
     {
-        if (editScope == AdjustmentScope.Global)
-        {
-            return SavedAdjustment.Format(settings.CameraZoom, settings.GlobalOffsetX, settings.GlobalOffsetZ, 1f, 1f);
-        }
-
-        return PortraitAdjustments.Get(editScope, pawn, settings)?.Summary() ?? SavedAdjustment.Format(1f, 0f, 0f, 1f, 1f);
+        var summary = PortraitAdjustments.Get(editScope, pawn, settings)?.Summary() ?? SavedAdjustment.Format(1f, 0f, 0f, 1f, 1f);
+        return editScope == AdjustmentScope.Global && settings.UseGlobalPreset
+            ? "PortraitOverlay.Edit.ReadoutPreset".Translate(PortraitAdjustments.PresetLabel(settings.GlobalPreset), summary)
+            : summary;
     }
 
     private static void DrawPanel(Rect rect, Pawn pawn, PortraitOverlaySettings settings, bool editing)

@@ -153,6 +153,16 @@ public static class PortraitAdjustments
         return ("PortraitOverlay.Category." + category).Translate();
     }
 
+    public static string PresetLabel(PortraitPreset preset)
+    {
+        return preset switch
+        {
+            PortraitPreset.UpperBody => "PortraitOverlay.Edit.PresetUpper".Translate(),
+            PortraitPreset.Face => "PortraitOverlay.Edit.PresetFace".Translate(),
+            _ => "PortraitOverlay.Edit.PresetFull".Translate()
+        };
+    }
+
     // The variant within a race: the xenotype for humanlike pawns, the growth stage for races with several.
     // Returns false when the pawn's race has no meaningful variant (most mechanoids and entities).
     public static bool TryGetVariant(Pawn pawn, out string key, out string label)
@@ -264,9 +274,14 @@ public static class PortraitAdjustments
     public static Dictionary<int, SavedAdjustment> PawnStore =>
         Current.Game?.GetComponent<SelectedPawnPortraitOverlayComponent>()?.PawnAdjustments;
 
-    // The saved entry of a pawn, category, race, or variant scope, or null. The global scope is not an entry.
+    // The saved entry of a scope, or null when it holds no correction.
     public static SavedAdjustment Get(AdjustmentScope scope, Pawn pawn, PortraitOverlaySettings settings)
     {
+        if (scope == AdjustmentScope.Global)
+        {
+            return settings.GlobalAdjustment != null && !settings.GlobalAdjustment.IsIdentity ? settings.GlobalAdjustment : null;
+        }
+
         if (pawn == null)
         {
             return null;
@@ -285,7 +300,7 @@ public static class PortraitAdjustments
     public static bool Has(AdjustmentScope scope, Pawn pawn, PortraitOverlaySettings settings)
     {
         return scope == AdjustmentScope.Global
-            ? !Mathf.Approximately(settings.GlobalOffsetX, 0f) || !Mathf.Approximately(settings.GlobalOffsetZ, 0f)
+            ? settings.UseGlobalPreset || Get(scope, pawn, settings) != null
             : Get(scope, pawn, settings) != null;
     }
 
@@ -300,8 +315,8 @@ public static class PortraitAdjustments
     public static PortraitAdjustment ResolveExcluding(Pawn pawn, PortraitOverlaySettings settings, AdjustmentScope? excluded)
     {
         var zoom = 1f;
-        var offsetX = excluded == AdjustmentScope.Global ? 0f : settings.GlobalOffsetX;
-        var offsetZ = excluded == AdjustmentScope.Global ? 0f : settings.GlobalOffsetZ;
+        var offsetX = 0f;
+        var offsetZ = 0f;
         foreach (var entry in Entries(pawn, settings, excluded))
         {
             zoom *= entry.Zoom;
@@ -327,6 +342,12 @@ public static class PortraitAdjustments
 
     private static IEnumerable<SavedAdjustment> Entries(Pawn pawn, PortraitOverlaySettings settings, AdjustmentScope? excluded)
     {
+        var global = excluded == AdjustmentScope.Global ? null : Get(AdjustmentScope.Global, pawn, settings);
+        if (global != null)
+        {
+            yield return global;
+        }
+
         if (pawn == null)
         {
             yield break;
@@ -353,12 +374,12 @@ public static class PortraitAdjustments
     {
         if (scope == AdjustmentScope.Global)
         {
-            settings.CameraZoom = Mathf.Clamp(
-                settings.CameraZoom * zoomFactor,
-                PortraitOverlaySettings.MinCameraZoom,
-                PortraitOverlaySettings.MaxCameraZoom);
-            settings.GlobalOffsetX += deltaX;
-            settings.GlobalOffsetZ += deltaZ;
+            var global = settings.GlobalAdjustment ?? new SavedAdjustment();
+            global.Zoom *= zoomFactor;
+            global.OffsetX += deltaX;
+            global.OffsetZ += deltaZ;
+            global.Clamp();
+            settings.GlobalAdjustment = global;
             return;
         }
 
@@ -374,17 +395,31 @@ public static class PortraitAdjustments
         Put(scope, pawn, settings, entry);
     }
 
-    // Sets a non-global scope's entry outright (an identity value removes it). The entry's panel size is kept
-    // unless a new one is given.
+    // Sets a scope's entry outright (an identity value removes it). The entry's panel size is kept unless a new
+    // one is given.
     public static void Set(AdjustmentScope scope, Pawn pawn, PortraitOverlaySettings settings, PortraitAdjustment value, Vector2? panelScale = null)
     {
-        if (scope == AdjustmentScope.Global || pawn == null || !IsAvailable(scope, pawn))
+        var existing = Get(scope, pawn, settings);
+        var scale = panelScale ?? (existing != null ? new Vector2(existing.PanelWidthScale, existing.PanelHeightScale) : Vector2.one);
+        if (scope == AdjustmentScope.Global)
+        {
+            settings.GlobalAdjustment = new SavedAdjustment
+            {
+                Zoom = value.Zoom,
+                OffsetX = value.OffsetX,
+                OffsetZ = value.OffsetZ,
+                PanelWidthScale = scale.x,
+                PanelHeightScale = scale.y
+            };
+            settings.GlobalAdjustment.Clamp();
+            return;
+        }
+
+        if (pawn == null || !IsAvailable(scope, pawn))
         {
             return;
         }
 
-        var existing = Get(scope, pawn, settings);
-        var scale = panelScale ?? (existing != null ? new Vector2(existing.PanelWidthScale, existing.PanelHeightScale) : Vector2.one);
         Put(scope, pawn, settings, new SavedAdjustment
         {
             Zoom = value.Zoom,
@@ -399,8 +434,8 @@ public static class PortraitAdjustments
     {
         if (scope == AdjustmentScope.Global)
         {
-            settings.GlobalOffsetX = 0f;
-            settings.GlobalOffsetZ = 0f;
+            settings.GlobalAdjustment = new SavedAdjustment();
+            settings.UseGlobalPreset = false;
             return;
         }
 
@@ -457,16 +492,25 @@ public static class PortraitAdjustments
         }
     }
 
-    // Frames the pawn to a preset by writing the needed correction and panel size into a non-global scope.
-    // The panel size is set so the final panel is the preset's share of the base size, whatever other scopes hold.
+    // Frames the pawn to a preset. In the All scope the preset itself is stored, so every pawn is framed to it by
+    // its own shape. In narrower scopes the needed correction and panel size are stored, with the panel size set
+    // so the final panel is the preset's share of the base size, whatever other scopes hold.
     public static void ApplyPreset(PortraitPreset preset, AdjustmentScope scope, Pawn pawn, PortraitOverlaySettings settings)
     {
-        if (scope == AdjustmentScope.Global || pawn == null || !IsAvailable(scope, pawn))
+        var (widthScale, heightScale) = PortraitFraming.PresetPanelScale(preset);
+        if (scope == AdjustmentScope.Global)
+        {
+            settings.UseGlobalPreset = true;
+            settings.GlobalPreset = preset;
+            settings.GlobalAdjustment = new SavedAdjustment { PanelWidthScale = widthScale, PanelHeightScale = heightScale };
+            return;
+        }
+
+        if (pawn == null || !IsAvailable(scope, pawn))
         {
             return;
         }
 
-        var (widthScale, heightScale) = PortraitFraming.PresetPanelScale(preset);
         var otherScale = ResolvePanelScale(pawn, settings, scope);
         var scopeScale = new Vector2(widthScale / Mathf.Max(0.01f, otherScale.x), heightScale / Mathf.Max(0.01f, otherScale.y));
         var portraitSize = SelectedPawnPortraitOverlayComponent.PortraitSizeFor(
@@ -486,7 +530,7 @@ public static class PortraitAdjustments
         Set(scope, pawn, settings, PortraitFraming.AdjustmentToReach(withoutScope, target), scopeScale);
     }
 
-    private static PortraitBounds FallbackBounds(Pawn pawn, bool humanlike)
+    public static PortraitBounds FallbackBounds(Pawn pawn, bool humanlike)
     {
         var graphic = humanlike ? null : pawn.ageTracker?.CurKindLifeStage?.bodyGraphicData;
         return PortraitFraming.FallbackBounds(humanlike, graphic?.drawSize.x ?? 0f, graphic?.drawSize.y ?? 0f);
@@ -502,8 +546,9 @@ public sealed class AdjustmentSnapshot
     private SavedAdjustment pawnAdjustment;
     private readonly List<KeyedEntry> keyedEntries = new();
     private float cameraZoom;
-    private float globalOffsetX;
-    private float globalOffsetZ;
+    private SavedAdjustment globalAdjustment;
+    private bool useGlobalPreset;
+    private PortraitPreset globalPreset;
     private float topCutoff;
     private float bottomCutoff;
     private float panelWidth;
@@ -523,8 +568,9 @@ public sealed class AdjustmentSnapshot
             pawnId = pawn?.thingIDNumber ?? -1,
             pawnAdjustment = PortraitAdjustments.Get(AdjustmentScope.Pawn, pawn, settings)?.Clone(),
             cameraZoom = settings.CameraZoom,
-            globalOffsetX = settings.GlobalOffsetX,
-            globalOffsetZ = settings.GlobalOffsetZ,
+            globalAdjustment = settings.GlobalAdjustment?.Clone(),
+            useGlobalPreset = settings.UseGlobalPreset,
+            globalPreset = settings.GlobalPreset,
             topCutoff = settings.TopCutoff,
             bottomCutoff = settings.BottomCutoff,
             panelWidth = settings.PanelWidth,
@@ -565,8 +611,9 @@ public sealed class AdjustmentSnapshot
         }
 
         settings.CameraZoom = cameraZoom;
-        settings.GlobalOffsetX = globalOffsetX;
-        settings.GlobalOffsetZ = globalOffsetZ;
+        settings.GlobalAdjustment = globalAdjustment?.Clone() ?? new SavedAdjustment();
+        settings.UseGlobalPreset = useGlobalPreset;
+        settings.GlobalPreset = globalPreset;
         settings.TopCutoff = topCutoff;
         settings.BottomCutoff = bottomCutoff;
         settings.PanelWidth = panelWidth;

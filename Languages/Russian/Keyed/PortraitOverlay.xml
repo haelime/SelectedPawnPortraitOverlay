@@ -80,7 +80,7 @@
   <PortraitOverlay.Edit.PresetUpper>Upper body</PortraitOverlay.Edit.PresetUpper>
   <PortraitOverlay.Edit.PresetFace>Face</PortraitOverlay.Edit.PresetFace>
   <PortraitOverlay.Edit.PresetTooltip>Frame the pawn this way and save it to the selected scope.</PortraitOverlay.Edit.PresetTooltip>
-  <PortraitOverlay.Edit.PresetGlobalTooltip>Presets fit one pawn's shape, so they work in every scope except All.</PortraitOverlay.Edit.PresetGlobalTooltip>
+  <PortraitOverlay.Edit.PresetGlobalTooltip>In the All scope a preset frames every pawn to it by its own shape and sets the panel size; narrower scopes still apply on top.</PortraitOverlay.Edit.PresetGlobalTooltip>
   <PortraitOverlay.Edit.CropTooltip>Drag to hide the top or bottom of the panel.</PortraitOverlay.Edit.CropTooltip>
   <PortraitOverlay.Edit.ResizeTooltip>Drag to resize the panel.</PortraitOverlay.Edit.ResizeTooltip>
   <PortraitOverlay.Edit.ReadoutTooltip>Double-click to type exact values.</PortraitOverlay.Edit.ReadoutTooltip>
@@ -107,4 +107,13 @@
   <PortraitOverlay.Saved.CategoriesHeader>Per-category</PortraitOverlay.Saved.CategoriesHeader>
   <PortraitOverlay.Saved.VariantsHeader>Per-variant (xenotype or growth stage)</PortraitOverlay.Saved.VariantsHeader>
   <PortraitOverlay.Saved.DeleteAllConfirm>Delete all {0} adjustments in {1}?</PortraitOverlay.Saved.DeleteAllConfirm>
+  <PortraitOverlay.ScopeHelp.Category>Applies to every pawn in the same category, such as all humanlikes or all animals. Use it to set a whole group's size and framing in one go; it is usually the best place to start.</PortraitOverlay.ScopeHelp.Category>
+  <PortraitOverlay.ScopeHelp.Race>Applies to every pawn of this race, such as all thrumbos or all humans. Use it for races whose art is unusually large or small, and for modded races.</PortraitOverlay.ScopeHelp.Race>
+  <PortraitOverlay.ScopeHelp.Variant>Applies only to this xenotype (humanlike) or growth stage (animals) within the race. Use it when babies and adults, or xenotypes with different builds, need their own framing.</PortraitOverlay.ScopeHelp.Variant>
+  <PortraitOverlay.ScopeHelp.Pawn>Applies only to this pawn and is stored in the save. Use it when one particular colonist should look different.</PortraitOverlay.ScopeHelp.Pawn>
+  <PortraitOverlay.ScopeHelp.Global>Applies to every pawn. Not recommended except for setting the panel (frame) size: pawns differ too much in shape for one zoom or offset to suit them all. Choosing a preset here frames every pawn to it by its own shape.</PortraitOverlay.ScopeHelp.Global>
+  <PortraitOverlay.ScopeHelp.VariantUnavailable>This pawn has no variant level. Humanlike pawns are split by xenotype only with Biotech, and races with a single growth stage, such as most mechanoids, have none.</PortraitOverlay.ScopeHelp.VariantUnavailable>
+  <PortraitOverlay.Edit.ReadoutPreset>{0} preset · {1}</PortraitOverlay.Edit.ReadoutPreset>
+  <PortraitOverlay.Saved.GlobalHeader>All</PortraitOverlay.Saved.GlobalHeader>
+  <PortraitOverlay.Saved.GlobalPreset>All ({0} preset)</PortraitOverlay.Saved.GlobalPreset>
 </LanguageData>

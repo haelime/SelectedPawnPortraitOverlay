@@ -370,6 +370,13 @@ public static class PortraitFraming
         };
     }
 
+    // A frame with a manual correction applied on top: zoom multiplies, offsets add.
+    public static PortraitFrame WithAdjustment(PortraitFrame frame, PortraitAdjustment adjustment)
+    {
+        var zoom = adjustment.Zoom > 0f ? Math.Max(frame.Zoom * adjustment.Zoom, MinZoom) : frame.Zoom;
+        return new PortraitFrame(zoom, frame.OffsetX + adjustment.OffsetX, frame.OffsetY, frame.OffsetZ + adjustment.OffsetZ);
+    }
+
     // The correction that turns a frame computed without this scope's adjustment into the target frame.
     public static PortraitAdjustment AdjustmentToReach(PortraitFrame withoutScope, PortraitFrame target)
     {

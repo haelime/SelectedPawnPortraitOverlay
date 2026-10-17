@@ -342,6 +342,30 @@ public sealed class PortraitOverlayMod : Mod
         DrawKeyedSection(listing, "PortraitOverlay.Saved.CategoriesHeader", settings.CategoryAdjustments, CategoryKeyLabel);
         DrawKeyedSection(listing, "PortraitOverlay.Saved.RacesHeader", settings.RaceAdjustments, GetRaceLabel);
         DrawKeyedSection(listing, "PortraitOverlay.Saved.VariantsHeader", settings.VariantAdjustments, null);
+        DrawGlobalSection(listing, settings);
+    }
+
+    // The All scope: an optional preset every pawn is framed to, plus a correction for every pawn.
+    private static void DrawGlobalSection(Listing_Standard listing, PortraitOverlaySettings settings)
+    {
+        listing.GapLine();
+        listing.Label("PortraitOverlay.Saved.GlobalHeader".Translate());
+        var adjustment = settings.GlobalAdjustment ?? new SavedAdjustment();
+        if (!settings.UseGlobalPreset && adjustment.IsIdentity)
+        {
+            DrawMutedLine(listing, "PortraitOverlay.Saved.Empty".Translate());
+            return;
+        }
+
+        var name = settings.UseGlobalPreset
+            ? "PortraitOverlay.Saved.GlobalPreset".Translate(PortraitAdjustments.PresetLabel(settings.GlobalPreset)).ToString()
+            : "PortraitOverlay.Edit.ScopeGlobal".Translate().ToString();
+        if (DrawSavedRow(listing, name, adjustment))
+        {
+            settings.GlobalAdjustment = new SavedAdjustment();
+            settings.UseGlobalPreset = false;
+            SaveSettings();
+        }
     }
 
     // One settings-stored level (category, race, or variant). labelFor names an entry from its key; without one,
@@ -596,7 +620,7 @@ public sealed class PortraitOverlayMod : Mod
             + Block(settings.CategoryAdjustments.Count)
             + Block(settings.RaceAdjustments.Count)
             + Block(settings.VariantAdjustments.Count);
-        return InfoLabelHeight + 8f + (4f * headerHeight) + blocks + 96f;
+        return InfoLabelHeight + 8f + (5f * headerHeight) + blocks + SavedRowHeight + 112f;
     }
 
     public override void WriteSettings()

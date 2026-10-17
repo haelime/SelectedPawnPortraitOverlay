@@ -73,9 +73,11 @@ public sealed class PortraitOverlaySettings : ModSettings
     // Set once the player has seen or dismissed the "hover the panel for edit tools" hint.
     public bool HoverToolbarHintShown;
 
-    // Camera offset applied to every portrait, edited with the "global" scope in edit mode.
-    public float GlobalOffsetX;
-    public float GlobalOffsetZ;
+    // The "All" scope: a correction for every pawn, and optionally a preset each pawn is framed to by its own
+    // shape before narrower scopes apply. Without a preset, the base framing is the zoom and face emphasis above.
+    public SavedAdjustment GlobalAdjustment = new();
+    public bool UseGlobalPreset;
+    public PortraitPreset GlobalPreset = PortraitPreset.FullBody;
 
     // Race defName -> manual correction. Keyed by name so races from removed mods are kept harmlessly.
     public Dictionary<string, SavedAdjustment> RaceAdjustments = new();
@@ -116,18 +118,31 @@ public sealed class PortraitOverlaySettings : ModSettings
         Scribe_Values.Look(ref AutoFitPortrait, nameof(AutoFitPortrait), DefaultAutoFitPortrait);
         Scribe_Values.Look(ref ShowHoverToolbar, nameof(ShowHoverToolbar), DefaultShowHoverToolbar);
         Scribe_Values.Look(ref HoverToolbarHintShown, nameof(HoverToolbarHintShown), false);
-        Scribe_Values.Look(ref GlobalOffsetX, nameof(GlobalOffsetX), 0f);
-        Scribe_Values.Look(ref GlobalOffsetZ, nameof(GlobalOffsetZ), 0f);
+        Scribe_Deep.Look(ref GlobalAdjustment, nameof(GlobalAdjustment));
+        Scribe_Values.Look(ref UseGlobalPreset, nameof(UseGlobalPreset), false);
+        Scribe_Values.Look(ref GlobalPreset, nameof(GlobalPreset), PortraitPreset.FullBody);
         Scribe_Collections.Look(ref RaceAdjustments, nameof(RaceAdjustments), LookMode.Value, LookMode.Deep);
         Scribe_Collections.Look(ref CategoryAdjustments, nameof(CategoryAdjustments), LookMode.Value, LookMode.Deep);
         Scribe_Collections.Look(ref VariantAdjustments, nameof(VariantAdjustments), LookMode.Value, LookMode.Deep);
         Scribe_Values.Look(ref settingsVersion, "SettingsVersion", 0);
 
         Dictionary<string, float> legacyRaceZoom = null;
+        var legacyGlobalOffsetX = 0f;
+        var legacyGlobalOffsetZ = 0f;
         if (Scribe.mode == LoadSaveMode.LoadingVars)
         {
-            // Pre-release builds stored per-race zoom as plain numbers; read them once for migration.
+            // Pre-release builds stored per-race zoom as plain numbers and the global scope as two offsets;
+            // read them once for migration.
             Scribe_Collections.Look(ref legacyRaceZoom, "RaceZoomOverrides", LookMode.Value, LookMode.Value);
+            Scribe_Values.Look(ref legacyGlobalOffsetX, "GlobalOffsetX", 0f);
+            Scribe_Values.Look(ref legacyGlobalOffsetZ, "GlobalOffsetZ", 0f);
+        }
+
+        GlobalAdjustment ??= new SavedAdjustment();
+        if (!Mathf.Approximately(legacyGlobalOffsetX, 0f) || !Mathf.Approximately(legacyGlobalOffsetZ, 0f))
+        {
+            GlobalAdjustment.OffsetX += legacyGlobalOffsetX;
+            GlobalAdjustment.OffsetZ += legacyGlobalOffsetZ;
         }
 
         RaceAdjustments ??= new Dictionary<string, SavedAdjustment>();
@@ -170,8 +185,8 @@ public sealed class PortraitOverlaySettings : ModSettings
         ApplyFilterDependencies();
         PanelX = EnsureFinite(PanelX, DefaultPanelX);
         PanelY = EnsureFinite(PanelY, DefaultPanelY);
-        GlobalOffsetX = EnsureFinite(GlobalOffsetX, 0f);
-        GlobalOffsetZ = EnsureFinite(GlobalOffsetZ, 0f);
+        GlobalAdjustment ??= new SavedAdjustment();
+        GlobalAdjustment.Clamp();
         PanelWidth = Mathf.Max(1f, EnsureFinite(PanelWidth, DefaultPanelWidth));
         PanelHeight = Mathf.Max(1f, EnsureFinite(PanelHeight, DefaultPanelHeight));
         BackgroundAlpha = Mathf.Clamp01(BackgroundAlpha);
@@ -225,8 +240,9 @@ public sealed class PortraitOverlaySettings : ModSettings
         BottomCutoff = DefaultBottomCutoff;
         AutoFitPortrait = DefaultAutoFitPortrait;
         ShowHoverToolbar = DefaultShowHoverToolbar;
-        GlobalOffsetX = 0f;
-        GlobalOffsetZ = 0f;
+        GlobalAdjustment = new SavedAdjustment();
+        UseGlobalPreset = false;
+        GlobalPreset = PortraitPreset.FullBody;
         RaceAdjustments.Clear();
         CategoryAdjustments.Clear();
         VariantAdjustments.Clear();
