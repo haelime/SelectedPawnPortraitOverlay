@@ -15,7 +15,7 @@ public sealed class PortraitOverlaySettings : ModSettings
     public const float MaxCombinedVerticalCutoff = 0.9f;
 
     // Bump when a setting needs migrating. Files written before versioning load as version 0.
-    private const int CurrentSettingsVersion = 3;
+    private const int CurrentSettingsVersion = 4;
 
     private const bool DefaultEnabled = true;
     private const bool DefaultShowBackground = true;
@@ -146,16 +146,12 @@ public sealed class PortraitOverlaySettings : ModSettings
 
     private void MigrateLoadedSettings(Dictionary<string, float> legacyRaceZoom)
     {
-        // Users who configured the mod before auto-fit existed keep the framing they tuned; new installs get it on.
-        if (settingsVersion < 1)
+        // Full-body framing (which needs auto-fit) is the default for everyone from version 4, including users
+        // whose earlier settings had auto-fit off. Either can still be turned off in the Portrait tab.
+        if (settingsVersion < 4)
         {
-            AutoFitPortrait = false;
-        }
-
-        // Full-body framing is the default for new installs only; existing users keep the framing they know.
-        if (settingsVersion < 3)
-        {
-            FullBodyFraming = false;
+            AutoFitPortrait = true;
+            FullBodyFraming = true;
         }
 
         if (legacyRaceZoom != null)

@@ -61,11 +61,11 @@ public static class PortraitBoundsMeasurer
         try
         {
             // Weapons stick far out of the body and only show while drafted, so they never count.
-            return ModCompatibility.WithPortraitWeaponMode(
+            return ModCompatibility.WithPortraitPreferences(
+                pawn,
+                settings.RenderHeadgear,
                 ShowWeaponsUnderPortraitMode.Never,
-                () => ModCompatibility.WithPortraitHeadgearPreference(
-                    settings.RenderHeadgear,
-                    () => MeasureNow(pawn, rotation, settings)));
+                () => MeasureNow(pawn, rotation, settings));
         }
         catch (Exception exception)
         {

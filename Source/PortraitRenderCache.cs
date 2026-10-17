@@ -18,17 +18,18 @@ public static class PortraitRenderCache
 
         try
         {
-            return ModCompatibility.WithPortraitWeaponRenderMode(
-                () => ModCompatibility.WithPortraitHeadgearPreference(
-                    settings.RenderHeadgear,
-                    () =>
-                    {
-                        // A dirty cache entry is re-rendered into its existing texture, so the
-                        // returned texture stays alive. Destroying it here would hand back a dead
-                        // texture: RimWorld 1.7 destroys render textures immediately.
-                        InvalidatePortraitState(pawn);
-                        return PawnFullBodyPortraitRenderer.Render(pawn, size, settings);
-                    }));
+            return ModCompatibility.WithPortraitPreferences(
+                pawn,
+                settings.RenderHeadgear,
+                ShowWeaponsUnderPortraitMode.WhileDrafted,
+                () =>
+                {
+                    // A dirty cache entry is re-rendered into its existing texture, so the
+                    // returned texture stays alive. Destroying it here would hand back a dead
+                    // texture: RimWorld 1.7 destroys render textures immediately.
+                    InvalidatePortraitState(pawn);
+                    return PawnFullBodyPortraitRenderer.Render(pawn, size, settings);
+                });
         }
         catch (Exception exception)
         {
